@@ -4,13 +4,22 @@ import SignInPage from "./pages/SignInPage";
 import { createTheme, CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import { themeColors } from "./theme";
+import SignUpPage from "./pages/SignUpPage";
+import { AuthGuard } from "./pages/guards/AuthGuard";
 
-const router = createBrowserRouter([
+const authRouter = createBrowserRouter([
   {
     path: "/",
     element: <SignInPage />,
   },
+  {
+    path: "/signup",
+    element: <SignUpPage />,
+  },
 ]);
+
+const managerRouter = createBrowserRouter([]);
+const clientRouter = createBrowserRouter([]);
 
 const theme = createTheme({
   palette: {
@@ -27,7 +36,19 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <RouterProvider router={router} />
+      <AuthGuard>
+        {(user) =>
+          user ? (
+            user.role === "manager" ? (
+              <RouterProvider router={managerRouter} />
+            ) : (
+              <RouterProvider router={clientRouter} />
+            )
+          ) : (
+            <RouterProvider router={authRouter} />
+          )
+        }
+      </AuthGuard>
     </ThemeProvider>
   );
 }

@@ -7,7 +7,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 
-export default function SignInPage() {
+export default function SignUpPage() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -31,7 +31,7 @@ export default function SignInPage() {
           99 & diner
         </Typography>
         <Typography component="h1" variant="h5" sx={{ color: "primary.dark" }}>
-          Sign in
+          Sign up
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
@@ -61,8 +61,8 @@ export default function SignInPage() {
           </Button>
           <Grid container sx={{ mt: 4, justifyContent: "center" }}>
             <Grid item>
-              <Link href="/signup" variant="body2" sx={{ color: "primary.dark" }} >
-                {"Don't have an account? Sign Up"}
+              <Link href="/" variant="body2" sx={{ color: "primary.dark" }}>
+                {"Already have an account? Sign In"}
               </Link>
             </Grid>
           </Grid>
