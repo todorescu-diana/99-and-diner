@@ -29,9 +29,7 @@ function App() {
       <CssBaseline />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<SignInPage />} />
-          <Route path="/signup" element={<SignUpPage />} />
-          {userGlobalState ? (
+          {userGlobalState.role !== ""? (
             userGlobalState.role === "manager" ? (
               <Route path="/" element={<></>} />
             ) : userGlobalState.role === "client" ? (
