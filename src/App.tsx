@@ -1,5 +1,5 @@
 import "./App.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import SignInPage from "./pages/auth-pages/SignInPage";
 import { createTheme, CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
@@ -28,18 +28,22 @@ function App() {
         <Routes>
           {userGlobalState.role !== "" ? (
             userGlobalState.role === "manager" ? (
-              <Route path="/" element={<></>} />
+              <Route path="/managertest" element={<></>} />
             ) : userGlobalState.role === "client" ? (
-              <Route path="/" element={<ClientFoodMenuPage />} />
+              <>
+                <Route path="/foodmenu" element={<ClientFoodMenuPage />} />
+              </>
             ) : (
               <>
+                <Route path="/" element={<Navigate to={"/signin"} />} />
                 <Route path="/" element={<SignInPage />} />
                 <Route path="/signup" element={<SignUpPage />} />
               </>
             )
           ) : (
             <>
-              <Route path="/" element={<SignInPage />} />
+              <Route path="/" element={<Navigate to={"/signin"} />} />
+              <Route path="/signin" element={<SignInPage />} />
               <Route path="/signup" element={<SignUpPage />} />
             </>
           )}
