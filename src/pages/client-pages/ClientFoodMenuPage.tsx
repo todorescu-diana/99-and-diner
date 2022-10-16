@@ -3,8 +3,10 @@ import { styled } from "@mui/material/styles";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { themeColors } from "../../theme";
+import { Stack } from "@mui/system";
+import ClientItemContainer from "../../components/ClientItemContainer";
 
 interface StyledTabsProps {
   children?: React.ReactNode;
@@ -62,7 +64,7 @@ export default function ClientFoodMenuPage() {
 
   return (
     <Box sx={{ width: "100%" }} height="100vh">
-      <Box sx={{ bgcolor: 'primary.dark', pt: 1 }}>
+      <Box sx={{ bgcolor: "primary.dark", pt: 1 }}>
         <StyledTabs
           value={value}
           onChange={handleChange}
@@ -75,6 +77,10 @@ export default function ClientFoodMenuPage() {
         </StyledTabs>
         <Box sx={{ p: 1 }} />
       </Box>
+
+      <Stack spacing={4} m={4}>
+        <ClientItemContainer itemName={"nume"} itemPrice={"pret"} />
+      </Stack>
     </Box>
   );
 }
