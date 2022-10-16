@@ -8,6 +8,8 @@ export type UserGlobalContextValue = {
   email: string;
   password: string;
   role: "manager" | "client" | "";
+  firstName: string;
+  lastName: string;
 };
 
 function useUserGlobalContextValue() {
@@ -16,6 +18,8 @@ function useUserGlobalContextValue() {
       email: "",
       password: "",
       role: "",
+      firstName: "",
+      lastName: "",
     });
 
   return [userGlobalState, setUserGlobalState] as const;
@@ -34,6 +38,6 @@ export const UserGlobalContextProvider: any = ({
   );
 };
 
-export function useGlobalContext() {
+export function useUserGlobalContext() {
   return useContext(UserGlobalContext);
 }

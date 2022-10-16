@@ -6,14 +6,16 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import { useLogin } from "../../hooks/login-hooks";
 
-export default function SignUpPage() {
+export default function SignInPage() {
+  const { doLogin } = useLogin();
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
+    doLogin({
+      email: data.get("email")?.toString() ?? "",
+      password: data.get("password")?.toString() ?? "",
     });
   };
 
@@ -31,7 +33,7 @@ export default function SignUpPage() {
           99 & diner
         </Typography>
         <Typography component="h1" variant="h5" sx={{ color: "primary.dark" }}>
-          Sign up
+          Sign in
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
@@ -61,8 +63,12 @@ export default function SignUpPage() {
           </Button>
           <Grid container sx={{ mt: 4, justifyContent: "center" }}>
             <Grid item>
-              <Link href="/" variant="body2" sx={{ color: "primary.dark" }}>
-                {"Already have an account? Sign In"}
+              <Link
+                href="/signup"
+                variant="body2"
+                sx={{ color: "primary.dark" }}
+              >
+                {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
           </Grid>

@@ -1,15 +1,12 @@
 import "./App.css";
-import {
-  BrowserRouter,
-  Route,
-  Routes,
-} from "react-router-dom";
-import SignInPage from "./pages/SignInPage";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import SignInPage from "./pages/auth-pages/SignInPage";
 import { createTheme, CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import { themeColors } from "./theme";
-import SignUpPage from "./pages/SignUpPage";
-import { useGlobalContext } from "./contexts/UserGlobalContext";
+import SignUpPage from "./pages/auth-pages/SignUpPage";
+import { useUserGlobalContext } from "./contexts/UserGlobalContext";
+import ClientFoodMenuPage from "./pages/client-pages/ClientFoodMenuPage";
 
 const theme = createTheme({
   palette: {
@@ -23,17 +20,17 @@ const theme = createTheme({
 });
 
 function App() {
-  const [userGlobalState] = useGlobalContext();
+  const [userGlobalState] = useUserGlobalContext();
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <BrowserRouter>
         <Routes>
-          {userGlobalState.role !== ""? (
+          {userGlobalState.role !== "" ? (
             userGlobalState.role === "manager" ? (
               <Route path="/" element={<></>} />
             ) : userGlobalState.role === "client" ? (
-              <Route path="/" element={<></>} />
+              <Route path="/" element={<ClientFoodMenuPage />} />
             ) : (
               <>
                 <Route path="/" element={<SignInPage />} />
