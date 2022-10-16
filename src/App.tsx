@@ -1,25 +1,15 @@
 import "./App.css";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  BrowserRouter,
+  Route,
+  Routes,
+} from "react-router-dom";
 import SignInPage from "./pages/SignInPage";
 import { createTheme, CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import { themeColors } from "./theme";
 import SignUpPage from "./pages/SignUpPage";
-import { AuthGuard } from "./pages/guards/AuthGuard";
-
-const authRouter = createBrowserRouter([
-  {
-    path: "/",
-    element: <SignInPage />,
-  },
-  {
-    path: "/signup",
-    element: <SignUpPage />,
-  },
-]);
-
-const managerRouter = createBrowserRouter([]);
-const clientRouter = createBrowserRouter([]);
+import { useGlobalContext } from "./contexts/UserGlobalContext";
 
 const theme = createTheme({
   palette: {
@@ -33,22 +23,33 @@ const theme = createTheme({
 });
 
 function App() {
+  const [userGlobalState] = useGlobalContext();
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AuthGuard>
-        {(user) =>
-          user ? (
-            user.role === "manager" ? (
-              <RouterProvider router={managerRouter} />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<SignInPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
+          {userGlobalState ? (
+            userGlobalState.role === "manager" ? (
+              <Route path="/" element={<></>} />
+            ) : userGlobalState.role === "client" ? (
+              <Route path="/" element={<></>} />
             ) : (
-              <RouterProvider router={clientRouter} />
+              <>
+                <Route path="/" element={<SignInPage />} />
+                <Route path="/signup" element={<SignUpPage />} />
+              </>
             )
           ) : (
-            <RouterProvider router={authRouter} />
-          )
-        }
-      </AuthGuard>
+            <>
+              <Route path="/" element={<SignInPage />} />
+              <Route path="/signup" element={<SignUpPage />} />
+            </>
+          )}
+        </Routes>
+      </BrowserRouter>
     </ThemeProvider>
   );
 }

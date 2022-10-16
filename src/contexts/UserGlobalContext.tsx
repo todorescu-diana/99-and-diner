@@ -1,4 +1,4 @@
-import { createContext, FC, ReactNode, useContext, useState } from "react";
+import { createContext, ReactNode, useContext, useState } from "react";
 
 export const UserGlobalContext = createContext<
   ReturnType<typeof useUserGlobalContextValue>
@@ -34,6 +34,6 @@ export const UserGlobalContextProvider: any = ({
   );
 };
 
-export function useUserGlobalContext() {
+export function useGlobalContext() {
   return useContext(UserGlobalContext);
 }
