@@ -1,12 +1,15 @@
-import { createContext, FC, ReactNode, useContext, useState } from "react";
+import { createContext, ReactNode, useContext, useState } from "react";
 
 export const UserGlobalContext = createContext<
   ReturnType<typeof useUserGlobalContextValue>
 >(null!);
 
-type UserGlobalContextValue = {
+export type UserGlobalContextValue = {
   email: string;
   password: string;
+  role: "manager" | "client" | "";
+  firstName: string;
+  lastName: string;
 };
 
 function useUserGlobalContextValue() {
@@ -14,6 +17,9 @@ function useUserGlobalContextValue() {
     useState<UserGlobalContextValue>({
       email: "",
       password: "",
+      role: "",
+      firstName: "",
+      lastName: "",
     });
 
   return [userGlobalState, setUserGlobalState] as const;
