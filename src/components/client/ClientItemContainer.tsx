@@ -1,9 +1,9 @@
 import { Box, Card, CardMedia, IconButton, Typography } from "@mui/material";
-import { themeColors } from "../theme";
+import { themeColors } from "../../theme";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { useState } from "react";
-import { useClientOrderContext } from "../contexts/ClientOrderContext";
+import { useClientOrderContext } from "../../contexts/ClientOrderContext";
 
 export default function ClientItemContainer({
   itemName,
@@ -141,7 +141,7 @@ export default function ClientItemContainer({
         <CardMedia
           component="img"
           sx={{ height: "100%", width: "100%" }}
-          image={require("../assets/imagetest.jpg")}
+          image={require("../../assets/imagetest.jpg")}
           alt="alt"
         />
       </Box>

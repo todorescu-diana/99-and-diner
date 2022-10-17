@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import { useNavigate } from "react-router-dom";
 import { themeColors } from "../../theme";
 import { Stack } from "@mui/system";
-import ClientItemContainer from "../../components/ClientItemContainer";
+import ClientItemContainer from "../../components/client/ClientItemContainer";
 
 interface StyledTabsProps {
   children?: React.ReactNode;

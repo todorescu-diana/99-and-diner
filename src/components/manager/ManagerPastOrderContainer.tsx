@@ -1,8 +1,8 @@
 import { Box, Card, Typography } from "@mui/material";
-import { themeColors } from "../theme";
-    // TODO DACA NU SUNT COMENZI + DACA COSUL ESTE GOL + DACA NU SE GASESC ITEME IN MENIU + FONT + LOGO
+import { themeColors } from "../../theme";
+// TODO DACA NU SUNT COMENZI + DACA COSUL ESTE GOL + DACA NU SE GASESC ITEME IN MENIU + FONT + LOGO
 
-export default function ClientPastOrderContainer() {
+export default function ManagerPastOrderContainer() {
   return (
     <Box m={4}>
       <Card
@@ -23,7 +23,13 @@ export default function ClientPastOrderContainer() {
               justifyContent: "space-between",
             }}
           >
-            <Typography variant="h4">Produse:</Typography>
+            <Typography variant="h4">Nume client:</Typography>
+            <Typography mt={3} variant="h4">
+              Produse:
+            </Typography>
+            <Typography mt={3} variant="h4">
+              Indicatii speciale
+            </Typography>
             <Typography mt={3} variant="h4">
               Pret total:
             </Typography>
@@ -32,6 +38,9 @@ export default function ClientPastOrderContainer() {
             </Typography>
             <Typography mt={3} variant="h4">
               Ora plasarii comenzii:
+            </Typography>
+            <Typography mt={3} variant="h4">
+              Adresa livrarii:
             </Typography>
           </Box>
           <Box
@@ -42,17 +51,22 @@ export default function ClientPastOrderContainer() {
               justifyContent: "space-between",
             }}
           >
-            <Box>
+            <Typography variant="h5">nume test</Typography>
+            <Box mt={3}>
               <Typography variant="h5">exemplu produs1 x 1</Typography>
               <Typography variant="h5">exemplu produs2 x 4</Typography>
             </Box>
 
+            <Typography variant="h5">indicatii</Typography>
             <Typography variant="h5">pret test</Typography>
             <Typography mt={3} variant="h5">
               data
             </Typography>
             <Typography mt={3} variant="h5">
               ora
+            </Typography>
+            <Typography mt={3} variant="h5">
+              adresa
             </Typography>
           </Box>
         </Box>

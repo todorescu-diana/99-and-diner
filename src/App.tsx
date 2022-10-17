@@ -7,6 +7,7 @@ import { themeColors } from "./theme";
 import SignUpPage from "./pages/auth-pages/SignUpPage";
 import { useUserGlobalContext } from "./contexts/UserGlobalContext";
 import ClientContent from "./pages/client-pages/ClientContent";
+import ManagerContent from "./pages/manager-pages/ManagerContent";
 
 const theme = createTheme({
   palette: {
@@ -28,7 +29,9 @@ function App() {
         <Routes>
           {userGlobalState.role !== "" ? (
             userGlobalState.role === "manager" ? (
-              <Route path="/managertest" element={<></>} />
+              <>
+                <Route path="/editcontent" element={<ManagerContent />} />
+              </>
             ) : userGlobalState.role === "client" ? (
               <>
                 <Route path="/content" element={<ClientContent />} />
