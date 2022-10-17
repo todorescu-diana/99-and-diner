@@ -1,5 +1,6 @@
 export const themeColors = {
-    background: "#FCF8E8",
-    primary: "#AD8B73",
+    background: "#EED6C4",
+    primary: "#483434",
+    secondary: "#FFF3E4",
     contrastText: "#EB1D36"
 }
