@@ -1,5 +1,5 @@
 import { Stack } from "@mui/material";
-import ClientItemContainer from "../../components/ClientItemContainer";
+import ClientItemContainer from "../../components/client/ClientItemContainer";
 
 export default function ClientFoodMenuContent() {
   return (
