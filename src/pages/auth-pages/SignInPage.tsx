@@ -23,7 +23,7 @@ export default function SignInPage() {
       email: data.get("email")?.toString() ?? "",
       password: data.get("password")?.toString() ?? "",
     });
-    navigate("/foodmenu");
+    navigate("/content");
   };
 
   return (

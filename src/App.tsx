@@ -6,7 +6,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import { themeColors } from "./theme";
 import SignUpPage from "./pages/auth-pages/SignUpPage";
 import { useUserGlobalContext } from "./contexts/UserGlobalContext";
-import ClientFoodMenuPage from "./pages/client-pages/ClientFoodMenuPage";
+import ClientContent from "./pages/client-pages/ClientContent";
 
 const theme = createTheme({
   palette: {
@@ -31,7 +31,7 @@ function App() {
               <Route path="/managertest" element={<></>} />
             ) : userGlobalState.role === "client" ? (
               <>
-                <Route path="/foodmenu" element={<ClientFoodMenuPage />} />
+                <Route path="/content" element={<ClientContent />} />
               </>
             ) : (
               <>

@@ -54,7 +54,6 @@ export default function SignUpPage() {
             label="Last Name"
             name="lastName"
             autoComplete="lastName"
-            autoFocus
             sx={{ backgroundColor: "#fefcf6" }}
           />
           <TextField
@@ -65,7 +64,6 @@ export default function SignUpPage() {
             label="Email Address"
             name="email"
             autoComplete="email"
-            autoFocus
             sx={{ backgroundColor: "#fefcf6" }}
           />
           <TextField
