@@ -2,7 +2,7 @@ import { useUserGlobalContext } from "../contexts/UserGlobalContext";
 
 export function useLogin() {
   // const loading = useLoading();
-  const [, setGlobalState] = useUserGlobalContext();
+  const [, setUserGlobalState] = useUserGlobalContext();
 
   async function doLogin(
     signInData: {
@@ -16,7 +16,7 @@ export function useLogin() {
     //   Promise.all([delay(delayMs), postApiUserLogin(signIn)]),
     //   msg,
     // );
-    setGlobalState({
+    setUserGlobalState({
       email: signInData.email,
       password: signInData.password,
       role: "client",

@@ -7,9 +7,15 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useLogin } from "../../hooks/login-hooks";
+import { useUserGlobalContext } from "../../contexts/UserGlobalContext";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { themeColors } from "../../theme";
 
 export default function SignInPage() {
+  const [userGlobalState, setUserGlobalState] = useUserGlobalContext();
   const { doLogin } = useLogin();
+  const navigate = useNavigate();
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -17,6 +23,7 @@ export default function SignInPage() {
       email: data.get("email")?.toString() ?? "",
       password: data.get("password")?.toString() ?? "",
     });
+    navigate("/content");
   };
 
   return (
@@ -32,7 +39,7 @@ export default function SignInPage() {
         <Typography component="h1" variant="h1" style={{ marginBottom: 50 }}>
           99 & diner
         </Typography>
-        <Typography component="h1" variant="h5" sx={{ color: "primary.dark" }}>
+        <Typography component="h1" variant="h5" sx={{ color: "primary.main" }}>
           Sign in
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
@@ -58,7 +65,12 @@ export default function SignInPage() {
             autoComplete="current-password"
             sx={{ backgroundColor: "#fefcf6" }}
           />
-          <Button type="submit" fullWidth variant="contained" sx={{ mt: 2 }}>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 2, color: themeColors.secondary }}
+          >
             Sign In
           </Button>
           <Grid container sx={{ mt: 4, justifyContent: "center" }}>
@@ -66,7 +78,7 @@ export default function SignInPage() {
               <Link
                 href="/signup"
                 variant="body2"
-                sx={{ color: "primary.dark" }}
+                sx={{ color: "primary.main" }}
               >
                 {"Don't have an account? Sign Up"}
               </Link>

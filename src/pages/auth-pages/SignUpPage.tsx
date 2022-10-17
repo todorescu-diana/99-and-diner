@@ -6,6 +6,7 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import { themeColors } from "../../theme";
 
 export default function SignUpPage() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -30,7 +31,7 @@ export default function SignUpPage() {
         <Typography component="h1" variant="h1" style={{ marginBottom: 50 }}>
           99 & diner
         </Typography>
-        <Typography component="h1" variant="h5" sx={{ color: "primary.dark" }}>
+        <Typography component="h1" variant="h5" sx={{ color: "primary.main" }}>
           Sign up
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
@@ -53,7 +54,6 @@ export default function SignUpPage() {
             label="Last Name"
             name="lastName"
             autoComplete="lastName"
-            autoFocus
             sx={{ backgroundColor: "#fefcf6" }}
           />
           <TextField
@@ -64,7 +64,6 @@ export default function SignUpPage() {
             label="Email Address"
             name="email"
             autoComplete="email"
-            autoFocus
             sx={{ backgroundColor: "#fefcf6" }}
           />
           <TextField
@@ -78,12 +77,17 @@ export default function SignUpPage() {
             autoComplete="current-password"
             sx={{ backgroundColor: "#fefcf6" }}
           />
-          <Button type="submit" fullWidth variant="contained" sx={{ mt: 2 }}>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 2, color: themeColors.secondary }}
+          >
             Sign Up
           </Button>
           <Grid container sx={{ mt: 4, justifyContent: "center" }}>
             <Grid item>
-              <Link href="/" variant="body2" sx={{ color: "primary.dark" }}>
+              <Link href="/" variant="body2" sx={{ color: "primary.main" }}>
                 {"Already have an account? Sign In"}
               </Link>
             </Grid>
