@@ -7,13 +7,10 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useLogin } from "../../hooks/login-hooks";
-import { useUserGlobalContext } from "../../contexts/UserGlobalContext";
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { themeColors } from "../../theme";
 
 export default function SignInPage() {
-  const [userGlobalState, setUserGlobalState] = useUserGlobalContext();
   const { doLogin } = useLogin();
   const navigate = useNavigate();
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {

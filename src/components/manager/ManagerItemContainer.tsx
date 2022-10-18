@@ -18,8 +18,6 @@ export default function ManagerItemContainer({
   itemPrice: number;
   itemType: "food" | "drink";
 }) {
-  const [itemQty, setItemQty] = useState(0);
-
   const [isEditNameActive, setIsEditNameActive] = useState(false);
   const [isEditPriceActive, setIsEditPriceActive] = useState(false);
 
@@ -89,7 +87,7 @@ export default function ManagerItemContainer({
               autoComplete="itemPrice"
               autoFocus
               sx={{ backgroundColor: "#fefcf6" }}
-              onChange={handleItemNameTextChange}
+              onChange={handlePriceTextChange}
             />
           ) : (
             <Typography variant="h6" sx={{ marginTop: 2 }}>
@@ -127,7 +125,7 @@ export default function ManagerItemContainer({
           fullWidth
           variant="contained"
           sx={{ mt: 2, ml: 2, color: themeColors.secondary }}
-          onClick={() => {}}    // TODO selectare poza
+          onClick={() => {}} // TODO selectare poza
         >
           Editare poza
         </Button>

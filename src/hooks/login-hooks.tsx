@@ -1,9 +1,8 @@
-import { useEffect } from "react";
-import { UserGlobalContext, useUserGlobalContext } from "../contexts/UserGlobalContext";
+import { useUserGlobalContext } from "../contexts/UserGlobalContext";
 
 export function useLogin() {
   // const loading = useLoading();
-  const [userGlobalState, setUserGlobalState] = useUserGlobalContext();
+  const [, setUserGlobalState] = useUserGlobalContext();
 
   async function doLogin(
     signInData: {

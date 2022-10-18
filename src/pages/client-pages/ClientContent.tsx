@@ -10,7 +10,7 @@ import ClientCheckoutContent from "./ClientCheckoutContent";
 import ClientPastOrdersContent from "./ClientPastOrdersContent";
 import ClientFoodMenuContent from "./ClientFoodMenuContent";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { IconButton, makeStyles, Typography } from "@mui/material";
+import { IconButton, Typography } from "@mui/material";
 import { useUserGlobalContext } from "../../contexts/UserGlobalContext";
 
 interface StyledTabsProps {
