@@ -2,20 +2,31 @@ import { Box, Card, CardMedia, IconButton, Typography } from "@mui/material";
 import { themeColors } from "../../theme";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useClientOrderContext } from "../../contexts/ClientOrderContext";
 
 export default function ClientItemContainer({
   itemName,
   itemPrice,
   itemType,
+  imageUrl,
 }: {
   itemName: string;
   itemPrice: number;
   itemType: "food" | "drink";
+  imageUrl: string;
 }) {
   const [itemQty, setItemQty] = useState(0);
   const [clientOrderState, setClientOrderState] = useClientOrderContext();
+
+  useEffect(() => {
+    const currentProduct = clientOrderState.orderProducts.find(
+      (orderProduct) => orderProduct.productName === itemName
+    );
+    if (currentProduct !== undefined) {
+      setItemQty(currentProduct.productQty);
+    }
+  }, []);
 
   function handleMinusPress() {
     const currentItemInOrderProductArray = clientOrderState.orderProducts.find(
@@ -38,8 +49,7 @@ export default function ClientItemContainer({
           }),
           orderTotalPrice:
             clientOrderState.orderTotalPrice -
-            currentItemInOrderProductArray.productPrice *
-              (currentItemInOrderProductArray.productQty - 1),
+            currentItemInOrderProductArray.productPrice,
         });
       }
     } else {
@@ -79,8 +89,7 @@ export default function ClientItemContainer({
         }),
         orderTotalPrice:
           clientOrderState.orderTotalPrice +
-          currentItemInOrderProductArray.productPrice *
-            (currentItemInOrderProductArray.productQty + 1),
+          currentItemInOrderProductArray.productPrice,
       });
     } else {
       setClientOrderState({
@@ -141,7 +150,9 @@ export default function ClientItemContainer({
         <CardMedia
           component="img"
           sx={{ height: "100%", width: "100%" }}
-          image={require("../../assets/imagetest.jpg")}
+          src={
+            "https://images.unsplash.com/photo-1659561158823-61fbd1bf5f17?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=465&q=80"
+          }
           alt="alt"
         />
       </Box>

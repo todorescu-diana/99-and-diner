@@ -3,7 +3,7 @@ const db = require("./config/db.ts");
 const cors = require("cors");
 
 const app = express();
-const PORT = 3002;
+const USERSPORT = 3002;
 app.use(cors());
 app.use(express.json());
 
@@ -69,6 +69,6 @@ app.post("/api/create", (req, res) => {
 // console.log(err)
 //         } }) })
 
-app.listen(PORT, () => {
-  console.log(`Server is running on ${PORT}`);
+app.listen(USERSPORT, () => {
+  console.log(`Server is running on ${USERSPORT}`);
 });

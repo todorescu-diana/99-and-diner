@@ -94,6 +94,7 @@ export default function ClientContent() {
           aria-label="minus"
           onClick={() => {
             setUserGlobalState({
+              id: -1,
               email: "",
               password: "",
               role: "",

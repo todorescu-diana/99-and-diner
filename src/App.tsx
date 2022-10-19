@@ -23,10 +23,7 @@ const theme = createTheme({
 
 function App() {
   const [userGlobalState] = useUserGlobalContext();
-  useEffect(() => {
-    console.log("AICI: " + JSON.stringify(userGlobalState));
-    console.log(userGlobalState.role === "client")
-  }, [userGlobalState]);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

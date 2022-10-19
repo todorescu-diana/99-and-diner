@@ -92,6 +92,7 @@ export default function ManagerContent() {
           aria-label="minus"
           onClick={() => {
             setUserGlobalState({
+              id: -1,
               email: "",
               password: "",
               role: "",

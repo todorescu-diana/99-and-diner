@@ -28,6 +28,7 @@ export default function SignInPage() {
     }).then((loginResult) => {
       if (loginResult !== undefined) {
         setUserGlobalState({
+          id: loginResult.user_id,
           email: loginResult.user_email,
           password: loginResult.user_password,
           role: loginResult.user_role,

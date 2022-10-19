@@ -1,8 +1,11 @@
 import { Box, Card, Typography } from "@mui/material";
+import { useEffect } from "react";
+import { Order } from "../../models/Order";
 import { themeColors } from "../../theme";
 // TODO DACA NU SUNT COMENZI + DACA COSUL ESTE GOL + DACA NU SE GASESC ITEME IN MENIU + FONT + LOGO
 
-export default function ClientPastOrderContainer() {
+export default function ClientPastOrderContainer({ order }: { order: Order }) {
+  useEffect(() => console.log(order.order_products), [])
   return (
     <Box m={4}>
       <Card
@@ -12,7 +15,6 @@ export default function ClientPastOrderContainer() {
           flexDirection: "row",
           padding: 4,
           justifyContent: "space-between",
-          height: "100%",
         }}
       >
         <Box sx={{ display: "flex", flexDirection: "row" }}>
@@ -45,20 +47,23 @@ export default function ClientPastOrderContainer() {
               justifyContent: "space-between",
             }}
           >
-            <Box>
-              <Typography variant="h5">exemplu produs1 x 1</Typography>
-              <Typography variant="h5">exemplu produs2 x 4</Typography>
-            </Box>
+            {order.order_products.map((product, idx) => (
+              <Box key={idx}>
+                <Typography variant="h5">
+                  {product.product_name} x {product.product_qty}
+                </Typography>
+              </Box>
+            ))}
 
-            <Typography variant="h5">pret test</Typography>
+            <Typography variant="h5">{order.order_total_price}</Typography>
             <Typography mt={3} variant="h5">
-              data
+              {order.order_date}
             </Typography>
             <Typography mt={3} variant="h5">
-              ora
+              {order.order_time}
             </Typography>
             <Typography mt={3} variant="h5">
-              adresa
+              {order.order_address}
             </Typography>
           </Box>
         </Box>

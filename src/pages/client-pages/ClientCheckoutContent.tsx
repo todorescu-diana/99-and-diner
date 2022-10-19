@@ -1,7 +1,4 @@
 import * as React from "react";
-import { styled } from "@mui/material/styles";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import { themeColors } from "../../theme";
 import CloseIcon from "@mui/icons-material/Close";
@@ -49,7 +46,7 @@ export default function ClientCheckoutContent({
   const [addressMissingErrorActive, setAddressMissingErrorActive] =
     useState(false);
 
-  const [, setClientOrderState] = useClientOrderContext();
+  const [clientOrderState, setClientOrderState] = useClientOrderContext();
 
   const [open, setOpen] = React.useState(false);
   const handleBackToHome = () => {
@@ -95,6 +92,16 @@ export default function ClientCheckoutContent({
     event.preventDefault();
     setAddress(event.target.value);
   };
+
+  const [isEmptyCartModalOpen, setIsEmptyCartModalOpen] = useState(false);
+
+  function handleEmptyCart() {
+    setClientOrderState({
+      orderProducts: [],
+      orderTotalPrice: 0,
+    });
+    setIsEmptyCartModalOpen(false);
+  }
 
   return (
     <Box
@@ -152,6 +159,61 @@ export default function ClientCheckoutContent({
           </Box>
         </Box>
       </Modal>
+      <Modal
+        open={isEmptyCartModalOpen}
+        onClose={() => setIsEmptyCartModalOpen(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box
+          sx={{
+            position: "absolute" as "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 400,
+            bgcolor: themeColors.secondary,
+            border: "2px solid #000",
+            borderRadius: 2,
+            boxShadow: 24,
+            p: 4,
+          }}
+        >
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Sunteti sigur ca doriti sa goliti cosul?
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            Aceasta actiune nu poate fi revocata.
+          </Typography>
+          <Box
+            mt={2}
+            sx={{
+              display: "flex",
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Button
+              onClick={handleEmptyCart}
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 2, mr: 2, color: themeColors.secondary }}
+            >
+              Goleste cosul
+            </Button>
+            <Button
+              onClick={() => setIsEmptyCartModalOpen(false)}
+              fullWidth
+              variant="contained"
+              sx={{ mt: 2, color: themeColors.secondary }}
+            >
+              Inapoi
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
       <Box m={4}>
         <Stepper activeStep={activeStep}>
           {steps.map((label, index) => {
@@ -194,34 +256,56 @@ export default function ClientCheckoutContent({
                 flexDirection: "column",
               }}
             >
-              <Typography mb={4} variant="h3">
-                Comanda mea
-              </Typography>
-              <Box sx={{ display: "flex", flexDirection: "row" }}>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Typography variant="h4">Produse:</Typography>
-                  <Typography variant="h4">Pret total:</Typography>
-                </Box>
-                <Box
-                  ml={20}
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
-                >
-                  <Typography variant="h5">exemplu produs1 x 1</Typography>
-                  <Typography variant="h5">exemplu produs2 x 4</Typography>
-                  <Typography mt={3} variant="h5">
-                    pret test
+              {clientOrderState.orderProducts.length > 0 ? (
+                <>
+                  <Typography mb={4} variant="h3">
+                    Comanda mea
                   </Typography>
-                </Box>
-              </Box>
+                  <Box sx={{ display: "flex", flexDirection: "row" }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Typography variant="h4">Produse:</Typography>
+                      <Typography variant="h4">Pret total:</Typography>
+                    </Box>
+                    <Box
+                      ml={20}
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
+                    >
+                      {clientOrderState.orderProducts.map(
+                        (orderProduct, idx) => (
+                          <Typography key={idx} variant="h5">
+                            {orderProduct.productName} x{" "}
+                            {orderProduct.productQty}
+                          </Typography>
+                        )
+                      )}
+                      <Typography mt={3} variant="h5">
+                        {clientOrderState.orderTotalPrice}
+                      </Typography>
+                    </Box>
+                  </Box>
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 2, color: themeColors.secondary }}
+                    onClick={() => setIsEmptyCartModalOpen(true)}
+                  >
+                    Goleste cosul
+                  </Button>
+                </>
+              ) : (
+                <Typography mb={4} variant="h3">
+                  Cosul dumneavoastra este gol.
+                </Typography>
+              )}
             </Box>
           </Card>
         </Box>
@@ -345,7 +429,12 @@ export default function ClientCheckoutContent({
         >
           Pasul anterior
         </Button>
-        <Button onClick={handleNext}>Pasul urmator</Button>
+        <Button
+          disabled={clientOrderState.orderProducts.length === 0}
+          onClick={handleNext}
+        >
+          Pasul urmator
+        </Button>
       </Box>
     </Box>
   );
