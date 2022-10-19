@@ -107,7 +107,7 @@ export default function ClientContent() {
         </IconButton>
       </Box>
 
-      <Typography ml={4} mt={4} variant="h4">
+      <Typography ml={5} mt={5} variant="h4">
         Buna, {userGlobalState.firstName}
       </Typography>
 
