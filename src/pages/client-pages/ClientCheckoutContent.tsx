@@ -214,29 +214,31 @@ export default function ClientCheckoutContent({
           </Box>
         </Box>
       </Modal>
-      <Box m={4}>
-        <Stepper activeStep={activeStep}>
-          {steps.map((label, index) => {
-            const stepProps: { completed?: boolean } = {};
-            const labelProps: {
-              optional?: React.ReactNode;
-            } = {};
-            if (isStepOptional(index)) {
-              labelProps.optional = (
-                <Typography variant="caption">Optional</Typography>
+      {clientOrderState.orderProducts.length > 0 ? (
+        <Box m={4}>
+          <Stepper activeStep={activeStep}>
+            {steps.map((label, index) => {
+              const stepProps: { completed?: boolean } = {};
+              const labelProps: {
+                optional?: React.ReactNode;
+              } = {};
+              if (isStepOptional(index)) {
+                labelProps.optional = (
+                  <Typography variant="caption">Optional</Typography>
+                );
+              }
+              if (isStepSkipped(index)) {
+                stepProps.completed = false;
+              }
+              return (
+                <Step key={label} {...stepProps}>
+                  <StepLabel {...labelProps}>{label}</StepLabel>
+                </Step>
               );
-            }
-            if (isStepSkipped(index)) {
-              stepProps.completed = false;
-            }
-            return (
-              <Step key={label} {...stepProps}>
-                <StepLabel {...labelProps}>{label}</StepLabel>
-              </Step>
-            );
-          })}
-        </Stepper>
-      </Box>
+            })}
+          </Stepper>
+        </Box>
+      ) : null}
 
       {activeStep === 0 ? (
         <Box m={4}>
@@ -414,28 +416,30 @@ export default function ClientCheckoutContent({
           </Card>
         </Box>
       ) : null}
-      <Box
-        p={4}
-        sx={{
-          display: "flex",
-          flex: 1,
-          justifyContent: "space-between",
-        }}
-      >
-        <Button
-          color="inherit"
-          disabled={activeStep === 0}
-          onClick={handleBack}
+      {clientOrderState.orderProducts.length > 0 ? (
+        <Box
+          p={4}
+          sx={{
+            display: "flex",
+            flex: 1,
+            justifyContent: "space-between",
+          }}
         >
-          Pasul anterior
-        </Button>
-        <Button
-          disabled={clientOrderState.orderProducts.length === 0}
-          onClick={handleNext}
-        >
-          Pasul urmator
-        </Button>
-      </Box>
+          <Button
+            color="inherit"
+            disabled={activeStep === 0}
+            onClick={handleBack}
+          >
+            Pasul anterior
+          </Button>
+          <Button
+            disabled={clientOrderState.orderProducts.length === 0}
+            onClick={handleNext}
+          >
+            Pasul urmator
+          </Button>
+        </Box>
+      ) : null}
     </Box>
   );
 }

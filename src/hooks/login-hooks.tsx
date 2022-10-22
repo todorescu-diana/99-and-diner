@@ -20,7 +20,9 @@ export function useLogin() {
       const allUsers: User[] = data;
 
       const currentUserInDatabase = allUsers.find(
-        (user) => user.user_email === signInData.email
+        (user) =>
+          user.user_email === signInData.email &&
+          user.user_password === signInData.password
       );
 
       return await currentUserInDatabase;

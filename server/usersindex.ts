@@ -30,6 +30,7 @@ app.get("/api/getFromId/:id", (req, res) => {
 
 // Route for creating the user
 app.post("/api/create", (req, res) => {
+  const userId = req.body.userId;
   const userFirstName = req.body.userFirstName;
   const userLastName = req.body.userLastName;
   const userEmail = req.body.userEmail;
@@ -37,8 +38,8 @@ app.post("/api/create", (req, res) => {
   const userRole = req.body.userRole;
 
   db.query(
-    "INSERT INTO users (user_id, user_first_name, user_last_name, user_email, user_password, user_role) VALUES (?,?,?)",
-    [userFirstName, userLastName, userEmail, userPassword, userRole],
+    "INSERT INTO users (user_id, user_first_name, user_last_name, user_email, user_password, user_role) VALUES (?,?,?,?,?,?)",
+    [userId, userFirstName, userLastName, userEmail, userPassword, userRole],
     (err, result) => {
       if (err) {
         console.log(err);

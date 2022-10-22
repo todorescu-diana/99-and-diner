@@ -41,13 +41,6 @@ export default function ClientPastOrdersContent() {
     getUserOrders();
   }, []);
 
-  // useEffect(() => {
-  //   if (userOrders.length > 0) {
-  //     console.log("AICI:" + userOrders[0].order_products);
-  //     console.log("AICI:" + JSON.parse(userOrders.order_products).items);
-  //   }
-  // }, [userOrders]);
-
   return (
     <Stack spacing={4}>
       {userOrders.length > 0 ? (
