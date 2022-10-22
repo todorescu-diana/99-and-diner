@@ -16,8 +16,6 @@ export default function ManagerAddItemContainer() {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
-    console.log("???");
-
     const res = await axios.get("http://localhost:3002/api/get");
     const { data } = await res;
     const totalNumberOfProducts = data.length;

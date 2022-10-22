@@ -29,6 +29,7 @@ export default function ManagerFoodMenuContent() {
       {foodProducts.map((foodProduct, idx) => (
         <ManagerItemContainer
           key={idx}
+          itemId={foodProduct.product_id}
           itemName={foodProduct.product_name}
           itemPrice={foodProduct.product_price}
           itemType={foodProduct.product_type}

@@ -52,16 +52,23 @@ products_app.post("/api/create", (req, res) => {
   );
 });
 
-// // Route to like a post
-// app.post('/api/like/:id',(req,res)=>{
-
-// const id = req.params.id;
-// db.query("UPDATE posts SET likes = likes + 1 WHERE id = ?",id, (err,result)=>{
-//     if(err) {
-//    console.log(err)   }
-//    console.log(result)
-//     });
-// });
+// Route to update a product
+products_app.put("/api/updateProduct/:id", (req, res) => {
+  const productId = req.body.productId;
+  const productNewName = req.body.productNewName;
+  const productNewPrice = req.body.productNewPrice;
+  const productNewImageUrl = req.body.productNewImageUrl;
+  products_db.query(
+    "UPDATE products SET product_name = ?, product_price = ?, product_image_url = ? WHERE product_id = ?",
+    [productNewName, productNewPrice, productNewImageUrl, productId],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      }
+      console.log(result);
+    }
+  );
+});
 
 // // Route to delete a post
 

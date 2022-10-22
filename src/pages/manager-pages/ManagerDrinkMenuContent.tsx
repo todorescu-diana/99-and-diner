@@ -29,6 +29,7 @@ export default function ManagerDrinkMenuContent() {
       {drinkProducts.map((drinkProduct, idx) => (
         <ManagerItemContainer
           key={idx}
+          itemId={drinkProduct.product_id}
           itemName={drinkProduct.product_name}
           itemPrice={drinkProduct.product_price}
           itemType={drinkProduct.product_type}
