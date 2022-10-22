@@ -9,7 +9,7 @@ products_app.use(products_express.json());
 
 // Route to get all products
 products_app.get("/api/get", (req, res) => {
-    products_db.query("SELECT * FROM products", (err, result) => {
+  products_db.query("SELECT * FROM products", (err, result) => {
     if (err) {
       console.log(err);
     }
@@ -17,26 +17,32 @@ products_app.get("/api/get", (req, res) => {
   });
 });
 
-// Route to get one user
+// Route to get one product
 products_app.get("/api/getFromId/:id", (req, res) => {
   const id = req.params.id;
-  products_db.query("SELECT * FROM products WHERE id = ?", id, (err, result) => {
-    if (err) {
-      console.log(err);
+  products_db.query(
+    "SELECT * FROM products WHERE id = ?",
+    id,
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      }
+      res.send(result);
     }
-    res.send(result);
-  });
+  );
 });
 
-// Route for creating the user
+// Route for creating the product
 products_app.post("/api/create", (req, res) => {
-  const productName = req.body.productFirstName;
+  const productId = req.body.productId;
+  const productName = req.body.productName;
   const productPrice = req.body.productPrice;
   const productType = req.body.productType;
+  const productImageUrl = req.body.productImageUrl;
 
   products_db.query(
-    "INSERT INTO users (product_id, product_name, product_price, product_type) VALUES (?,?,?)",
-    [productName, productPrice, productType],
+    "INSERT INTO products (product_id, product_name, product_price, product_type,product_image_url) VALUES (?,?,?,?,?)",
+    [productId, productName, productPrice, productType, productImageUrl],
     (err, result) => {
       if (err) {
         console.log(err);

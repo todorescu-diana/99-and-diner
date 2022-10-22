@@ -7,22 +7,35 @@ import {
   Typography,
 } from "@mui/material";
 import { themeColors } from "../../theme";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function ManagerItemContainer({
   itemName,
   itemPrice,
   itemType,
+  imageUrl,
 }: {
   itemName: string;
   itemPrice: number;
   itemType: "food" | "drink";
+  imageUrl: string;
 }) {
   const [isEditNameActive, setIsEditNameActive] = useState(false);
   const [isEditPriceActive, setIsEditPriceActive] = useState(false);
 
   const [name, setName] = useState(itemName);
   const [price, setPrice] = useState(itemPrice);
+  const [url, setUrl] = useState(imageUrl);
+
+  const [hasItemChanged, setHasItemChanged] = useState(false);
+
+  useEffect(() => {
+    if (name !== itemName || price !== itemPrice || url !== imageUrl) {
+      if (!hasItemChanged) setHasItemChanged(true);
+    } else if (name === itemName && price === itemPrice && url === imageUrl) {
+      if (hasItemChanged) setHasItemChanged(false);
+    }
+  }, [name, price, imageUrl]);
 
   const handleItemNameTextChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -130,6 +143,17 @@ export default function ManagerItemContainer({
           Editare poza
         </Button>
       </Box>
+      {hasItemChanged ? (
+        <Box sx={{ mt: 2 }}>
+          <Button
+            fullWidth
+            variant="contained"
+            sx={{ mt: 2, color: themeColors.secondary }}
+          >
+            Salvare informatii produs
+          </Button>
+        </Box>
+      ) : null}
     </Card>
   );
 }

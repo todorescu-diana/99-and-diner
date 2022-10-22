@@ -1,5 +1,3 @@
-import * as React from "react";
-import { useNavigate } from "react-router-dom";
 import { Stack } from "@mui/system";
 import ClientItemContainer from "../../components/client/ClientItemContainer";
 import { useEffect, useState } from "react";
@@ -7,8 +5,6 @@ import axios from "axios";
 import { Product } from "../../models/Product";
 
 export default function ClientDrinkMenuContent() {
-  let navigate = useNavigate();
-
   const [drinkProducts, setDrinkProducts] = useState<Product[]>([]);
 
   useEffect(() => {
