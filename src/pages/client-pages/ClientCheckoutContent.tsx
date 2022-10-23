@@ -304,7 +304,7 @@ export default function ClientCheckoutContent({
                   </Button>
                 </>
               ) : (
-                <Typography mb={4} variant="h3">
+                <Typography variant="h3">
                   Cosul dumneavoastra este gol.
                 </Typography>
               )}
