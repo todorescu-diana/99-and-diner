@@ -25,7 +25,7 @@ export default function ManagerFoodMenuContent() {
   }, []);
 
   return (
-    <Stack spacing={4} m={4}>
+    <Stack spacing={4} m={4} p={4}>
       {foodProducts.map((foodProduct, idx) => (
         <ManagerItemContainer
           key={idx}

@@ -53,7 +53,7 @@ products_app.post("/api/create", (req, res) => {
 });
 
 // Route to update a product
-products_app.put("/api/updateProduct/:id", (req, res) => {
+products_app.put("/api/updateProduct/:product_id", (req, res) => {
   const productId = req.body.productId;
   const productNewName = req.body.productNewName;
   const productNewPrice = req.body.productNewPrice;
@@ -63,9 +63,10 @@ products_app.put("/api/updateProduct/:id", (req, res) => {
     [productNewName, productNewPrice, productNewImageUrl, productId],
     (err, result) => {
       if (err) {
-        console.log(err);
+        res.send({ error: err.message });
+        return;
       }
-      console.log(result);
+      res.send(result);
     }
   );
 });
