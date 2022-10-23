@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 
-export default function ClientPastOrderContainerRow({
+export default function ManagerPastOrderContainerRow({
   leftContent,
   rightContent,
 }: {
