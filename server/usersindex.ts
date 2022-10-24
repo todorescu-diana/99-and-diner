@@ -18,9 +18,9 @@ app.get("/api/get", (req, res) => {
 });
 
 // Route to get one user
-app.get("/api/getFromId/:id", (req, res) => {
-  const id = req.params.id;
-  db.query("SELECT * FROM users WHERE id = ?", id, (err, result) => {
+app.get("/api/getFromId/:user_id", (req, res) => {
+  const userId = req.params.userId;
+  db.query("SELECT * FROM users WHERE user_id = ?", [userId], (err, result) => {
     if (err) {
       console.log(err);
     }

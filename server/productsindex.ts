@@ -45,8 +45,11 @@ products_app.post("/api/create", (req, res) => {
     [productId, productName, productPrice, productType, productImageUrl],
     (err, result) => {
       if (err) {
+        res.send({ error: err.message });
         console.log(err);
+        return;
       }
+      res.send(result);
       console.log(result);
     }
   );

@@ -102,9 +102,16 @@ export default function ManagerItemContainer({
         `http://localhost:3003/api/updateProduct/:${itemId}`,
         newProductInfo
       );
-      if (hasServerRequestProccessedWithError)
-        setHasServerRequestProccessedWithError(false);
-      setHasServerRequestProccessedWithSuccess(true);
+
+      if (!result.data.error) {
+        if (hasServerRequestProccessedWithError)
+          setHasServerRequestProccessedWithError(false);
+        setHasServerRequestProccessedWithSuccess(true);
+      } else {
+        if (hasServerRequestProccessedWithSuccess)
+          setHasServerRequestProccessedWithSuccess(false);
+        setHasServerRequestProccessedWithError(true);
+      }
     } catch (err) {
       if (hasServerRequestProccessedWithSuccess)
         setHasServerRequestProccessedWithSuccess(false);

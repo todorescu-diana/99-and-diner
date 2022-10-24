@@ -1,22 +1,43 @@
 import {
+  Alert,
   Box,
   Button,
   Card,
   CardMedia,
+  Collapse,
+  IconButton,
   MenuItem,
   TextField,
 } from "@mui/material";
 import axios from "axios";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { themeColors } from "../../theme";
+import CloseIcon from "@mui/icons-material/Close";
 
 export default function ManagerAddItemContainer() {
   const [imageUrl, setImageUrl] = useState("");
+
+  const [
+    hasServerRequestProccessedWithError,
+    setHasServerRequestProccessedWithError,
+  ] = useState(false);
+  const [
+    hasServerRequestProccessedWithSuccess,
+    setHasServerRequestProccessedWithSuccess,
+  ] = useState(false);
+
+  // const [type, setType] = useState<"" | "Mancare" | "Bautura">("");
+  const [type, setType] = useState<string>("");
+
+  const nameInputRef = useRef<HTMLInputElement>(null);
+  const priceInputRef = useRef<HTMLInputElement>(null);
+  const urlInputRef = useRef<HTMLInputElement>(null);
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
-    const res = await axios.get("http://localhost:3002/api/get");
+    const res = await axios.get("http://localhost:3003/api/get");
     const { data } = await res;
     const totalNumberOfProducts = data.length;
 
@@ -24,17 +45,34 @@ export default function ManagerAddItemContainer() {
       productId: totalNumberOfProducts,
       productName: formData.get("itemName"),
       productPrice: formData.get("itemPrice"),
-      productType: "food",
-      // productType: formData.get("itemType"),
-      // TODO daca nu se alege nimic
+      productType: formData.get("itemType") === "Mancare" ? "food" : "bautura", // TODO daca nu se alege nimic
       productImageUrl: formData.get("itemUrl"),
     };
 
-    const postResponseData = await axios.post(
-      "http://localhost:3003/api/create",
-      newProduct
-    );
-    const response = await postResponseData.data;
+    try {
+      const postResponseData = await axios.post(
+        "http://localhost:3003/api/create",
+        newProduct
+      );
+      if (!postResponseData.data.error) {
+        if (hasServerRequestProccessedWithError)
+          setHasServerRequestProccessedWithError(false);
+        setHasServerRequestProccessedWithSuccess(true);
+
+        if (nameInputRef.current) nameInputRef.current.value = "";
+        if (priceInputRef.current) priceInputRef.current.value = "";
+        setType("");
+        if (urlInputRef.current) urlInputRef.current.value = "";
+      } else {
+        if (hasServerRequestProccessedWithSuccess)
+          setHasServerRequestProccessedWithSuccess(false);
+        setHasServerRequestProccessedWithError(true);
+      }
+    } catch (err) {
+      if (hasServerRequestProccessedWithSuccess)
+        setHasServerRequestProccessedWithSuccess(false);
+      setHasServerRequestProccessedWithError(true);
+    }
   };
 
   return (
@@ -75,6 +113,7 @@ export default function ManagerAddItemContainer() {
             autoComplete="itemName"
             autoFocus
             sx={{ backgroundColor: "#fefcf6" }}
+            inputRef={nameInputRef}
           />
           <TextField
             margin="normal"
@@ -84,6 +123,7 @@ export default function ManagerAddItemContainer() {
             name="itemPrice"
             autoComplete="itemPrice"
             sx={{ backgroundColor: "#fefcf6" }}
+            inputRef={priceInputRef}
           />
           <TextField
             select
@@ -92,11 +132,13 @@ export default function ManagerAddItemContainer() {
             name="itemType"
             fullWidth
             sx={{ backgroundColor: "#fefcf6", mt: 2 }}
+            value={type}
+            onChange={(t) => setType(t.target.value)}
           >
-            <MenuItem key={1} value="food">
+            <MenuItem key={1} value="Mancare">
               Mancare
             </MenuItem>
-            <MenuItem key={2} value="drink">
+            <MenuItem key={2} value="Bautura">
               Bautura
             </MenuItem>
           </TextField>
@@ -108,6 +150,7 @@ export default function ManagerAddItemContainer() {
             name="itemUrl"
             sx={{ backgroundColor: "#fefcf6", mt: 3 }}
             onChange={(e) => setImageUrl(e.target.value)}
+            inputRef={urlInputRef}
           />
           <Box mt={2} sx={{ display: "flex", flexDirection: "row" }}>
             <Button
@@ -119,6 +162,43 @@ export default function ManagerAddItemContainer() {
             >
               Adaugare produs
             </Button>
+          </Box>
+          <Box sx={{ width: "100%" }} mt={2}>
+            <Collapse
+              in={
+                hasServerRequestProccessedWithError ||
+                hasServerRequestProccessedWithSuccess
+              }
+            >
+              <Alert
+                severity={
+                  hasServerRequestProccessedWithError ? "error" : "success"
+                }
+                action={
+                  <IconButton
+                    aria-label="close"
+                    color="inherit"
+                    size="small"
+                    onClick={() => {
+                      if (hasServerRequestProccessedWithError)
+                        setHasServerRequestProccessedWithError(
+                          !hasServerRequestProccessedWithError
+                        );
+                      else if (hasServerRequestProccessedWithSuccess)
+                        setHasServerRequestProccessedWithSuccess(
+                          !hasServerRequestProccessedWithSuccess
+                        );
+                    }}
+                  >
+                    <CloseIcon fontSize="inherit" />
+                  </IconButton>
+                }
+              >
+                {hasServerRequestProccessedWithError
+                  ? "Eroare in comunicarea cu serverul."
+                  : "Corect"}
+              </Alert>
+            </Collapse>
           </Box>
         </Box>
         <Box sx={{ width: 200, height: 130 }}>

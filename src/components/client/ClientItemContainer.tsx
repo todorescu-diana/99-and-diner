@@ -150,9 +150,7 @@ export default function ClientItemContainer({
         <CardMedia
           component="img"
           sx={{ height: "100%", width: "100%" }}
-          src={
-            "https://images.unsplash.com/photo-1659561158823-61fbd1bf5f17?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=465&q=80"
-          }
+          src={imageUrl}
           alt="alt"
         />
       </Box>

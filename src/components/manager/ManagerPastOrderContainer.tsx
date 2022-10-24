@@ -1,9 +1,39 @@
 import { Box, Card, Typography } from "@mui/material";
+import axios, { AxiosRequestConfig } from "axios";
+import { useEffect, useState } from "react";
+import { Order } from "../../models/Order";
+import { User } from "../../models/User";
 import { themeColors } from "../../theme";
 import ManagerPastOrderContainerRow from "./ManagerPastOrderContainerRow";
 // TODO DACA NU SUNT COMENZI + DACA COSUL ESTE GOL + DACA NU SE GASESC ITEME IN MENIU + FONT + LOGO
 
-export default function ManagerPastOrderContainer() {
+export default function ManagerPastOrderContainer({ order }: { order: Order }) {
+  const [userName, setUserName] = useState("");
+
+  useEffect(() => {
+    async function getClientInfo() {
+      try {
+        // const res = await axios.get(
+        //   `http://localhost:3002/api/getFromId/:${order.order_user_id}`,
+        //   { params: { userId: order.order_user_id } }
+        // );
+        const res = await axios.get("http://localhost:3002/api/get");
+        const { data } = await res;
+        const allUsers: User[] = data;
+
+        const orderUser: User | undefined = allUsers.find(
+          (user) => user.user_id === order.order_user_id
+        );
+
+        setUserName(
+          orderUser?.user_last_name + " " + orderUser?.user_first_name
+        );
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    getClientInfo();
+  }, []);
   return (
     <Box m={4}>
       <Card
@@ -25,7 +55,7 @@ export default function ManagerPastOrderContainer() {
         >
           <ManagerPastOrderContainerRow
             leftContent={<Typography variant="h4">Nume client:</Typography>}
-            rightContent={<Typography variant="h5">nume test</Typography>}
+            rightContent={<Typography variant="h5">{userName}</Typography>}
           />
           <ManagerPastOrderContainerRow
             leftContent={
@@ -35,20 +65,23 @@ export default function ManagerPastOrderContainer() {
             }
             rightContent={
               <Box mt={3}>
-                <Typography variant="h5">exemplu produs1 x 1</Typography>
-                <Typography variant="h5">exemplu produs2 x 4</Typography>
+                {order.order_products.map((orderProduct) => (
+                  <Typography variant="h5">
+                    {orderProduct.product_name} x {orderProduct.product_qty}
+                  </Typography>
+                ))}
               </Box>
             }
           />
           <ManagerPastOrderContainerRow
             leftContent={
               <Typography mt={3} variant="h4">
-                Indicatii speciale
+                Indicatii speciale:
               </Typography>
             }
             rightContent={
               <Typography mt={3} variant="h5">
-                indicatii
+                {order.order_notes}
               </Typography>
             }
           />
@@ -60,7 +93,7 @@ export default function ManagerPastOrderContainer() {
             }
             rightContent={
               <Typography mt={3} variant="h5">
-                pret test
+                {order.order_total_price} lei
               </Typography>
             }
           />
@@ -72,7 +105,7 @@ export default function ManagerPastOrderContainer() {
             }
             rightContent={
               <Typography mt={3} variant="h5">
-                data
+                {order.order_date}
               </Typography>
             }
           />
@@ -84,7 +117,7 @@ export default function ManagerPastOrderContainer() {
             }
             rightContent={
               <Typography mt={3} variant="h5">
-                ora
+                {order.order_time}
               </Typography>
             }
           />
@@ -96,7 +129,7 @@ export default function ManagerPastOrderContainer() {
             }
             rightContent={
               <Typography mt={3} variant="h5">
-                adresa
+                {order.order_address}
               </Typography>
             }
           />
