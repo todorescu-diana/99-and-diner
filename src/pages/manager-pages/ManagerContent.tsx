@@ -11,6 +11,7 @@ import { useUserGlobalContext } from "../../contexts/UserGlobalContext";
 import ManagerFoodMenuContent from "./ManagerFoodMenuContent";
 import ManagerDrinkMenuContent from "./ManagerDrinkMenuContent";
 import ManagerPastOrdersContent from "./ManagerPastOrdersContent";
+import ManagerAddNewProductContent from "./ManagerAddNewProductContent";
 
 interface StyledTabsProps {
   children?: React.ReactNode;
@@ -85,6 +86,7 @@ export default function ManagerContent() {
         >
           <StyledTab label="Meniu Mancare" />
           <StyledTab label="Meniu Bauturi" />
+          <StyledTab label="Adaugare Produs Nou" />
           <StyledTab label="Comenzi anterioare" />
         </StyledTabs>
         <IconButton
@@ -92,6 +94,7 @@ export default function ManagerContent() {
           aria-label="minus"
           onClick={() => {
             setUserGlobalState({
+              id: -1,
               email: "",
               password: "",
               role: "",
@@ -107,7 +110,8 @@ export default function ManagerContent() {
 
       {value === 0 ? <ManagerFoodMenuContent /> : null}
       {value === 1 ? <ManagerDrinkMenuContent /> : null}
-      {value === 2 ? <ManagerPastOrdersContent /> : null}
+      {value === 2 ? <ManagerAddNewProductContent /> : null}
+      {value === 3 ? <ManagerPastOrdersContent /> : null}
     </Box>
   );
 }

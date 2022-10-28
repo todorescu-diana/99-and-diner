@@ -10,7 +10,7 @@ import ClientCheckoutContent from "./ClientCheckoutContent";
 import ClientPastOrdersContent from "./ClientPastOrdersContent";
 import ClientFoodMenuContent from "./ClientFoodMenuContent";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { IconButton, makeStyles, Typography } from "@mui/material";
+import { IconButton, Typography } from "@mui/material";
 import { useUserGlobalContext } from "../../contexts/UserGlobalContext";
 
 interface StyledTabsProps {
@@ -94,6 +94,7 @@ export default function ClientContent() {
           aria-label="minus"
           onClick={() => {
             setUserGlobalState({
+              id: -1,
               email: "",
               password: "",
               role: "",
@@ -107,7 +108,7 @@ export default function ClientContent() {
         </IconButton>
       </Box>
 
-      <Typography ml={4} mt={4} variant="h4">
+      <Typography ml={5} mt={5} variant="h4">
         Buna, {userGlobalState.firstName}
       </Typography>
 

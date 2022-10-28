@@ -5,6 +5,7 @@ export const UserGlobalContext = createContext<
 >(null!);
 
 export type UserGlobalContextValue = {
+  id: number;
   email: string;
   password: string;
   role: "manager" | "client" | "";
@@ -15,6 +16,7 @@ export type UserGlobalContextValue = {
 function useUserGlobalContextValue() {
   const [userGlobalState, setUserGlobalState] =
     useState<UserGlobalContextValue>({
+      id: -1,
       email: "",
       password: "",
       role: "",

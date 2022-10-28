@@ -8,6 +8,7 @@ import SignUpPage from "./pages/auth-pages/SignUpPage";
 import { useUserGlobalContext } from "./contexts/UserGlobalContext";
 import ClientContent from "./pages/client-pages/ClientContent";
 import ManagerContent from "./pages/manager-pages/ManagerContent";
+import { useEffect } from "react";
 
 const theme = createTheme({
   palette: {
@@ -22,6 +23,7 @@ const theme = createTheme({
 
 function App() {
   const [userGlobalState] = useUserGlobalContext();
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

@@ -1,60 +1,81 @@
-import * as React from "react";
-import { styled } from "@mui/material/styles";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
 import { themeColors } from "../../theme";
 import { Stack } from "@mui/system";
 import ClientPastOrderContainer from "../../components/client/ClientPastOrderContainer";
-
-interface StyledTabsProps {
-  children?: React.ReactNode;
-  value: number;
-  onChange: (event: React.SyntheticEvent, newValue: number) => void;
-}
-
-const StyledTabs = styled((props: StyledTabsProps) => (
-  <Tabs
-    {...props}
-    TabIndicatorProps={{ children: <span className="MuiTabs-indicatorSpan" /> }}
-    centered
-  />
-))({
-  "& .MuiTabs-indicator": {
-    display: "flex",
-    justifyContent: "center",
-    backgroundColor: "transparent",
-  },
-  "& .MuiTabs-indicatorSpan": {
-    maxWidth: 40,
-    width: "100%",
-    backgroundColor: themeColors.primary,
-  },
-});
-
-interface StyledTabProps {
-  label: string;
-}
-
-const StyledTab = styled((props: StyledTabProps) => (
-  <Tab disableRipple {...props} />
-))(({ theme }) => ({
-  textTransform: "none",
-  fontWeight: theme.typography.fontWeightRegular,
-  fontSize: theme.typography.pxToRem(15),
-  marginRight: theme.spacing(1),
-  color: "rgba(255, 255, 255, 0.4)",
-  "&.Mui-selected": {
-    color: themeColors.secondary,
-  },
-  "&.Mui-focusVisible": {
-    backgroundColor: "rgba(100, 95, 228, 0.32)",
-  },
-}));
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { Order } from "../../models/Order";
+import { useUserGlobalContext } from "../../contexts/UserGlobalContext";
+import { Box, Card, Typography } from "@mui/material";
+import { OrderResponse } from "../../models/OrderResponse";
 
 export default function ClientPastOrdersContent() {
+  const [userOrders, setUserOrders] = useState<Order[]>([]);
+
+  const [userGlobalState] = useUserGlobalContext();
+
+  useEffect(() => {
+    async function getUserOrders() {
+      try {
+        const res = await axios.get("http://localhost:3004/api/get");
+        const { data } = await res;
+        const allOrders: OrderResponse[] = data;
+
+        setUserOrders(
+          allOrders
+            .filter((order) => order.order_user_id === userGlobalState.id)
+            .map((order) => ({
+              order_id: order.order_id,
+              order_user_id: order.order_user_id,
+              order_products: JSON.parse(order.order_products).items,
+              order_notes: order.order_notes,
+              order_total_price: order.order_total_price,
+              order_address: order.order_address,
+              order_date: order.order_date,
+              order_time: order.order_time,
+            }))
+        );
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    getUserOrders();
+  }, []);
+
+  useEffect(() => {
+    console.log("USER ORDERS: " + JSON.stringify(userOrders))
+  }, [userOrders])
+
   return (
-    <Stack spacing={4} m={4}>
-      <ClientPastOrderContainer />
+    <Stack spacing={4} p={4}>
+      {userOrders.length > 0 ? (
+        userOrders.map((userOrder, idx) => (
+          <ClientPastOrderContainer key={idx} order={userOrder} />
+        ))
+      ) : (
+        <Box m={4}>
+          <Card
+            sx={{
+              backgroundColor: themeColors.secondary,
+              display: "flex",
+              flexDirection: "row",
+              padding: 4,
+              justifyContent: "space-between",
+              height: "100%",
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <Typography mb={4} variant="h3">
+                Nu s-au gasit comenzi anterioare.
+              </Typography>
+            </Box>
+          </Card>
+        </Box>
+      )}
     </Stack>
   );
 }

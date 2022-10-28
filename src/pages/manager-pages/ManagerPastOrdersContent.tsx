@@ -1,60 +1,44 @@
-import * as React from "react";
-import { styled } from "@mui/material/styles";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import { themeColors } from "../../theme";
 import { Stack } from "@mui/system";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import ManagerPastOrderContainer from "../../components/manager/ManagerPastOrderContainer";
+import { Order } from "../../models/Order";
+import { OrderResponse } from "../../models/OrderResponse";
 
-interface StyledTabsProps {
-  children?: React.ReactNode;
-  value: number;
-  onChange: (event: React.SyntheticEvent, newValue: number) => void;
-}
+export default function ManagerPastOrdersContent() {
+  const [orders, setOrders] = useState<Order[]>([]);
 
-const StyledTabs = styled((props: StyledTabsProps) => (
-  <Tabs
-    {...props}
-    TabIndicatorProps={{ children: <span className="MuiTabs-indicatorSpan" /> }}
-    centered
-  />
-))({
-  "& .MuiTabs-indicator": {
-    display: "flex",
-    justifyContent: "center",
-    backgroundColor: "transparent",
-  },
-  "& .MuiTabs-indicatorSpan": {
-    maxWidth: 40,
-    width: "100%",
-    backgroundColor: themeColors.primary,
-  },
-});
+  useEffect(() => {
+    async function getRestaurantOrders() {
+      try {
+        const res = await axios.get("http://localhost:3004/api/get");
+        const { data } = await res;
+        const allOrders: OrderResponse[] = data;
 
-interface StyledTabProps {
-  label: string;
-}
+        setOrders(
+          allOrders.map((order) => ({
+            order_id: order.order_id,
+            order_user_id: order.order_user_id,
+            order_products: JSON.parse(order.order_products).items,
+            order_notes: order.order_notes,
+            order_total_price: order.order_total_price,
+            order_address: order.order_address,
+            order_date: order.order_date,
+            order_time: order.order_time,
+          }))
+        );
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    getRestaurantOrders();
+  }, []);
 
-const StyledTab = styled((props: StyledTabProps) => (
-  <Tab disableRipple {...props} />
-))(({ theme }) => ({
-  textTransform: "none",
-  fontWeight: theme.typography.fontWeightRegular,
-  fontSize: theme.typography.pxToRem(15),
-  marginRight: theme.spacing(1),
-  color: "rgba(255, 255, 255, 0.4)",
-  "&.Mui-selected": {
-    color: themeColors.secondary,
-  },
-  "&.Mui-focusVisible": {
-    backgroundColor: "rgba(100, 95, 228, 0.32)",
-  },
-}));
-
-export default function ClientPastOrdersContent() {
   return (
     <Stack spacing={4} m={4}>
-      <ManagerPastOrderContainer />
+      {orders.map((order) => (
+        <ManagerPastOrderContainer order={order} />
+      ))}
     </Stack>
   );
 }

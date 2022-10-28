@@ -1,9 +1,10 @@
-import { useEffect } from "react";
-import { UserGlobalContext, useUserGlobalContext } from "../contexts/UserGlobalContext";
+import axios from "axios";
+import { useUserGlobalContext } from "../contexts/UserGlobalContext";
+import { User } from "../models/User";
 
 export function useLogin() {
   // const loading = useLoading();
-  const [userGlobalState, setUserGlobalState] = useUserGlobalContext();
+  const [, setUserGlobalState] = useUserGlobalContext();
 
   async function doLogin(
     signInData: {
@@ -13,18 +14,25 @@ export function useLogin() {
     msg?: string,
     delayMs = 1000
   ) {
+    try {
+      const res = await axios.get("http://localhost:3002/api/get");
+      const { data } = await res;
+      const allUsers: User[] = data;
+
+      const currentUserInDatabase = allUsers.find(
+        (user) =>
+          user.user_email === signInData.email &&
+          user.user_password === signInData.password
+      );
+
+      return await currentUserInDatabase;
+    } catch (err) {
+      console.log(err);
+    }
     // const [, userData] = await loading(
     //   Promise.all([delay(delayMs), postApiUserLogin(signIn)]),
     //   msg,
     // );
-    setUserGlobalState({
-      email: signInData.email,
-      password: signInData.password,
-      role: "manager",
-      firstName: "example firstName",
-      lastName: "example lastName",
-    });
-    // return userData;
   }
 
   return { doLogin };

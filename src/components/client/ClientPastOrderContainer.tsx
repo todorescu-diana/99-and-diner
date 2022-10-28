@@ -1,10 +1,13 @@
-import { Box, Card, Typography } from "@mui/material";
+import { Box, Card, Grid, Typography } from "@mui/material";
+import { useEffect } from "react";
+import { Order } from "../../models/Order";
 import { themeColors } from "../../theme";
+import ClientPastOrderContainerRow from "./ClientPastOrderContainerRow";
 // TODO DACA NU SUNT COMENZI + DACA COSUL ESTE GOL + DACA NU SE GASESC ITEME IN MENIU + FONT + LOGO
 
-export default function ClientPastOrderContainer() {
+export default function ClientPastOrderContainer({ order }: { order: Order }) {
   return (
-    <Box m={4}>
+    <Box>
       <Card
         sx={{
           backgroundColor: themeColors.secondary,
@@ -12,55 +15,102 @@ export default function ClientPastOrderContainer() {
           flexDirection: "row",
           padding: 4,
           justifyContent: "space-between",
-          height: "100%",
         }}
       >
-        <Box sx={{ display: "flex", flexDirection: "row" }}>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-            }}
-          >
-            <Typography variant="h4">Produse:</Typography>
-            <Typography mt={3} variant="h4">
-              Pret total:
-            </Typography>
-            <Typography mt={3} variant="h4">
-              Data plasarii comenzii:
-            </Typography>
-            <Typography mt={3} variant="h4">
-              Ora plasarii comenzii:
-            </Typography>
-            <Typography mt={3} variant="h4">
-              Adresa livrarii:
-            </Typography>
-          </Box>
-          <Box
-            ml={20}
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-            }}
-          >
-            <Box>
-              <Typography variant="h5">exemplu produs1 x 1</Typography>
-              <Typography variant="h5">exemplu produs2 x 4</Typography>
-            </Box>
+        <Box
+          sx={{
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+          }}
+        >
+          <ClientPastOrderContainerRow
+            leftContent={
+              <Typography sx={{ flex: 1 }} variant="h4">
+                Produse:
+              </Typography>
+            }
+            rightContent={
+              <>
+                {order.order_products.map((product, idx) => {
+                  console.log("PRODUCT: " + JSON.stringify(product));
 
-            <Typography variant="h5">pret test</Typography>
-            <Typography mt={3} variant="h5">
-              data
-            </Typography>
-            <Typography mt={3} variant="h5">
-              ora
-            </Typography>
-            <Typography mt={3} variant="h5">
-              adresa
-            </Typography>
-          </Box>
+                  return (
+                    <Box key={idx}>
+                      <Typography sx={{ textAlign: "center" }} variant="h5">
+                        {product.product_name} x {product.product_qty}
+                      </Typography>
+                    </Box>
+                  );
+                })}
+              </>
+            }
+          />
+          <ClientPastOrderContainerRow
+            leftContent={
+              <Typography mt={3} variant="h4">
+                Pret total:
+              </Typography>
+            }
+            rightContent={
+              <Typography mt={3} variant="h5">
+                {order.order_total_price}
+              </Typography>
+            }
+          />
+
+          <ClientPastOrderContainerRow
+            leftContent={
+              <Typography mt={3} variant="h4">
+                Indicatii speciale:
+              </Typography>
+            }
+            rightContent={
+              <Typography mt={3} variant="h5">
+                {order.order_notes}
+              </Typography>
+            }
+          />
+
+          <ClientPastOrderContainerRow
+            leftContent={
+              <Typography mt={3} variant="h4">
+                Data plasarii comenzii:
+              </Typography>
+            }
+            rightContent={
+              <Typography mt={3} variant="h5">
+                {order.order_date}
+              </Typography>
+            }
+          />
+
+          <ClientPastOrderContainerRow
+            leftContent={
+              <Typography mt={3} variant="h4">
+                Ora plasarii comenzii:
+              </Typography>
+            }
+            rightContent={
+              <Typography mt={3} variant="h5">
+                {order.order_time}
+              </Typography>
+            }
+          />
+
+          <ClientPastOrderContainerRow
+            leftContent={
+              <Typography mt={3} variant="h4">
+                Adresa livrarii:
+              </Typography>
+            }
+            rightContent={
+              <Typography mt={3} variant="h5">
+                {order.order_address}
+              </Typography>
+            }
+          />
         </Box>
       </Card>
     </Box>

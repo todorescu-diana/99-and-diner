@@ -7,24 +7,39 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useLogin } from "../../hooks/login-hooks";
-import { useUserGlobalContext } from "../../contexts/UserGlobalContext";
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { themeColors } from "../../theme";
+import { useUserGlobalContext } from "../../contexts/UserGlobalContext";
 
 export default function SignInPage() {
-  const [userGlobalState, setUserGlobalState] = useUserGlobalContext();
   const { doLogin } = useLogin();
   const navigate = useNavigate();
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const [, setUserGlobalState] = useUserGlobalContext();
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     doLogin({
       email: data.get("email")?.toString() ?? "",
       password: data.get("password")?.toString() ?? "",
-    });
-    // navigate("/content");
-    navigate("/editcontent");
+    })
+      .then((loginResult) => {
+        if (loginResult !== undefined) {
+          setUserGlobalState({
+            id: loginResult.user_id,
+            email: loginResult.user_email,
+            password: loginResult.user_password,
+            role: loginResult.user_role,
+            firstName: loginResult.user_first_name,
+            lastName: loginResult.user_last_name,
+          });
+          if (loginResult.user_role === "client") {
+            navigate("/content");
+          } else if (loginResult.user_role === "manager") {
+            navigate("/editcontent");
+          }
+        }
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
