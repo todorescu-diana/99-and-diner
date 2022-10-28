@@ -17,7 +17,7 @@ orders_app.get("/api/get", (req, res) => {
   });
 });
 
-// Route to get one user
+// Route to get one order
 orders_app.get("/api/getFromId/:id", (req, res) => {
   const id = req.params.id;
   orders_db.query("SELECT * FROM orders WHERE id = ?", id, (err, result) => {
@@ -28,44 +28,39 @@ orders_app.get("/api/getFromId/:id", (req, res) => {
   });
 });
 
-// Route for creating the user
+// Route for creating the order
 orders_app.post("/api/create", (req, res) => {
-  const productName = req.body.productFirstName;
-  const productPrice = req.body.productPrice;
-  const productType = req.body.productType;
+  const orderId = req.body.orderId;
+  const orderUserId = req.body.orderUserId;
+  const orderProducts = req.body.orderProducts;
+  const orderNotes = req.body.orderNotes;
+  const orderTotalPrice = req.body.orderTotalPrice;
+  const orderAddress = req.body.orderAddress;
+  const orderDate = req.body.orderDate;
+  const orderTime = req.body.orderTime;
 
   orders_db.query(
-    "INSERT INTO users (product_id, product_name, product_price, product_type) VALUES (?,?,?)",
-    [productName, productPrice, productType],
+    "INSERT INTO orders (order_id, order_user_id, order_products, order_notes, order_total_price, order_address, order_date, order_time) VALUES (?,?,?,?,?,?,?,?)",
+    [
+      orderId,
+      orderUserId,
+      orderProducts,
+      orderNotes,
+      orderTotalPrice,
+      orderAddress,
+      orderDate,
+      orderTime,
+    ],
     (err, result) => {
       if (err) {
+        res.send({ error: err.message });
         console.log(err);
       }
+      res.send(result);
       console.log(result);
     }
   );
 });
-
-// // Route to like a post
-// app.post('/api/like/:id',(req,res)=>{
-
-// const id = req.params.id;
-// db.query("UPDATE posts SET likes = likes + 1 WHERE id = ?",id, (err,result)=>{
-//     if(err) {
-//    console.log(err)   }
-//    console.log(result)
-//     });
-// });
-
-// // Route to delete a post
-
-// app.delete('/api/delete/:id',(req,res)=>{
-// const id = req.params.id;
-
-// db.query("DELETE FROM posts WHERE id= ?", id, (err,result)=>{
-// if(err) {
-// console.log(err)
-//         } }) })
 
 orders_app.listen(ORDERSPORT, () => {
   console.log(`Server is running on ${ORDERSPORT}`);

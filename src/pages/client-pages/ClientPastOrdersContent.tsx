@@ -41,8 +41,12 @@ export default function ClientPastOrdersContent() {
     getUserOrders();
   }, []);
 
+  useEffect(() => {
+    console.log("USER ORDERS: " + JSON.stringify(userOrders))
+  }, [userOrders])
+
   return (
-    <Stack spacing={4}>
+    <Stack spacing={4} p={4}>
       {userOrders.length > 0 ? (
         userOrders.map((userOrder, idx) => (
           <ClientPastOrderContainer key={idx} order={userOrder} />

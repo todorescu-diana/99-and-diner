@@ -15,8 +15,11 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useClientOrderContext } from "../../contexts/ClientOrderContext";
+import axios from "axios";
+import { useUserGlobalContext } from "../../contexts/UserGlobalContext";
+import useEnhancedEffect from "@mui/material/utils/useEnhancedEffect";
 
 const steps = [
   "Verificare comanda",
@@ -47,32 +50,28 @@ export default function ClientCheckoutContent({
     useState(false);
 
   const [clientOrderState, setClientOrderState] = useClientOrderContext();
+  const [userGlobalState] = useUserGlobalContext();
 
   const [open, setOpen] = React.useState(false);
   const handleBackToHome = () => {
-    setClientOrderState({ orderProducts: [], orderTotalPrice: 0 });
+    setClientOrderState({
+      order_products: [],
+      order_total_price: 0,
+      order_notes: "",
+    });
     setOpen(false);
     setValue(0);
   };
 
   const handleNext = () => {
-    if (activeStep === 2) {
-      if (address === "") {
-        if (!addressMissingErrorActive)
-          setAddressMissingErrorActive(!addressMissingErrorActive);
-      } else {
-        setOpen(true);
-      }
-    } else {
-      let newSkipped = skipped;
-      if (isStepSkipped(activeStep)) {
-        newSkipped = new Set(newSkipped.values());
-        newSkipped.delete(activeStep);
-      }
-
-      setActiveStep((prevActiveStep) => prevActiveStep + 1);
-      setSkipped(newSkipped);
+    let newSkipped = skipped;
+    if (isStepSkipped(activeStep)) {
+      newSkipped = new Set(newSkipped.values());
+      newSkipped.delete(activeStep);
     }
+
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    setSkipped(newSkipped);
   };
 
   const handleBack = () => {
@@ -97,11 +96,73 @@ export default function ClientCheckoutContent({
 
   function handleEmptyCart() {
     setClientOrderState({
-      orderProducts: [],
-      orderTotalPrice: 0,
+      order_products: [],
+      order_total_price: 0,
+      order_notes: "",
     });
     setIsEmptyCartModalOpen(false);
   }
+
+  const [
+    hasServerRequestProccessedWithError,
+    setHasServerRequestProccessedWithError,
+  ] = useState(false);
+  const [
+    hasServerRequestProccessedWithSuccess,
+    setHasServerRequestProccessedWithSuccess,
+  ] = useState(false);
+
+  useEnhancedEffect(() => {
+    console.log(clientOrderState.order_total_price);
+  }, []);
+
+  const handlePlaceOrder = async () => {
+    if (address === "") {
+      if (!addressMissingErrorActive)
+        setAddressMissingErrorActive(!addressMissingErrorActive);
+    } else {
+      const res = await axios.get("http://localhost:3004/api/get");
+      const { data } = await res;
+      const totalNumberOfOrders = data.length;
+      console.log(totalNumberOfOrders)
+
+      const today = new Date();
+
+      const newOrder = {
+        orderId: totalNumberOfOrders,
+        orderUserId: userGlobalState.id,
+        orderProducts: JSON.stringify({
+          items: clientOrderState.order_products,
+        }),
+        orderNotes: specialIndications,
+        orderTotalPrice: clientOrderState.order_total_price,
+        orderAddress: address,
+        orderDate:
+          today.getDay() + "." + today.getMonth() + "." + today.getFullYear(),
+        orderTime: today.getHours() + ":" + today.getMinutes(),
+      };
+      try {
+        const postResponseData = await axios.post(
+          "http://localhost:3004/api/create",
+          newOrder
+        );
+        if (!postResponseData.data.error) {
+          if (hasServerRequestProccessedWithError)
+            setHasServerRequestProccessedWithError(false);
+          setHasServerRequestProccessedWithSuccess(true);
+          setOpen(true);
+        } else {
+          if (hasServerRequestProccessedWithSuccess)
+            setHasServerRequestProccessedWithSuccess(false);
+          setHasServerRequestProccessedWithError(true);
+        }
+      } catch (err) {
+        if (hasServerRequestProccessedWithSuccess)
+          setHasServerRequestProccessedWithSuccess(false);
+        setHasServerRequestProccessedWithError(true);
+      }
+    }
+  };
 
   return (
     <Box
@@ -133,10 +194,14 @@ export default function ClientCheckoutContent({
           }}
         >
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            Comanda dumneavoastra a fost plasata.
+            {hasServerRequestProccessedWithSuccess
+              ? "Comanda dumneavoastra a fost plasata."
+              : "Ne cerem scuze, a aparut o eroare la trimiterea comenzii."}
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Va fi livrata in cel mai scurt timp la adresa dumneavoastra.
+            {hasServerRequestProccessedWithSuccess
+              ? "Va fi livrata in cel mai scurt timp la adresa dumneavoastra."
+              : "Va rugam incercati mai tarziu."}
           </Typography>
           <Box
             mt={2}
@@ -149,7 +214,6 @@ export default function ClientCheckoutContent({
           >
             <Button
               onClick={handleBackToHome}
-              type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 2, color: themeColors.secondary }}
@@ -196,7 +260,6 @@ export default function ClientCheckoutContent({
           >
             <Button
               onClick={handleEmptyCart}
-              type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 2, mr: 2, color: themeColors.secondary }}
@@ -214,7 +277,7 @@ export default function ClientCheckoutContent({
           </Box>
         </Box>
       </Modal>
-      {clientOrderState.orderProducts.length > 0 ? (
+      {clientOrderState.order_products.length > 0 ? (
         <Box m={4}>
           <Stepper activeStep={activeStep}>
             {steps.map((label, index) => {
@@ -258,7 +321,7 @@ export default function ClientCheckoutContent({
                 flexDirection: "column",
               }}
             >
-              {clientOrderState.orderProducts.length > 0 ? (
+              {clientOrderState.order_products.length > 0 ? (
                 <>
                   <Typography mb={4} variant="h3">
                     Comanda mea
@@ -281,16 +344,16 @@ export default function ClientCheckoutContent({
                         flexDirection: "column",
                       }}
                     >
-                      {clientOrderState.orderProducts.map(
+                      {clientOrderState.order_products.map(
                         (orderProduct, idx) => (
                           <Typography key={idx} variant="h5">
-                            {orderProduct.productName} x{" "}
-                            {orderProduct.productQty}
+                            {orderProduct.product_name} x{" "}
+                            {orderProduct.product_qty}
                           </Typography>
                         )
                       )}
                       <Typography mt={3} variant="h5">
-                        {clientOrderState.orderTotalPrice}
+                        {clientOrderState.order_total_price}
                       </Typography>
                     </Box>
                   </Box>
@@ -416,7 +479,7 @@ export default function ClientCheckoutContent({
           </Card>
         </Box>
       ) : null}
-      {clientOrderState.orderProducts.length > 0 ? (
+      {clientOrderState.order_products.length > 0 ? (
         <Box
           p={4}
           sx={{
@@ -433,10 +496,10 @@ export default function ClientCheckoutContent({
             Pasul anterior
           </Button>
           <Button
-            disabled={clientOrderState.orderProducts.length === 0}
-            onClick={handleNext}
+            disabled={clientOrderState.order_products.length === 0}
+            onClick={activeStep !== 2 ? handleNext : handlePlaceOrder}
           >
-            Pasul urmator
+            {activeStep !== 2 ? "Pasul urmator" : "Plasare comanda"}
           </Button>
         </Box>
       ) : null}

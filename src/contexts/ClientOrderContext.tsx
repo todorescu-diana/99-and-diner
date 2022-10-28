@@ -5,20 +5,22 @@ export const ClientOrderContext = createContext<
 >(null!);
 
 export type ClientOrderContextValue = {
-  orderProducts: {
-    productName: string;
-    productPrice: number;
-    productType: "food" | "drink" | "";
-    productQty: number
+  order_products: {
+    product_name: string;
+    product_price: number;
+    product_type: "food" | "drink" | "";
+    product_qty: number;
   }[];
-  orderTotalPrice: number;
+  order_total_price: number;
+  order_notes: string;
 };
 
 function useClientOrderContextValue() {
   const [clientOrderState, setClientOrderState] =
     useState<ClientOrderContextValue>({
-      orderProducts: [],
-      orderTotalPrice: 0,
+      order_products: [],
+      order_total_price: 0,
+      order_notes: "",
     });
 
   return [clientOrderState, setClientOrderState] as const;
