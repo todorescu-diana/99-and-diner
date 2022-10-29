@@ -33,45 +33,84 @@ export default function ManagerAddItemContainer() {
   const priceInputRef = useRef<HTMLInputElement>(null);
   const urlInputRef = useRef<HTMLInputElement>(null);
 
+  const [emptyNameFieldErrorActive, setEmptyNameFieldErrorActive] =
+    useState(false);
+  const [emptyPriceFieldErrorActive, setEmptyPriceFieldErrorActive] =
+    useState(false);
+  const [emptyTypeFieldErrorActive, setEmptyTypeFieldErrorActive] =
+    useState(false);
+  const [emptyUrlFieldErrorActive, setEmptyUrlFieldErrorActive] =
+    useState(false);
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
-    const res = await axios.get("http://localhost:3003/api/get");
-    const { data } = await res;
-    const totalNumberOfProducts = data.length;
+    if (formData.get("itemName") === "") {
+      setEmptyNameFieldErrorActive(true);
+    }
 
-    const newProduct = {
-      productId: totalNumberOfProducts,
-      productName: formData.get("itemName"),
-      productPrice: formData.get("itemPrice"),
-      productType: formData.get("itemType") === "Mancare" ? "food" : "bautura", // TODO daca nu se alege nimic
-      productImageUrl: formData.get("itemUrl"),
-    };
+    if (formData.get("itemPrice") === "") {
+      setEmptyPriceFieldErrorActive(true);
+    }
 
-    try {
-      const postResponseData = await axios.post(
-        "http://localhost:3003/api/create",
-        newProduct
-      );
-      if (!postResponseData.data.error) {
-        if (hasServerRequestProccessedWithError)
-          setHasServerRequestProccessedWithError(false);
-        setHasServerRequestProccessedWithSuccess(true);
+    if (formData.get("itemType") === "") {
+      setEmptyTypeFieldErrorActive(true);
+    }
 
-        if (nameInputRef.current) nameInputRef.current.value = "";
-        if (priceInputRef.current) priceInputRef.current.value = "";
-        setType("");
-        if (urlInputRef.current) urlInputRef.current.value = "";
-      } else {
+    if (formData.get("itemUrl") === "") {
+      setEmptyUrlFieldErrorActive(true);
+    } else {
+      const res = await axios.get("http://localhost:3003/api/get");
+      const { data } = await res;
+      let lastProductId = 0;
+      if (data.length > 0) lastProductId = data[data.length - 1].product_id;
+
+      console.log(JSON.stringify(data[data.length - 1]));
+      const newProduct = {
+        productId: lastProductId + 1,
+        productName: formData.get("itemName"),
+        productPrice: formData.get("itemPrice"),
+        productType: formData.get("itemType") === "Mancare" ? "food" : "drink", // TODO daca nu se alege nimic
+        productImageUrl: formData.get("itemUrl"),
+      };
+
+      try {
+        const postResponseData = await axios.post(
+          "http://localhost:3003/api/create",
+          newProduct
+        );
+        if (!postResponseData.data.error) {
+          if (emptyNameFieldErrorActive) {
+            setEmptyNameFieldErrorActive(false);
+          }
+          if (emptyPriceFieldErrorActive) {
+            setEmptyPriceFieldErrorActive(false);
+          }
+          if (emptyTypeFieldErrorActive) {
+            setEmptyTypeFieldErrorActive(false);
+          }
+          if (emptyUrlFieldErrorActive) {
+            setEmptyUrlFieldErrorActive(false);
+          }
+          if (hasServerRequestProccessedWithError)
+            setHasServerRequestProccessedWithError(false);
+          setHasServerRequestProccessedWithSuccess(true);
+
+          if (nameInputRef.current) nameInputRef.current.value = "";
+          if (priceInputRef.current) priceInputRef.current.value = "";
+          setType("");
+          if (urlInputRef.current) urlInputRef.current.value = "";
+        } else {
+          if (hasServerRequestProccessedWithSuccess)
+            setHasServerRequestProccessedWithSuccess(false);
+          setHasServerRequestProccessedWithError(true);
+        }
+      } catch (err) {
         if (hasServerRequestProccessedWithSuccess)
           setHasServerRequestProccessedWithSuccess(false);
         setHasServerRequestProccessedWithError(true);
       }
-    } catch (err) {
-      if (hasServerRequestProccessedWithSuccess)
-        setHasServerRequestProccessedWithSuccess(false);
-      setHasServerRequestProccessedWithError(true);
     }
   };
 
@@ -105,6 +144,7 @@ export default function ManagerAddItemContainer() {
           }}
         >
           <TextField
+            error={emptyNameFieldErrorActive}
             margin="normal"
             fullWidth
             id="itemName"
@@ -116,6 +156,7 @@ export default function ManagerAddItemContainer() {
             inputRef={nameInputRef}
           />
           <TextField
+            error={emptyPriceFieldErrorActive}
             margin="normal"
             fullWidth
             id="itemPrice"
@@ -126,6 +167,7 @@ export default function ManagerAddItemContainer() {
             inputRef={priceInputRef}
           />
           <TextField
+            error={emptyTypeFieldErrorActive}
             select
             label="Tip Produs"
             id="itemType"
@@ -143,6 +185,7 @@ export default function ManagerAddItemContainer() {
             </MenuItem>
           </TextField>
           <TextField
+            error={emptyUrlFieldErrorActive}
             margin="normal"
             fullWidth
             id="itemUrl"
@@ -208,6 +251,55 @@ export default function ManagerAddItemContainer() {
             src={imageUrl}
             alt="Invalid Image Url."
           />
+        </Box>
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Box sx={{ width: "100%" }} p={4}>
+          <Collapse
+            in={
+              emptyNameFieldErrorActive ||
+              emptyPriceFieldErrorActive ||
+              emptyTypeFieldErrorActive ||
+              emptyUrlFieldErrorActive
+            }
+          >
+            <Alert
+              severity="error"
+              action={
+                <IconButton
+                  aria-label="close"
+                  color="inherit"
+                  size="small"
+                  onClick={() => {
+                    if (emptyNameFieldErrorActive) {
+                      setEmptyNameFieldErrorActive(false);
+                    }
+                    if (emptyPriceFieldErrorActive) {
+                      setEmptyPriceFieldErrorActive(false);
+                    }
+                    if (emptyTypeFieldErrorActive) {
+                      setEmptyTypeFieldErrorActive(false);
+                    }
+                    if (emptyUrlFieldErrorActive) {
+                      setEmptyUrlFieldErrorActive(false);
+                    }
+                  }}
+                >
+                  <CloseIcon fontSize="inherit" />
+                </IconButton>
+              }
+              sx={{ mb: 2 }}
+            >
+              Toate campurile sunt obligatorii.
+            </Alert>
+          </Collapse>
         </Box>
       </Box>
     </Card>
