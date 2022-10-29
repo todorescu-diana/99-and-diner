@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useRef, useState } from "react";
-import { themeColors } from "../../theme";
+import { themeColors } from "../../theme/theme";
 import CloseIcon from "@mui/icons-material/Close";
 
 export default function ManagerAddItemContainer() {
@@ -204,7 +204,7 @@ export default function ManagerAddItemContainer() {
         <Box sx={{ width: 200, height: 130 }}>
           <CardMedia
             component="img"
-            sx={{ height: "100%", width: "100%" }}
+            sx={{ height: "100%", width: "100%", borderRadius: 2 }}
             src={imageUrl}
             alt="Invalid Image Url."
           />

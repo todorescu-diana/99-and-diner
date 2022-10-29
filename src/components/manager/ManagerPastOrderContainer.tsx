@@ -3,7 +3,7 @@ import axios, { AxiosRequestConfig } from "axios";
 import { useEffect, useState } from "react";
 import { Order } from "../../models/Order";
 import { User } from "../../models/User";
-import { themeColors } from "../../theme";
+import { themeColors } from "../../theme/theme";
 import ManagerPastOrderContainerRow from "./ManagerPastOrderContainerRow";
 // TODO DACA NU SUNT COMENZI + DACA COSUL ESTE GOL + DACA NU SE GASESC ITEME IN MENIU + FONT + LOGO
 

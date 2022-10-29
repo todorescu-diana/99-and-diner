@@ -9,7 +9,7 @@ import {
   Typography,
   IconButton,
 } from "@mui/material";
-import { themeColors } from "../../theme";
+import { themeColors } from "../../theme/theme";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import CloseIcon from "@mui/icons-material/Close";
@@ -306,7 +306,7 @@ export default function ManagerItemContainer({
           <Box sx={{ width: 200, height: 130 }}>
             <CardMedia
               component="img"
-              sx={{ height: "100%", width: "100%" }}
+              sx={{ height: "100%", width: "100%", borderRadius: 2 }}
               src={imageUrl}
               alt="URL imagine invalid"
             />

@@ -1,5 +1,5 @@
 import { Box, Card, CardMedia, IconButton, Typography } from "@mui/material";
-import { themeColors } from "../../theme";
+import { themeColors } from "../../theme/theme";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { useEffect, useState } from "react";
@@ -32,7 +32,7 @@ export default function ClientItemContainer({
     const currentItemInOrderProductArray = clientOrderState.order_products.find(
       (orderProduct) => orderProduct.product_name === itemName
     );
-    if (itemQty > 0) {
+    if (itemQty > 1) {
       setItemQty(itemQty - 1);
 
       if (currentItemInOrderProductArray !== undefined) {
@@ -120,27 +120,56 @@ export default function ClientItemContainer({
         display: "flex",
         flexDirection: "row",
         padding: 4,
-        justifyContent: "space-between",
+        justifyContent: "flex-start",
+        width: "35%",
+        height: 250,
+        alignSelf: "center",
+        margin: 2,
+        borderRadius: 2,
       }}
     >
-      <Box sx={{ display: "flex", flexDirection: "column" }}>
-        <Typography variant="h4">{itemName}</Typography>
-        <Typography variant="h6" sx={{ marginTop: 2 }}>
+      <Box sx={{ width: 200, height: 130, alignSelf: "center" }} mr={5}>
+        <CardMedia
+          component="img"
+          sx={{ height: "100%", width: "100%", borderRadius: 2 }}
+          src={imageUrl}
+          alt="alt"
+        />
+      </Box>
+      <Box
+        maxWidth={300}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-evenly",
+        }}
+      >
+        <Typography
+          variant="h5"
+          sx={{
+            wordWrap: "break-word",
+            fontWeight: "bold",
+            color: "primary.dark",
+          }}
+        >
+          {itemName}
+        </Typography>
+        <Typography variant="h6" sx={{ marginTop: 3 }}>
           {itemPrice.toString()} lei
         </Typography>
         <Box
           sx={{
             display: "flex",
-            alignSelf: "flex-start",
             alignItems: "center",
           }}
+          mt={2}
         >
           <IconButton
             aria-label="minus"
             onClick={handleMinusPress}
             sx={{ mr: 2 }}
           >
-            <RemoveIcon />
+            <RemoveIcon color={"primary"} />
           </IconButton>
           <Typography>{itemQty}</Typography>
           <IconButton
@@ -148,17 +177,9 @@ export default function ClientItemContainer({
             onClick={handlePlusPress}
             sx={{ ml: 2 }}
           >
-            <AddIcon />
+            <AddIcon color={"primary"} />
           </IconButton>
         </Box>
-      </Box>
-      <Box sx={{ width: 200, height: 130 }}>
-        <CardMedia
-          component="img"
-          sx={{ height: "100%", width: "100%" }}
-          src={imageUrl}
-          alt="alt"
-        />
       </Box>
     </Card>
   );

@@ -6,7 +6,7 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { themeColors } from "../../theme";
+import { themeColors } from "../../theme/theme";
 import axios from "axios";
 
 export default function SignUpPage() {

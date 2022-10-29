@@ -1,81 +1,49 @@
-import { themeColors } from "../../theme";
+import { themeColors } from "../../theme/theme";
 import { Stack } from "@mui/system";
 import ClientPastOrderContainer from "../../components/client/ClientPastOrderContainer";
-import { useEffect, useState } from "react";
-import axios from "axios";
 import { Order } from "../../models/Order";
-import { useUserGlobalContext } from "../../contexts/UserGlobalContext";
 import { Box, Card, Typography } from "@mui/material";
-import { OrderResponse } from "../../models/OrderResponse";
+import StyledFooter from "../../components/StyledFooter";
 
-export default function ClientPastOrdersContent() {
-  const [userOrders, setUserOrders] = useState<Order[]>([]);
-
-  const [userGlobalState] = useUserGlobalContext();
-
-  useEffect(() => {
-    async function getUserOrders() {
-      try {
-        const res = await axios.get("http://localhost:3004/api/get");
-        const { data } = await res;
-        const allOrders: OrderResponse[] = data;
-
-        setUserOrders(
-          allOrders
-            .filter((order) => order.order_user_id === userGlobalState.id)
-            .map((order) => ({
-              order_id: order.order_id,
-              order_user_id: order.order_user_id,
-              order_products: JSON.parse(order.order_products).items,
-              order_notes: order.order_notes,
-              order_total_price: order.order_total_price,
-              order_address: order.order_address,
-              order_date: order.order_date,
-              order_time: order.order_time,
-            }))
-        );
-      } catch (err) {
-        console.log(err);
-      }
-    }
-    getUserOrders();
-  }, []);
-
-  useEffect(() => {
-    console.log("USER ORDERS: " + JSON.stringify(userOrders))
-  }, [userOrders])
-
+export default function ClientPastOrdersContent({
+  userOrders,
+}: {
+  userOrders: Order[];
+}) {
   return (
-    <Stack spacing={4} p={4}>
-      {userOrders.length > 0 ? (
-        userOrders.map((userOrder, idx) => (
-          <ClientPastOrderContainer key={idx} order={userOrder} />
-        ))
-      ) : (
-        <Box m={4}>
-          <Card
-            sx={{
-              backgroundColor: themeColors.secondary,
-              display: "flex",
-              flexDirection: "row",
-              padding: 4,
-              justifyContent: "space-between",
-              height: "100%",
-            }}
-          >
-            <Box
+    <Box sx={{ width: "100%" }} height="100vh">
+      <Stack spacing={4} p={4}>
+        {userOrders.length > 0 ? (
+          userOrders.map((userOrder, idx) => (
+            <ClientPastOrderContainer key={idx} order={userOrder} />
+          ))
+        ) : (
+          <Box m={4}>
+            <Card
               sx={{
+                backgroundColor: themeColors.secondary,
                 display: "flex",
-                flexDirection: "column",
+                flexDirection: "row",
+                padding: 4,
+                justifyContent: "space-between",
+                height: "100%",
               }}
             >
-              <Typography mb={4} variant="h3">
-                Nu s-au gasit comenzi anterioare.
-              </Typography>
-            </Box>
-          </Card>
-        </Box>
-      )}
-    </Stack>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <Typography mb={4} variant="h3">
+                  Nu s-au gasit comenzi anterioare.
+                </Typography>
+              </Box>
+            </Card>
+          </Box>
+        )}
+      </Stack>
+      <StyledFooter />
+    </Box>
   );
 }

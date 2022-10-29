@@ -4,7 +4,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import { useNavigate } from "react-router-dom";
-import { themeColors } from "../../theme";
+import { themeColors } from "../../theme/theme";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { IconButton } from "@mui/material";
 import { useUserGlobalContext } from "../../contexts/UserGlobalContext";

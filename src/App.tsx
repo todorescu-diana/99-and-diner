@@ -1,14 +1,14 @@
 import "./App.css";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import SignInPage from "./pages/auth-pages/SignInPage";
-import { createTheme, CssBaseline } from "@mui/material";
+import { CssBaseline } from "@mui/material";
+import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/material/styles";
-import { themeColors } from "./theme";
+import { themeColors } from "./theme/theme";
 import SignUpPage from "./pages/auth-pages/SignUpPage";
 import { useUserGlobalContext } from "./contexts/UserGlobalContext";
 import ClientContent from "./pages/client-pages/ClientContent";
 import ManagerContent from "./pages/manager-pages/ManagerContent";
-import { useEffect } from "react";
 
 const theme = createTheme({
   palette: {
@@ -18,6 +18,9 @@ const theme = createTheme({
     primary: {
       main: themeColors.primary,
     },
+  },
+  typography: {
+    fontFamily: ['Quicksand', 'Arial'].join(","),
   },
 });
 
