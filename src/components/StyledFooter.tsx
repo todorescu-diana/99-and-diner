@@ -5,6 +5,9 @@ export default function StyledFooter() {
   return (
     <Box
       sx={{
+        position: "absolute",
+        bottom: 0,
+        width: "100%",
         backgroundColor: "primary.main",
         display: "flex",
         flexDirection: "row",

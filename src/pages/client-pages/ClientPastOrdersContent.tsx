@@ -11,31 +11,36 @@ export default function ClientPastOrdersContent({
   userOrders: Order[];
 }) {
   return (
-    <Box sx={{ width: "100%" }} height="100vh">
+    <Box>
       <Stack spacing={4} p={4}>
         {userOrders.length > 0 ? (
           userOrders.map((userOrder, idx) => (
             <ClientPastOrderContainer key={idx} order={userOrder} />
           ))
         ) : (
-          <Box m={4}>
+          <Box m={4} sx={{ alignSelf: "center", mt: 21 }}>
             <Card
               sx={{
                 backgroundColor: themeColors.secondary,
                 display: "flex",
                 flexDirection: "row",
                 padding: 4,
-                justifyContent: "space-between",
+                justifyContent: "center",
                 height: "100%",
+                borderRadius: 2,
+                pr: 15,
+                pl: 15,
               }}
             >
               <Box
                 sx={{
                   display: "flex",
-                  flexDirection: "column",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
               >
-                <Typography mb={4} variant="h3">
+                <Typography variant="h4">
                   Nu s-au gasit comenzi anterioare.
                 </Typography>
               </Box>

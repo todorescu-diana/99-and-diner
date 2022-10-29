@@ -15,6 +15,7 @@ import axios from "axios";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
 import DoneOutlineIcon from "@mui/icons-material/DoneOutline";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function ManagerItemContainer({
   itemId,
@@ -22,12 +23,14 @@ export default function ManagerItemContainer({
   itemPrice,
   itemType,
   imageUrl,
+  setOpen,
 }: {
   itemId: number;
   itemName: string;
   itemPrice: number;
   itemType: "food" | "drink";
   imageUrl: string;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [isEditNameActive, setIsEditNameActive] = useState(false);
   const [isEditPriceActive, setIsEditPriceActive] = useState(false);
@@ -87,40 +90,53 @@ export default function ManagerItemContainer({
     setUrl(event.target.value);
   };
 
+  const [changeCancelled, setChangeCancelled] = useState(false);
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const newProductInfo = {
-      productId: itemId,
-      productNewName: name,
-      productNewPrice: price,
-      productNewImageUrl: url,
-    };
+    if (name === "" || isNaN(price) || url === "") {
+      setChangeCancelled(true);
+      setHasItemChanged(false);
+      setIsEditNameActive(false);
+      setIsEditPriceActive(false);
+      setIsEditUrlActive(false);
+      if (name === "") setName(itemName); // TODO
+      if (isNaN(price)) setPrice(itemPrice);
+      if (url === "") setUrl(imageUrl);
+    } else {
+      const newProductInfo = {
+        productId: itemId,
+        productNewName: name,
+        productNewPrice: price,
+        productNewImageUrl: url,
+      };
 
-    try {
-      const result = await axios.put(
-        `http://localhost:3003/api/updateProduct/:${itemId}`,
-        newProductInfo
-      );
+      try {
+        const result = await axios.put(
+          `http://localhost:3003/api/updateProduct/:${itemId}`,
+          newProductInfo
+        );
 
-      if (!result.data.error) {
-        if (hasServerRequestProccessedWithError)
-          setHasServerRequestProccessedWithError(false);
-        setHasServerRequestProccessedWithSuccess(true);
-      } else {
+        if (!result.data.error) {
+          if (hasServerRequestProccessedWithError)
+            setHasServerRequestProccessedWithError(false);
+          setHasServerRequestProccessedWithSuccess(true);
+        } else {
+          if (hasServerRequestProccessedWithSuccess)
+            setHasServerRequestProccessedWithSuccess(false);
+          setHasServerRequestProccessedWithError(true);
+        }
+      } catch (err) {
         if (hasServerRequestProccessedWithSuccess)
           setHasServerRequestProccessedWithSuccess(false);
         setHasServerRequestProccessedWithError(true);
+      } finally {
+        setHasItemChanged(false);
+        if (isEditNameActive) setIsEditNameActive(!isEditNameActive);
+        if (isEditPriceActive) setIsEditPriceActive(!isEditPriceActive);
+        if (isEditUrlActive) setIsEditUrlActive(!isEditUrlActive);
       }
-    } catch (err) {
-      if (hasServerRequestProccessedWithSuccess)
-        setHasServerRequestProccessedWithSuccess(false);
-      setHasServerRequestProccessedWithError(true);
-    } finally {
-      setHasItemChanged(false);
-      if (isEditNameActive) setIsEditNameActive(!isEditNameActive);
-      if (isEditPriceActive) setIsEditPriceActive(!isEditPriceActive);
-      if (isEditUrlActive) setIsEditUrlActive(!isEditUrlActive);
     }
   };
 
@@ -134,6 +150,10 @@ export default function ManagerItemContainer({
     }
   }, [hasServerRequestProccessedWithSuccess]);
 
+  function handleDeletePress() {
+    setOpen(true);
+  }
+
   return (
     <Card
       sx={{
@@ -141,7 +161,9 @@ export default function ManagerItemContainer({
         display: "flex",
         flexDirection: "column",
         padding: 4,
+        paddinBottom: 0,
         justifyContent: "space-between",
+        borderRadius: 2,
       }}
     >
       <Box component="form" onSubmit={handleSubmit}>
@@ -150,6 +172,7 @@ export default function ManagerItemContainer({
             display: "flex",
             flexDirection: "row",
             justifyContent: "space-between",
+            alignItems: "center",
           }}
         >
           <Box
@@ -183,7 +206,10 @@ export default function ManagerItemContainer({
               >
                 <DoneOutlineIcon fontSize="inherit" />
               </IconButton>
-              <Typography sx={{ width: "20%" }} variant="h4">
+              <Typography
+                sx={{ width: "20%", fontWeight: "bold" }}
+                variant="h5"
+              >
                 Nume:{" "}
               </Typography>
               {isEditNameActive ? (
@@ -200,7 +226,7 @@ export default function ManagerItemContainer({
                   defaultValue={name}
                 />
               ) : (
-                <Typography sx={{ width: "70%" }} variant="h4">
+                <Typography sx={{ width: "70%" }} variant="h5">
                   {name}
                 </Typography>
               )}{" "}
@@ -228,7 +254,10 @@ export default function ManagerItemContainer({
               >
                 <DoneOutlineIcon fontSize="inherit" />
               </IconButton>
-              <Typography sx={{ width: "20%" }} variant="h6">
+              <Typography
+                sx={{ width: "20%", fontWeight: "bold" }}
+                variant="h6"
+              >
                 Pret:{" "}
               </Typography>
               {isEditPriceActive ? (
@@ -273,7 +302,10 @@ export default function ManagerItemContainer({
               >
                 <DoneOutlineIcon fontSize="inherit" />
               </IconButton>
-              <Typography sx={{ width: "20%" }} variant="h6">
+              <Typography
+                sx={{ width: "20%", fontWeight: "bold" }}
+                variant="h6"
+              >
                 Url imagine:{" "}
               </Typography>
               {isEditUrlActive ? (
@@ -303,7 +335,16 @@ export default function ManagerItemContainer({
               )}
             </Box>
           </Box>
-          <Box sx={{ width: 200, height: 130 }}>
+          <Box
+            sx={{
+              width: 200,
+              height: 130,
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <CardMedia
               component="img"
               sx={{ height: "100%", width: "100%", borderRadius: 2 }}
@@ -311,18 +352,50 @@ export default function ManagerItemContainer({
               alt="URL imagine invalid"
             />
           </Box>
+          <IconButton
+            aria-label="delete"
+            onClick={handleDeletePress}
+            sx={{ ml: 10, mr: 3, mt: 2.5 }}
+          >
+            <DeleteIcon color={"primary"} />
+          </IconButton>
         </Box>
+
         {hasItemChanged ? (
-          <Box sx={{ mt: 2 }}>
-            <Button
-              fullWidth
-              variant="contained"
-              sx={{ mt: 2, color: themeColors.secondary }}
-              type="submit"
-            >
-              Salvare informatii produs
-            </Button>
-          </Box>
+          <>
+            <Box sx={{ mt: 2 }}>
+              <Button
+                fullWidth
+                variant="contained"
+                sx={{ mt: 2, color: themeColors.secondary }}
+                type="submit"
+              >
+                Salvare informatii produs
+              </Button>
+            </Box>
+            <Box sx={{ mt: 2 }}>
+              <Collapse in={changeCancelled}>
+                <Alert
+                  severity="info"
+                  action={
+                    <IconButton
+                      aria-label="close"
+                      color="inherit"
+                      size="small"
+                      onClick={() => {
+                        setChangeCancelled(false);
+                      }}
+                    >
+                      <CloseIcon fontSize="inherit" />
+                    </IconButton>
+                  }
+                  sx={{ mb: 2 }}
+                >
+                  Modificare anulata.
+                </Alert>
+              </Collapse>
+            </Box>
+          </>
         ) : null}
         <Box sx={{ width: "100%" }} mt={2}>
           <Collapse
@@ -357,7 +430,7 @@ export default function ManagerItemContainer({
             >
               {hasServerRequestProccessedWithError
                 ? "Eroare in comunicarea cu serverul."
-                : "Corect"}
+                : "Produs modificat cu succes."}
             </Alert>
           </Collapse>
         </Box>

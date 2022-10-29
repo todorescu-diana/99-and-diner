@@ -35,7 +35,7 @@ export default function ManagerPastOrdersContent() {
   }, []);
 
   return (
-    <Stack spacing={4} m={4}>
+    <Stack spacing={4} p={4}>
       {orders.map((order) => (
         <ManagerPastOrderContainer order={order} />
       ))}

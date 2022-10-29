@@ -9,7 +9,7 @@ export default function ClientDrinkMenuContent({
   drinkProducts: Product[];
 }) {
   return (
-    <Box sx={{ width: "100%" }} height="100vh">
+    <Box>
       <Box
         p={4}
         pl={0}

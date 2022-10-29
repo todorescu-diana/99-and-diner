@@ -166,7 +166,7 @@ export default function ClientCheckoutContent({
   };
 
   return (
-    <Box sx={{ width: "100%" }} height="80vh">
+    <Box>
       <Box
         sx={{
           display: "flex",
@@ -335,7 +335,7 @@ export default function ClientCheckoutContent({
           {activeStep === 0 ? (
             <Box
               m={4}
-              mt={clientOrderState.order_products.length > 0 ? 4 : 20}
+              mt={clientOrderState.order_products.length > 0 ? 4 : 25}
               sx={{
                 display: "flex",
                 flexDirection: "row",
@@ -416,7 +416,7 @@ export default function ClientCheckoutContent({
                       </Button>
                     </>
                   ) : (
-                    <Typography variant="h3">
+                    <Typography variant="h4">
                       Cosul dumneavoastra este gol.
                     </Typography>
                   )}

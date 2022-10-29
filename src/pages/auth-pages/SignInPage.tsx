@@ -11,11 +11,16 @@ import { useNavigate } from "react-router-dom";
 import { themeColors } from "../../theme/theme";
 import { useUserGlobalContext } from "../../contexts/UserGlobalContext";
 import StyledFooter from "../../components/StyledFooter";
+import { Alert, Collapse, IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 export default function SignInPage() {
   const { doLogin } = useLogin();
   const navigate = useNavigate();
   const [, setUserGlobalState] = useUserGlobalContext();
+
+  const [invalidCredentials, setInvalidCredentials] = React.useState(false);
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -25,6 +30,7 @@ export default function SignInPage() {
     })
       .then((loginResult) => {
         if (loginResult !== undefined) {
+          if (invalidCredentials) setInvalidCredentials(false);
           setUserGlobalState({
             id: loginResult.user_id,
             email: loginResult.user_email,
@@ -38,6 +44,8 @@ export default function SignInPage() {
           } else if (loginResult.user_role === "manager") {
             navigate("/editcontent");
           }
+        } else {
+          setInvalidCredentials(true);
         }
       })
       .catch((err) => console.log(err));
@@ -71,6 +79,7 @@ export default function SignInPage() {
             sx={{ mt: 1 }}
           >
             <TextField
+              error={invalidCredentials}
               margin="normal"
               required
               fullWidth
@@ -82,6 +91,7 @@ export default function SignInPage() {
               sx={{ backgroundColor: "#fefcf6" }}
             />
             <TextField
+              error={invalidCredentials}
               margin="normal"
               required
               fullWidth
@@ -100,6 +110,26 @@ export default function SignInPage() {
             >
               Sign In
             </Button>
+            <Collapse in={invalidCredentials}>
+              <Alert
+                severity="error"
+                action={
+                  <IconButton
+                    aria-label="close"
+                    color="inherit"
+                    size="small"
+                    onClick={() => {
+                      setInvalidCredentials(false);
+                    }}
+                  >
+                    <CloseIcon fontSize="inherit" />
+                  </IconButton>
+                }
+                sx={{ mb: 2, mt: 3 }}
+              >
+                Email sau parola incorecte.
+              </Alert>
+            </Collapse>
             <Grid container sx={{ mt: 4, justifyContent: "center" }}>
               <Grid item>
                 <Link

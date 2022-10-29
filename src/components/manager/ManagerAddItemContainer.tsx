@@ -26,7 +26,6 @@ export default function ManagerAddItemContainer() {
     setHasServerRequestProccessedWithSuccess,
   ] = useState(false);
 
-  // const [type, setType] = useState<"" | "Mancare" | "Bautura">("");
   const [type, setType] = useState<string>("");
 
   const nameInputRef = useRef<HTMLInputElement>(null);
@@ -121,7 +120,9 @@ export default function ManagerAddItemContainer() {
         display: "flex",
         flexDirection: "column",
         padding: 4,
+        paddingBottom: 0,
         justifyContent: "space-between",
+        borderRadius: 2,
       }}
     >
       <Box
@@ -141,6 +142,7 @@ export default function ManagerAddItemContainer() {
             justifyContent: "space-between",
             flex: 1,
             p: 4,
+            pb: 0,
           }}
         >
           <TextField
@@ -201,7 +203,6 @@ export default function ManagerAddItemContainer() {
               variant="contained"
               sx={{ mt: 2, color: themeColors.secondary }}
               type="submit"
-              // TODO selectare poza
             >
               Adaugare produs
             </Button>
@@ -239,15 +240,19 @@ export default function ManagerAddItemContainer() {
               >
                 {hasServerRequestProccessedWithError
                   ? "Eroare in comunicarea cu serverul."
-                  : "Corect"}
+                  : "Produs adaugat cu succes."}
               </Alert>
             </Collapse>
           </Box>
         </Box>
-        <Box sx={{ width: 200, height: 130 }}>
+        <Box sx={{ width: 200, height: 130, alignSelf: "center" }}>
           <CardMedia
             component="img"
-            sx={{ height: "100%", width: "100%", borderRadius: 2 }}
+            sx={{
+              height: "100%",
+              width: "100%",
+              borderRadius: 2,
+            }}
             src={imageUrl}
             alt="Invalid Image Url."
           />
@@ -261,7 +266,7 @@ export default function ManagerAddItemContainer() {
           alignItems: "center",
         }}
       >
-        <Box sx={{ width: "100%" }} p={4}>
+        <Box sx={{ width: "81%" }} p={4}>
           <Collapse
             in={
               emptyNameFieldErrorActive ||

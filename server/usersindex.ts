@@ -42,8 +42,10 @@ app.post("/api/create", (req, res) => {
     [userId, userFirstName, userLastName, userEmail, userPassword, userRole],
     (err, result) => {
       if (err) {
+        res.send({ error: err.message });
         console.log(err);
       }
+      res.send(result);
       console.log(result);
     }
   );

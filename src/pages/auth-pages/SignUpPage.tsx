@@ -8,31 +8,128 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { themeColors } from "../../theme/theme";
 import axios from "axios";
+import { User } from "../../models/User";
+import { Alert, Collapse, IconButton, InputAdornment } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import { useRef, useState } from "react";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 export default function SignUpPage() {
+  const [emailAlreadyInUseError, setEmailAlreadyInUseError] = useState(false);
+  const [userCreatedWithSuccess, setUserCreatedWithSuccess] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+  const [emptyFirstNameFieldErrorActive, setEmptyFirstNameFieldErrorActive] =
+    useState(false);
+  const [emptyLastNameFieldErrorActive, setEmptyLastNameFieldErrorActive] =
+    useState(false);
+  const [emptyEmailFieldErrorActive, setEmptyEmailFieldErrorActive] =
+    useState(false);
+  const [emptyPasswordFieldErrorActive, setEmptyPasswordFieldErrorActive] =
+    useState(false);
+
+  const firstNameInputRef = useRef<HTMLInputElement>(null);
+  const lastNameInputRef = useRef<HTMLInputElement>(null);
+  const emailInputRef = useRef<HTMLInputElement>(null);
+  const passwordInputRef = useRef<HTMLInputElement>(null);
+
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
-    const res = await axios.get("http://localhost:3002/api/get");
-    const { data } = await res;
-    const totalNumberOfUsers = data.length;
+    if (formData.get("firstName") === "") {
+      setEmptyFirstNameFieldErrorActive(true);
+    }
 
-    const newUser = {
-      userId: totalNumberOfUsers,
-      userFirstName: formData.get("firstName"),
-      userLastName: formData.get("lastName"),
-      userEmail: formData.get("email"),
-      userPassword: formData.get("password"),
-      userRole: "client",
-    };
+    if (formData.get("lastName") === "") {
+      setEmptyLastNameFieldErrorActive(true);
+    }
 
-    const postResponseData = await axios.post(
-      "http://localhost:3002/api/create",
-      newUser
-    );
-    const response = await postResponseData.data;
+    if (formData.get("email") === "") {
+      setEmptyEmailFieldErrorActive(true);
+    }
+
+    if (formData.get("password") === "") {
+      setEmptyPasswordFieldErrorActive(true);
+    } else {
+      if (emptyFirstNameFieldErrorActive) {
+        setEmptyFirstNameFieldErrorActive(false);
+      }
+      if (emptyLastNameFieldErrorActive) {
+        setEmptyLastNameFieldErrorActive(false);
+      }
+      if (emptyEmailFieldErrorActive) {
+        setEmptyEmailFieldErrorActive(false);
+      }
+      if (emptyPasswordFieldErrorActive) {
+        setEmptyPasswordFieldErrorActive(false);
+      }
+      const res = await axios.get("http://localhost:3002/api/get");
+      const { data } = await res;
+
+      const userWithEmail = data.find(
+        (user: User) => user.user_email === formData.get("email")
+      );
+      if (
+        formData.get("firstName") !== "" &&
+        formData.get("lastName") !== "" &&
+        formData.get("email") !== "" &&
+        formData.get("password") !== "" &&
+        userWithEmail !== undefined
+      ) {
+        setEmailAlreadyInUseError(true);
+      } else {
+        try {
+          const totalNumberOfUsers = data.length;
+
+          const newUser = {
+            userId: totalNumberOfUsers,
+            userFirstName: formData.get("firstName"),
+            userLastName: formData.get("lastName"),
+            userEmail: formData.get("email"),
+            userPassword: formData.get("password"),
+            userRole: "client",
+          };
+
+          const postResponseData = await axios.post(
+            "http://localhost:3002/api/create",
+            newUser
+          );
+          if (!postResponseData.data.error) {
+            if (emailAlreadyInUseError) {
+              setEmailAlreadyInUseError(false);
+            }
+            if (emptyFirstNameFieldErrorActive) {
+              setEmptyFirstNameFieldErrorActive(false);
+            }
+            if (emptyLastNameFieldErrorActive) {
+              setEmptyLastNameFieldErrorActive(false);
+            }
+            if (emptyEmailFieldErrorActive) {
+              setEmptyEmailFieldErrorActive(false);
+            }
+            if (emptyPasswordFieldErrorActive) {
+              setEmptyPasswordFieldErrorActive(false);
+            }
+            setUserCreatedWithSuccess(true);
+            if (firstNameInputRef.current) firstNameInputRef.current.value = "";
+            if (lastNameInputRef.current) lastNameInputRef.current.value = "";
+            if (emailInputRef.current) emailInputRef.current.value = "";
+            if (passwordInputRef.current) passwordInputRef.current.value = "";
+          } else {
+            if (userCreatedWithSuccess) setUserCreatedWithSuccess(false);
+          }
+        } catch (err) {
+          if (userCreatedWithSuccess) setUserCreatedWithSuccess(false);
+        }
+      }
+    }
   }
+
+  React.useEffect(() => {
+    console.log(userCreatedWithSuccess);
+  }, [userCreatedWithSuccess]);
 
   return (
     <Container component="main" maxWidth="sm">
@@ -52,6 +149,7 @@ export default function SignUpPage() {
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
+            error={emptyFirstNameFieldErrorActive}
             margin="normal"
             required
             fullWidth
@@ -61,8 +159,10 @@ export default function SignUpPage() {
             autoComplete="firstName"
             autoFocus
             sx={{ backgroundColor: "#fefcf6" }}
+            inputRef={firstNameInputRef}
           />
           <TextField
+            error={emptyLastNameFieldErrorActive}
             margin="normal"
             required
             fullWidth
@@ -71,8 +171,10 @@ export default function SignUpPage() {
             name="lastName"
             autoComplete="lastName"
             sx={{ backgroundColor: "#fefcf6" }}
+            inputRef={lastNameInputRef}
           />
           <TextField
+            error={emptyEmailFieldErrorActive || emailAlreadyInUseError}
             margin="normal"
             required
             fullWidth
@@ -81,17 +183,41 @@ export default function SignUpPage() {
             name="email"
             autoComplete="email"
             sx={{ backgroundColor: "#fefcf6" }}
+            inputRef={emailInputRef}
           />
           <TextField
+            error={emptyPasswordFieldErrorActive}
             margin="normal"
             required
             fullWidth
             name="password"
             label="Password"
-            type="password"
+            type={!isPasswordVisible ? "password" : "text"}
             id="password"
             autoComplete="current-password"
             sx={{ backgroundColor: "#fefcf6" }}
+            InputProps={{
+              endAdornment: !isPasswordVisible ? (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="visibility-on"
+                    onClick={() => setIsPasswordVisible(true)}
+                  >
+                    <VisibilityIcon />
+                  </IconButton>
+                </InputAdornment>
+              ) : (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="visibility-off"
+                    onClick={() => setIsPasswordVisible(false)}
+                  >
+                    <VisibilityOffIcon />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+            inputRef={passwordInputRef}
           />
           <Button
             type="submit"
@@ -101,7 +227,85 @@ export default function SignUpPage() {
           >
             Sign Up
           </Button>
-          <Grid container sx={{ mt: 4, justifyContent: "center" }}>
+          <Collapse in={emailAlreadyInUseError}>
+            <Alert
+              severity="error"
+              action={
+                <IconButton
+                  aria-label="close"
+                  color="inherit"
+                  size="small"
+                  onClick={() => {
+                    setEmailAlreadyInUseError(false);
+                  }}
+                >
+                  <CloseIcon fontSize="inherit" />
+                </IconButton>
+              }
+              sx={{ mt: 3 }}
+            >
+              Adresa de email introdusa este deja in folosinta.
+            </Alert>
+          </Collapse>
+          <Collapse
+            in={
+              emptyFirstNameFieldErrorActive ||
+              emptyLastNameFieldErrorActive ||
+              emptyEmailFieldErrorActive ||
+              emptyPasswordFieldErrorActive
+            }
+          >
+            <Alert
+              severity="error"
+              action={
+                <IconButton
+                  aria-label="close"
+                  color="inherit"
+                  size="small"
+                  onClick={() => {
+                    if (emptyFirstNameFieldErrorActive) {
+                      setEmptyFirstNameFieldErrorActive(false);
+                    }
+                    if (emptyLastNameFieldErrorActive) {
+                      setEmptyLastNameFieldErrorActive(false);
+                    }
+                    if (emptyEmailFieldErrorActive) {
+                      setEmptyEmailFieldErrorActive(false);
+                    }
+                    if (emptyPasswordFieldErrorActive) {
+                      setEmptyPasswordFieldErrorActive(false);
+                    }
+                  }}
+                >
+                  <CloseIcon fontSize="inherit" />
+                </IconButton>
+              }
+              sx={{ mt: 3 }}
+            >
+              Toate campurile sunt obligatorii.
+            </Alert>
+          </Collapse>
+          <Collapse in={userCreatedWithSuccess}>
+            <Alert
+              severity="success"
+              action={
+                <IconButton
+                  aria-label="close"
+                  color="inherit"
+                  size="small"
+                  onClick={() => {
+                    setUserCreatedWithSuccess(false);
+                  }}
+                >
+                  <CloseIcon fontSize="inherit" />
+                </IconButton>
+              }
+              sx={{ mt: 3 }}
+            >
+              Contul dumneavoastra a fost creat.
+            </Alert>
+          </Collapse>
+          <Grid container sx={{ mt: 4, mb: 5, justifyContent: "center" }}>
             <Grid item>
               <Link href="/" variant="body2" sx={{ color: "primary.main" }}>
                 {"Already have an account? Sign In"}
