@@ -162,12 +162,22 @@ export default function ClientCheckoutContent({
   return (
     <Box>
       <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          // flex: 1,
-          justifyContent: "space-evenly",
-        }}
+        sx={
+          !(clientOrderState.order_products.length > 0)
+            ? {
+                display: "flex",
+                flexDirection: "column",
+                // flex: 1,
+                justifyContent: "space-evenly",
+                height: "65vh",
+              }
+            : {
+                display: "flex",
+                flexDirection: "column",
+                // flex: 1,
+                justifyContent: "space-evenly",
+              }
+        }
       >
         <Modal
           open={open}
@@ -330,7 +340,7 @@ export default function ClientCheckoutContent({
           {activeStep === 0 ? (
             <Box
               m={4}
-              mt={clientOrderState.order_products.length > 0 ? 4 : 25}
+              mt={clientOrderState.order_products.length > 0 ? 4 : 10}
               sx={{
                 display: "flex",
                 flexDirection: "row",

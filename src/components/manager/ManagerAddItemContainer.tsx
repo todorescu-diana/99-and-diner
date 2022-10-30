@@ -99,6 +99,7 @@ export default function ManagerAddItemContainer() {
           if (priceInputRef.current) priceInputRef.current.value = "";
           setType("");
           if (urlInputRef.current) urlInputRef.current.value = "";
+          setImageUrl("");
         } else {
           if (hasServerRequestProccessedWithSuccess)
             setHasServerRequestProccessedWithSuccess(false);

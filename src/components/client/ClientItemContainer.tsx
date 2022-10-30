@@ -137,7 +137,7 @@ export default function ClientItemContainer({
         />
       </Box>
       <Box
-        maxWidth={300}
+        maxWidth={250}
         sx={{
           display: "flex",
           flexDirection: "column",

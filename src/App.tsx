@@ -9,6 +9,7 @@ import SignUpPage from "./pages/auth-pages/SignUpPage";
 import { useUserGlobalContext } from "./contexts/UserGlobalContext";
 import ClientContent from "./pages/client-pages/ClientContent";
 import ManagerContent from "./pages/manager-pages/ManagerContent";
+import { useEffect } from "react";
 
 const theme = createTheme({
   palette: {
@@ -20,12 +21,26 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: ['Quicksand', 'Arial'].join(","),
+    fontFamily: ["Quicksand", "Arial"].join(","),
   },
 });
 
 function App() {
-  const [userGlobalState] = useUserGlobalContext();
+  const [userGlobalState, setUserGlobalState] = useUserGlobalContext();
+  useEffect(() => {
+    const data = window.localStorage.getItem("MY_APP_STATE");
+    if (data !== null) {
+      const user = JSON.parse(data);
+      setUserGlobalState({
+        id: user.user_id,
+        email: user.user_email,
+        password: user.user_password,
+        role: user.user_role,
+        firstName: user.user_first_name,
+        lastName: user.uer_last_name,
+      });
+    }
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>

@@ -317,7 +317,7 @@ export default function ManagerItemContainer({
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
-                flex: 1,
+                width: "70%",
                 mr: 5,
               }}
             >
@@ -440,7 +440,10 @@ export default function ManagerItemContainer({
                   <DoneOutlineIcon fontSize="inherit" />
                 </IconButton>
                 <Typography
-                  sx={{ width: "20%", fontWeight: "bold" }}
+                  sx={{
+                    width: "20%",
+                    fontWeight: "bold",
+                  }}
                   variant="h6"
                 >
                   Url imagine:{" "}
@@ -464,7 +467,7 @@ export default function ManagerItemContainer({
                   />
                 ) : (
                   <Typography
-                    sx={{ width: "70%", wordWrap: "break-word" }}
+                    sx={{ width: 600, wordWrap: "break-word" }}
                     variant="h6"
                   >
                     {imageUrl}

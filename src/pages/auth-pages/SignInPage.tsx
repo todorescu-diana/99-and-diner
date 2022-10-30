@@ -15,7 +15,8 @@ import { Alert, Collapse, IconButton, InputAdornment } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import userEvent from "@testing-library/user-event";
 
 export default function SignInPage() {
   const { doLogin } = useLogin();
@@ -42,6 +43,10 @@ export default function SignInPage() {
             firstName: loginResult.user_first_name,
             lastName: loginResult.user_last_name,
           });
+          window.localStorage.setItem(
+            "MY_APP_STATE",
+            JSON.stringify(loginResult)
+          );
           if (loginResult.user_role === "client") {
             navigate("/content");
           } else if (loginResult.user_role === "manager") {

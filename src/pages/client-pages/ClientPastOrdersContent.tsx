@@ -12,7 +12,11 @@ export default function ClientPastOrdersContent({
 }) {
   return (
     <Box>
-      <Stack spacing={4} p={4}>
+      <Stack
+        spacing={4}
+        p={4}
+        sx={!(userOrders.length > 0) ? { height: "65vh" } : null}
+      >
         {userOrders.length > 0 ? (
           userOrders.map((userOrder, idx) => (
             <ClientPastOrderContainer key={idx} order={userOrder} />

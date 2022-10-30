@@ -178,6 +178,7 @@ export default function ClientContent() {
               firstName: "",
               lastName: "",
             });
+            window.localStorage.clear();
             navigate("/");
           }}
         >
