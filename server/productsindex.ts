@@ -74,15 +74,23 @@ products_app.put("/api/updateProduct/:product_id", (req, res) => {
   );
 });
 
-// // Route to delete a post
+// Route to delete a product
 
-// app.delete('/api/delete/:id',(req,res)=>{
-// const id = req.params.id;
+products_app.delete("/api/delete/:product_id", (req, res) => {
+  const productId = req.params.product_id;
 
-// db.query("DELETE FROM posts WHERE id= ?", id, (err,result)=>{
-// if(err) {
-// console.log(err)
-//         } }) })
+  products_db.query(
+    "DELETE FROM products WHERE product_id = ?",
+    [productId],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        res.send({ error: err.message });
+      }
+      res.send(result);
+    }
+  );
+});
 
 products_app.listen(PRODUCTSPORT, () => {
   console.log(`Server is running on ${PRODUCTSPORT}`);

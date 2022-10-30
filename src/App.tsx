@@ -1,9 +1,10 @@
 import "./App.css";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import SignInPage from "./pages/auth-pages/SignInPage";
-import { createTheme, CssBaseline } from "@mui/material";
+import { CssBaseline } from "@mui/material";
+import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/material/styles";
-import { themeColors } from "./theme";
+import { themeColors } from "./theme/theme";
 import SignUpPage from "./pages/auth-pages/SignUpPage";
 import { useUserGlobalContext } from "./contexts/UserGlobalContext";
 import ClientContent from "./pages/client-pages/ClientContent";
@@ -19,10 +20,27 @@ const theme = createTheme({
       main: themeColors.primary,
     },
   },
+  typography: {
+    fontFamily: ["Quicksand", "Arial"].join(","),
+  },
 });
 
 function App() {
-  const [userGlobalState] = useUserGlobalContext();
+  const [userGlobalState, setUserGlobalState] = useUserGlobalContext();
+  useEffect(() => {
+    const data = window.localStorage.getItem("MY_APP_STATE");
+    if (data !== null) {
+      const user = JSON.parse(data);
+      setUserGlobalState({
+        id: user.user_id,
+        email: user.user_email,
+        password: user.user_password,
+        role: user.user_role,
+        firstName: user.user_first_name,
+        lastName: user.uer_last_name,
+      });
+    }
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>

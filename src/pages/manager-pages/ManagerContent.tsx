@@ -4,9 +4,9 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import { useNavigate } from "react-router-dom";
-import { themeColors } from "../../theme";
+import { themeColors } from "../../theme/theme";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { IconButton } from "@mui/material";
+import { IconButton, Typography } from "@mui/material";
 import { useUserGlobalContext } from "../../contexts/UserGlobalContext";
 import ManagerFoodMenuContent from "./ManagerFoodMenuContent";
 import ManagerDrinkMenuContent from "./ManagerDrinkMenuContent";
@@ -76,9 +76,26 @@ export default function ManagerContent() {
           display: "flex",
           flexDirection: "row",
           p: 2,
-          justifyContent: "center",
+          // justifyContent: "flex-end",
+          alignItems: "center",
         }}
       >
+        <Typography
+          variant="h4"
+          sx={{
+            color: themeColors.secondary,
+            alignSelf: "flex-start",
+            flex: 0.5,
+            marginLeft: 5,
+          }}
+        >
+          99 & diner
+        </Typography>
+        <StyledTabs
+          value={value}
+          onChange={handleChange}
+          aria-label="styled tabs"
+        ></StyledTabs>
         <StyledTabs
           value={value}
           onChange={handleChange}

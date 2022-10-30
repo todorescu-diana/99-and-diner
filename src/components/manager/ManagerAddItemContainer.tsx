@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useRef, useState } from "react";
-import { themeColors } from "../../theme";
+import { themeColors } from "../../theme/theme";
 import CloseIcon from "@mui/icons-material/Close";
 
 export default function ManagerAddItemContainer() {
@@ -26,52 +26,90 @@ export default function ManagerAddItemContainer() {
     setHasServerRequestProccessedWithSuccess,
   ] = useState(false);
 
-  // const [type, setType] = useState<"" | "Mancare" | "Bautura">("");
   const [type, setType] = useState<string>("");
 
   const nameInputRef = useRef<HTMLInputElement>(null);
   const priceInputRef = useRef<HTMLInputElement>(null);
   const urlInputRef = useRef<HTMLInputElement>(null);
 
+  const [emptyNameFieldErrorActive, setEmptyNameFieldErrorActive] =
+    useState(false);
+  const [emptyPriceFieldErrorActive, setEmptyPriceFieldErrorActive] =
+    useState(false);
+  const [emptyTypeFieldErrorActive, setEmptyTypeFieldErrorActive] =
+    useState(false);
+  const [emptyUrlFieldErrorActive, setEmptyUrlFieldErrorActive] =
+    useState(false);
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
-    const res = await axios.get("http://localhost:3003/api/get");
-    const { data } = await res;
-    const totalNumberOfProducts = data.length;
+    if (formData.get("itemName") === "") {
+      setEmptyNameFieldErrorActive(true);
+    }
 
-    const newProduct = {
-      productId: totalNumberOfProducts,
-      productName: formData.get("itemName"),
-      productPrice: formData.get("itemPrice"),
-      productType: formData.get("itemType") === "Mancare" ? "food" : "bautura", // TODO daca nu se alege nimic
-      productImageUrl: formData.get("itemUrl"),
-    };
+    if (formData.get("itemPrice") === "") {
+      setEmptyPriceFieldErrorActive(true);
+    }
 
-    try {
-      const postResponseData = await axios.post(
-        "http://localhost:3003/api/create",
-        newProduct
-      );
-      if (!postResponseData.data.error) {
-        if (hasServerRequestProccessedWithError)
-          setHasServerRequestProccessedWithError(false);
-        setHasServerRequestProccessedWithSuccess(true);
+    if (formData.get("itemType") === "") {
+      setEmptyTypeFieldErrorActive(true);
+    }
 
-        if (nameInputRef.current) nameInputRef.current.value = "";
-        if (priceInputRef.current) priceInputRef.current.value = "";
-        setType("");
-        if (urlInputRef.current) urlInputRef.current.value = "";
-      } else {
+    if (formData.get("itemUrl") === "") {
+      setEmptyUrlFieldErrorActive(true);
+    } else {
+      const res = await axios.get("http://localhost:3003/api/get");
+      const { data } = await res;
+      let lastProductId = 0;
+      if (data.length > 0) lastProductId = data[data.length - 1].product_id;
+
+      const newProduct = {
+        productId: lastProductId + 1,
+        productName: formData.get("itemName"),
+        productPrice: formData.get("itemPrice"),
+        productType: formData.get("itemType") === "Mancare" ? "food" : "drink", // TODO daca nu se alege nimic
+        productImageUrl: formData.get("itemUrl"),
+      };
+
+      try {
+        const postResponseData = await axios.post(
+          "http://localhost:3003/api/create",
+          newProduct
+        );
+        if (!postResponseData.data.error) {
+          if (emptyNameFieldErrorActive) {
+            setEmptyNameFieldErrorActive(false);
+          }
+          if (emptyPriceFieldErrorActive) {
+            setEmptyPriceFieldErrorActive(false);
+          }
+          if (emptyTypeFieldErrorActive) {
+            setEmptyTypeFieldErrorActive(false);
+          }
+          if (emptyUrlFieldErrorActive) {
+            setEmptyUrlFieldErrorActive(false);
+          }
+          if (hasServerRequestProccessedWithError)
+            setHasServerRequestProccessedWithError(false);
+          setHasServerRequestProccessedWithSuccess(true);
+
+          if (nameInputRef.current) nameInputRef.current.value = "";
+          if (priceInputRef.current) priceInputRef.current.value = "";
+          setType("");
+          if (urlInputRef.current) urlInputRef.current.value = "";
+          setImageUrl("");
+        } else {
+          if (hasServerRequestProccessedWithSuccess)
+            setHasServerRequestProccessedWithSuccess(false);
+          setHasServerRequestProccessedWithError(true);
+        }
+      } catch (err) {
         if (hasServerRequestProccessedWithSuccess)
           setHasServerRequestProccessedWithSuccess(false);
         setHasServerRequestProccessedWithError(true);
       }
-    } catch (err) {
-      if (hasServerRequestProccessedWithSuccess)
-        setHasServerRequestProccessedWithSuccess(false);
-      setHasServerRequestProccessedWithError(true);
     }
   };
 
@@ -82,7 +120,9 @@ export default function ManagerAddItemContainer() {
         display: "flex",
         flexDirection: "column",
         padding: 4,
+        paddingBottom: 0,
         justifyContent: "space-between",
+        borderRadius: 2,
       }}
     >
       <Box
@@ -102,9 +142,11 @@ export default function ManagerAddItemContainer() {
             justifyContent: "space-between",
             flex: 1,
             p: 4,
+            pb: 0,
           }}
         >
           <TextField
+            error={emptyNameFieldErrorActive}
             margin="normal"
             fullWidth
             id="itemName"
@@ -116,6 +158,7 @@ export default function ManagerAddItemContainer() {
             inputRef={nameInputRef}
           />
           <TextField
+            error={emptyPriceFieldErrorActive}
             margin="normal"
             fullWidth
             id="itemPrice"
@@ -126,6 +169,7 @@ export default function ManagerAddItemContainer() {
             inputRef={priceInputRef}
           />
           <TextField
+            error={emptyTypeFieldErrorActive}
             select
             label="Tip Produs"
             id="itemType"
@@ -143,6 +187,7 @@ export default function ManagerAddItemContainer() {
             </MenuItem>
           </TextField>
           <TextField
+            error={emptyUrlFieldErrorActive}
             margin="normal"
             fullWidth
             id="itemUrl"
@@ -158,7 +203,6 @@ export default function ManagerAddItemContainer() {
               variant="contained"
               sx={{ mt: 2, color: themeColors.secondary }}
               type="submit"
-              // TODO selectare poza
             >
               Adaugare produs
             </Button>
@@ -196,18 +240,71 @@ export default function ManagerAddItemContainer() {
               >
                 {hasServerRequestProccessedWithError
                   ? "Eroare in comunicarea cu serverul."
-                  : "Corect"}
+                  : "Produs adaugat cu succes."}
               </Alert>
             </Collapse>
           </Box>
         </Box>
-        <Box sx={{ width: 200, height: 130 }}>
+        <Box sx={{ width: 200, height: 130, alignSelf: "center" }}>
           <CardMedia
             component="img"
-            sx={{ height: "100%", width: "100%" }}
+            sx={{
+              height: "100%",
+              width: "100%",
+              borderRadius: 2,
+            }}
             src={imageUrl}
             alt="Invalid Image Url."
           />
+        </Box>
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Box sx={{ width: "85.5%" }} p={4}>
+          <Collapse
+            in={
+              emptyNameFieldErrorActive ||
+              emptyPriceFieldErrorActive ||
+              emptyTypeFieldErrorActive ||
+              emptyUrlFieldErrorActive
+            }
+          >
+            <Alert
+              severity="error"
+              action={
+                <IconButton
+                  aria-label="close"
+                  color="inherit"
+                  size="small"
+                  onClick={() => {
+                    if (emptyNameFieldErrorActive) {
+                      setEmptyNameFieldErrorActive(false);
+                    }
+                    if (emptyPriceFieldErrorActive) {
+                      setEmptyPriceFieldErrorActive(false);
+                    }
+                    if (emptyTypeFieldErrorActive) {
+                      setEmptyTypeFieldErrorActive(false);
+                    }
+                    if (emptyUrlFieldErrorActive) {
+                      setEmptyUrlFieldErrorActive(false);
+                    }
+                  }}
+                >
+                  <CloseIcon fontSize="inherit" />
+                </IconButton>
+              }
+              sx={{ mb: 2 }}
+            >
+              Toate campurile sunt obligatorii.
+            </Alert>
+          </Collapse>
         </Box>
       </Box>
     </Card>

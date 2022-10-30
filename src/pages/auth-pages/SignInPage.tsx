@@ -8,13 +8,23 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useLogin } from "../../hooks/login-hooks";
 import { useNavigate } from "react-router-dom";
-import { themeColors } from "../../theme";
+import { themeColors } from "../../theme/theme";
 import { useUserGlobalContext } from "../../contexts/UserGlobalContext";
+import StyledFooter from "../../components/StyledFooter";
+import { Alert, Collapse, IconButton, InputAdornment } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { useEffect, useState } from "react";
+import userEvent from "@testing-library/user-event";
 
 export default function SignInPage() {
   const { doLogin } = useLogin();
   const navigate = useNavigate();
   const [, setUserGlobalState] = useUserGlobalContext();
+
+  const [invalidCredentials, setInvalidCredentials] = React.useState(false);
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -24,6 +34,7 @@ export default function SignInPage() {
     })
       .then((loginResult) => {
         if (loginResult !== undefined) {
+          if (invalidCredentials) setInvalidCredentials(false);
           setUserGlobalState({
             id: loginResult.user_id,
             email: loginResult.user_email,
@@ -32,76 +43,139 @@ export default function SignInPage() {
             firstName: loginResult.user_first_name,
             lastName: loginResult.user_last_name,
           });
+          window.localStorage.setItem(
+            "MY_APP_STATE",
+            JSON.stringify(loginResult)
+          );
           if (loginResult.user_role === "client") {
             navigate("/content");
           } else if (loginResult.user_role === "manager") {
             navigate("/editcontent");
           }
+        } else {
+          setInvalidCredentials(true);
         }
       })
       .catch((err) => console.log(err));
   };
 
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
   return (
-    <Container component="main" maxWidth="sm">
-      <Box
-        sx={{
-          marginTop: 8,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Typography component="h1" variant="h1" style={{ marginBottom: 50 }}>
-          99 & diner
-        </Typography>
-        <Typography component="h1" variant="h5" sx={{ color: "primary.main" }}>
-          Sign in
-        </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            sx={{ backgroundColor: "#fefcf6" }}
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            sx={{ backgroundColor: "#fefcf6" }}
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 2, color: themeColors.secondary }}
+    <Box>
+      <Container component="main" sx={{ marginBottom: 8.35 }}>
+        <Box
+          sx={{
+            marginTop: 8,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Typography component="h1" variant="h1" style={{ marginBottom: 50 }}>
+            99 & diner
+          </Typography>
+          <Typography
+            component="h1"
+            variant="h5"
+            sx={{ color: "primary.main" }}
           >
-            Sign In
-          </Button>
-          <Grid container sx={{ mt: 4, justifyContent: "center" }}>
-            <Grid item>
-              <Link
-                href="/signup"
-                variant="body2"
-                sx={{ color: "primary.main" }}
+            Sign in
+          </Typography>
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            noValidate
+            sx={{ mt: 1 }}
+          >
+            <TextField
+              error={invalidCredentials}
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              autoFocus
+              sx={{ backgroundColor: "#fefcf6" }}
+            />
+            <TextField
+              error={invalidCredentials}
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              id="password"
+              autoComplete="current-password"
+              sx={{ backgroundColor: "#fefcf6" }}
+              type={!isPasswordVisible ? "password" : "text"}
+              InputProps={{
+                endAdornment: !isPasswordVisible ? (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="visibility-on"
+                      onClick={() => setIsPasswordVisible(true)}
+                    >
+                      <VisibilityIcon />
+                    </IconButton>
+                  </InputAdornment>
+                ) : (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="visibility-off"
+                      onClick={() => setIsPasswordVisible(false)}
+                    >
+                      <VisibilityOffIcon />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 2, color: themeColors.secondary }}
+            >
+              Sign In
+            </Button>
+            <Collapse in={invalidCredentials}>
+              <Alert
+                severity="error"
+                action={
+                  <IconButton
+                    aria-label="close"
+                    color="inherit"
+                    size="small"
+                    onClick={() => {
+                      setInvalidCredentials(false);
+                    }}
+                  >
+                    <CloseIcon fontSize="inherit" />
+                  </IconButton>
+                }
+                sx={{ mb: 2, mt: 3 }}
               >
-                {"Don't have an account? Sign Up"}
-              </Link>
+                Email sau parola incorecte.
+              </Alert>
+            </Collapse>
+            <Grid container sx={{ mt: 4, justifyContent: "center" }}>
+              <Grid item>
+                <Link
+                  href="/signup"
+                  variant="body2"
+                  sx={{ color: "primary.main" }}
+                >
+                  {"Don't have an account? Sign Up"}
+                </Link>
+              </Grid>
             </Grid>
-          </Grid>
+          </Box>
         </Box>
-      </Box>
-    </Container>
+      </Container>
+      <StyledFooter />
+    </Box>
   );
 }

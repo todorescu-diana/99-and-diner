@@ -1,4 +1,4 @@
-import { Stack } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import ManagerItemContainer from "../../components/manager/ManagerItemContainer";
@@ -25,17 +25,20 @@ export default function ManagerDrinkMenuContent() {
   }, []);
 
   return (
-    <Stack spacing={4} m={4} p={4}>
-      {drinkProducts.map((drinkProduct, idx) => (
-        <ManagerItemContainer
-          key={idx}
-          itemId={drinkProduct.product_id}
-          itemName={drinkProduct.product_name}
-          itemPrice={drinkProduct.product_price}
-          itemType={drinkProduct.product_type}
-          imageUrl={drinkProduct.product_image_url}
-        />
-      ))}
-    </Stack>
+    <Box>
+      <Stack spacing={4} m={4} p={4} pb={8}>
+        {drinkProducts.map((drinkProduct) => (
+          <ManagerItemContainer
+            key={drinkProduct.product_id.toString()}
+            itemId={drinkProduct.product_id}
+            itemName={drinkProduct.product_name}
+            itemPrice={drinkProduct.product_price}
+            imageUrl={drinkProduct.product_image_url}
+            products={drinkProducts}
+            setProducts={setDrinkProducts}
+          />
+        ))}
+      </Stack>
+    </Box>
   );
 }

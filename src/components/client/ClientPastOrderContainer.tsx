@@ -1,13 +1,12 @@
 import { Box, Card, Grid, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { Order } from "../../models/Order";
-import { themeColors } from "../../theme";
+import { themeColors } from "../../theme/theme";
 import ClientPastOrderContainerRow from "./ClientPastOrderContainerRow";
-// TODO DACA NU SUNT COMENZI + DACA COSUL ESTE GOL + DACA NU SE GASESC ITEME IN MENIU + FONT + LOGO
 
 export default function ClientPastOrderContainer({ order }: { order: Order }) {
   return (
-    <Box>
+    <Box sx={{ width: "50%", alignSelf: "center" }}>
       <Card
         sx={{
           backgroundColor: themeColors.secondary,
@@ -15,6 +14,7 @@ export default function ClientPastOrderContainer({ order }: { order: Order }) {
           flexDirection: "row",
           padding: 4,
           justifyContent: "space-between",
+          borderRadius: 2,
         }}
       >
         <Box
@@ -27,34 +27,30 @@ export default function ClientPastOrderContainer({ order }: { order: Order }) {
         >
           <ClientPastOrderContainerRow
             leftContent={
-              <Typography sx={{ flex: 1 }} variant="h4">
+              <Typography sx={{ flex: 1, fontWeight: "bold" }} variant="h5">
                 Produse:
               </Typography>
             }
             rightContent={
               <>
-                {order.order_products.map((product, idx) => {
-                  console.log("PRODUCT: " + JSON.stringify(product));
-
-                  return (
-                    <Box key={idx}>
-                      <Typography sx={{ textAlign: "center" }} variant="h5">
-                        {product.product_name} x {product.product_qty}
-                      </Typography>
-                    </Box>
-                  );
-                })}
+                {order.order_products.map((product, idx) => (
+                  <Box key={idx}>
+                    <Typography sx={{ textAlign: "center" }} variant="h6">
+                      {product.product_name} x {product.product_qty}
+                    </Typography>
+                  </Box>
+                ))}
               </>
             }
           />
           <ClientPastOrderContainerRow
             leftContent={
-              <Typography mt={3} variant="h4">
+              <Typography mt={3} variant="h5" sx={{ fontWeight: "bold" }}>
                 Pret total:
               </Typography>
             }
             rightContent={
-              <Typography mt={3} variant="h5">
+              <Typography mt={3} variant="h6">
                 {order.order_total_price}
               </Typography>
             }
@@ -62,25 +58,25 @@ export default function ClientPastOrderContainer({ order }: { order: Order }) {
 
           <ClientPastOrderContainerRow
             leftContent={
-              <Typography mt={3} variant="h4">
+              <Typography mt={3} variant="h5" sx={{ fontWeight: "bold" }}>
                 Indicatii speciale:
               </Typography>
             }
             rightContent={
-              <Typography mt={3} variant="h5">
-                {order.order_notes}
+              <Typography mt={3} variant="h6">
+                {order.order_notes !== "" ? order.order_notes : "-"}
               </Typography>
             }
           />
 
           <ClientPastOrderContainerRow
             leftContent={
-              <Typography mt={3} variant="h4">
+              <Typography mt={3} variant="h5" sx={{ fontWeight: "bold" }}>
                 Data plasarii comenzii:
               </Typography>
             }
             rightContent={
-              <Typography mt={3} variant="h5">
+              <Typography mt={3} variant="h6">
                 {order.order_date}
               </Typography>
             }
@@ -88,12 +84,12 @@ export default function ClientPastOrderContainer({ order }: { order: Order }) {
 
           <ClientPastOrderContainerRow
             leftContent={
-              <Typography mt={3} variant="h4">
+              <Typography mt={3} variant="h5" sx={{ fontWeight: "bold" }}>
                 Ora plasarii comenzii:
               </Typography>
             }
             rightContent={
-              <Typography mt={3} variant="h5">
+              <Typography mt={3} variant="h6">
                 {order.order_time}
               </Typography>
             }
@@ -101,12 +97,12 @@ export default function ClientPastOrderContainer({ order }: { order: Order }) {
 
           <ClientPastOrderContainerRow
             leftContent={
-              <Typography mt={3} variant="h4">
+              <Typography mt={3} variant="h5" sx={{ fontWeight: "bold" }}>
                 Adresa livrarii:
               </Typography>
             }
             rightContent={
-              <Typography mt={3} variant="h5">
+              <Typography mt={3} variant="h6">
                 {order.order_address}
               </Typography>
             }

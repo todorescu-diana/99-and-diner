@@ -3,7 +3,7 @@ import ManagerAddItemContainer from "../../components/manager/ManagerAddItemCont
 
 export default function ManagerAddNewProductContent() {
   return (
-    <Box m={4}>
+    <Box m={2} p={4}>
       <ManagerAddItemContainer />
     </Box>
   );

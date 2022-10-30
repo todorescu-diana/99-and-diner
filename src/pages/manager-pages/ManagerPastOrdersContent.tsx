@@ -35,7 +35,17 @@ export default function ManagerPastOrdersContent() {
   }, []);
 
   return (
-    <Stack spacing={4} m={4}>
+    <Stack
+      spacing={4}
+      p={4}
+      pt={8}
+      pb={8}
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-evenly",
+      }}
+    >
       {orders.map((order) => (
         <ManagerPastOrderContainer order={order} />
       ))}
