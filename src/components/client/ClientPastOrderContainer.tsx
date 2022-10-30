@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { Order } from "../../models/Order";
 import { themeColors } from "../../theme/theme";
 import ClientPastOrderContainerRow from "./ClientPastOrderContainerRow";
-// TODO DACA NU SUNT COMENZI + DACA COSUL ESTE GOL + DACA NU SE GASESC ITEME IN MENIU + FONT + LOGO
 
 export default function ClientPastOrderContainer({ order }: { order: Order }) {
   return (
@@ -34,17 +33,13 @@ export default function ClientPastOrderContainer({ order }: { order: Order }) {
             }
             rightContent={
               <>
-                {order.order_products.map((product, idx) => {
-                  console.log("PRODUCT: " + JSON.stringify(product));
-
-                  return (
-                    <Box key={idx}>
-                      <Typography sx={{ textAlign: "center" }} variant="h6">
-                        {product.product_name} x {product.product_qty}
-                      </Typography>
-                    </Box>
-                  );
-                })}
+                {order.order_products.map((product, idx) => (
+                  <Box key={idx}>
+                    <Typography sx={{ textAlign: "center" }} variant="h6">
+                      {product.product_name} x {product.product_qty}
+                    </Typography>
+                  </Box>
+                ))}
               </>
             }
           />
@@ -69,7 +64,7 @@ export default function ClientPastOrderContainer({ order }: { order: Order }) {
             }
             rightContent={
               <Typography mt={3} variant="h6">
-                {order.order_notes}
+                {order.order_notes !== "" ? order.order_notes : "-"}
               </Typography>
             }
           />

@@ -19,7 +19,6 @@ import { useState } from "react";
 import { useClientOrderContext } from "../../contexts/ClientOrderContext";
 import axios from "axios";
 import { useUserGlobalContext } from "../../contexts/UserGlobalContext";
-import useEnhancedEffect from "@mui/material/utils/useEnhancedEffect";
 import StyledFooter from "../../components/StyledFooter";
 
 const steps = [
@@ -113,10 +112,6 @@ export default function ClientCheckoutContent({
     setHasServerRequestProccessedWithSuccess,
   ] = useState(false);
 
-  useEnhancedEffect(() => {
-    console.log(clientOrderState.order_total_price);
-  }, []);
-
   const handlePlaceOrder = async () => {
     if (address === "") {
       if (!addressMissingErrorActive)
@@ -125,7 +120,6 @@ export default function ClientCheckoutContent({
       const res = await axios.get("http://localhost:3004/api/get");
       const { data } = await res;
       const totalNumberOfOrders = data.length;
-      console.log(totalNumberOfOrders);
 
       const today = new Date();
 
@@ -171,7 +165,7 @@ export default function ClientCheckoutContent({
         sx={{
           display: "flex",
           flexDirection: "column",
-          flex: 1,
+          // flex: 1,
           justifyContent: "space-evenly",
         }}
       >
@@ -310,6 +304,7 @@ export default function ClientCheckoutContent({
             display: "flex",
             flexDirecton: "row",
             justifyContent: "space-evenly",
+            marginBottom: 4,
           }}
         >
           {clientOrderState.order_products.length > 0 ? (
@@ -576,9 +571,7 @@ export default function ClientCheckoutContent({
           ) : null}
         </Box>
       </Box>
-      <Box sx={{ position: "absolute", bottom: 0, width: "100%" }}>
-        <StyledFooter />
-      </Box>
+      <StyledFooter />
     </Box>
   );
 }

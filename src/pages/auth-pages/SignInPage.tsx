@@ -11,8 +11,11 @@ import { useNavigate } from "react-router-dom";
 import { themeColors } from "../../theme/theme";
 import { useUserGlobalContext } from "../../contexts/UserGlobalContext";
 import StyledFooter from "../../components/StyledFooter";
-import { Alert, Collapse, IconButton } from "@mui/material";
+import { Alert, Collapse, IconButton, InputAdornment } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { useState } from "react";
 
 export default function SignInPage() {
   const { doLogin } = useLogin();
@@ -50,6 +53,8 @@ export default function SignInPage() {
       })
       .catch((err) => console.log(err));
   };
+
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   return (
     <Box>
@@ -97,10 +102,31 @@ export default function SignInPage() {
               fullWidth
               name="password"
               label="Password"
-              type="password"
               id="password"
               autoComplete="current-password"
               sx={{ backgroundColor: "#fefcf6" }}
+              type={!isPasswordVisible ? "password" : "text"}
+              InputProps={{
+                endAdornment: !isPasswordVisible ? (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="visibility-on"
+                      onClick={() => setIsPasswordVisible(true)}
+                    >
+                      <VisibilityIcon />
+                    </IconButton>
+                  </InputAdornment>
+                ) : (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="visibility-off"
+                      onClick={() => setIsPasswordVisible(false)}
+                    >
+                      <VisibilityOffIcon />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
             <Button
               type="submit"

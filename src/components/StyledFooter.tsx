@@ -5,8 +5,6 @@ export default function StyledFooter() {
   return (
     <Box
       sx={{
-        position: "absolute",
-        bottom: 0,
         width: "100%",
         backgroundColor: "primary.main",
         display: "flex",
@@ -14,7 +12,7 @@ export default function StyledFooter() {
         justifyContent: "space-evenly",
         alignItems: "center",
       }}
-      p={2}
+      p={4}
     >
       <Typography variant="h4" sx={{ color: themeColors.secondary }}>
         99 & diner

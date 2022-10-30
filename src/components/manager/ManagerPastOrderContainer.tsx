@@ -36,13 +36,8 @@ export default function ManagerPastOrderContainer({ order }: { order: Order }) {
   }, []);
   return (
     <Box
-      m={4}
       sx={{
-        backgroundColor: "yellow",
         width: "90%",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
         alignSelf: "center",
       }}
     >
@@ -54,6 +49,7 @@ export default function ManagerPastOrderContainer({ order }: { order: Order }) {
           flexDirection: "row",
           padding: 4,
           justifyContent: "space-between",
+          borderRadius: 2,
         }}
       >
         <Box

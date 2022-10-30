@@ -65,7 +65,6 @@ export default function ManagerAddItemContainer() {
       let lastProductId = 0;
       if (data.length > 0) lastProductId = data[data.length - 1].product_id;
 
-      console.log(JSON.stringify(data[data.length - 1]));
       const newProduct = {
         productId: lastProductId + 1,
         productName: formData.get("itemName"),
@@ -266,7 +265,7 @@ export default function ManagerAddItemContainer() {
           alignItems: "center",
         }}
       >
-        <Box sx={{ width: "81%" }} p={4}>
+        <Box sx={{ width: "85.5%" }} p={4}>
           <Collapse
             in={
               emptyNameFieldErrorActive ||

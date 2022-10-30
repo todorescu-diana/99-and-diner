@@ -127,10 +127,6 @@ export default function SignUpPage() {
     }
   }
 
-  React.useEffect(() => {
-    console.log(userCreatedWithSuccess);
-  }, [userCreatedWithSuccess]);
-
   return (
     <Container component="main" maxWidth="sm">
       <Box

@@ -142,10 +142,18 @@ export default function ClientContent() {
           flexDirection: "row",
           p: 2,
           // justifyContent: "flex-end",
-          alignItems: "center"
+          alignItems: "center",
         }}
       >
-        <Typography variant="h4" sx={{ color: themeColors.secondary, alignSelf: "flex-start", flex: 0.5, marginLeft: 5 }}>
+        <Typography
+          variant="h4"
+          sx={{
+            color: themeColors.secondary,
+            alignSelf: "flex-start",
+            flex: 0.5,
+            marginLeft: 5,
+          }}
+        >
           99 & diner
         </Typography>
         <StyledTabs
@@ -182,9 +190,16 @@ export default function ClientContent() {
           <Typography ml={8} mt={8} variant="h4" sx={{ fontWeight: "bold" }}>
             Buna, {userGlobalState.firstName}!{" "}
           </Typography>
-          <Typography ml={8} mt={3} variant="h5">
-            Alege din meniul de {value === 0 ? "mancare" : "bauturi"}.
-          </Typography>
+          {(value === 0 && foodProducts.length > 0) ||
+          (value === 1 && drinkProducts.length > 0) ? (
+            <Typography ml={8} mt={3} variant="h5">
+              Alege din meniul de {value === 0 ? "mancare" : "bauturi"}.
+            </Typography>
+          ) : (
+            <Typography ml={8} mt={3} variant="h5">
+              Din pacate, nu s-au gasit produse disponibile.
+            </Typography>
+          )}
         </>
       ) : null}
 
