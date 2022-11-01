@@ -4,12 +4,15 @@ import ClientPastOrderContainer from "../../components/client/ClientPastOrderCon
 import { Order } from "../../models/Order";
 import { Box, Card, Typography } from "@mui/material";
 import StyledFooter from "../../components/StyledFooter";
+import { useTranslation } from "react-i18next";
 
 export default function ClientPastOrdersContent({
   userOrders,
 }: {
   userOrders: Order[];
 }) {
+  const [t] = useTranslation("common");
+
   return (
     <Box>
       <Stack
@@ -45,7 +48,7 @@ export default function ClientPastOrdersContent({
                 }}
               >
                 <Typography variant="h4">
-                  Nu s-au gasit comenzi anterioare.
+                  {t("clientpastorderscontent.noordersfound")}
                 </Typography>
               </Box>
             </Card>

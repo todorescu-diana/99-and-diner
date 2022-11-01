@@ -14,6 +14,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useRef, useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { useTranslation } from "react-i18next";
+import ChangeLanguageSelect from "../../components/ChangeLanguageSelect";
 
 export default function SignUpPage() {
   const [emailAlreadyInUseError, setEmailAlreadyInUseError] = useState(false);
@@ -127,8 +129,13 @@ export default function SignUpPage() {
     }
   }
 
+  const [t] = useTranslation("common");
+
   return (
     <Container component="main" maxWidth="sm">
+      <Box sx={{ position: "absolute", right: 0, top: 0, margin: 5 }}>
+        <ChangeLanguageSelect />
+      </Box>
       <Box
         sx={{
           marginTop: 8,
@@ -141,7 +148,7 @@ export default function SignUpPage() {
           99 & diner
         </Typography>
         <Typography component="h1" variant="h5" sx={{ color: "primary.main" }}>
-          Sign up
+          {t("signup.title")}
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
@@ -150,7 +157,7 @@ export default function SignUpPage() {
             required
             fullWidth
             id="firstName"
-            label="First Name"
+            label={t("fields.firstname")}
             name="firstName"
             autoComplete="firstName"
             autoFocus
@@ -163,7 +170,7 @@ export default function SignUpPage() {
             required
             fullWidth
             id="lastName"
-            label="Last Name"
+            label={t("fields.lastname")}
             name="lastName"
             autoComplete="lastName"
             sx={{ backgroundColor: "#fefcf6" }}
@@ -175,7 +182,7 @@ export default function SignUpPage() {
             required
             fullWidth
             id="email"
-            label="Email Address"
+            label={t("fields.email")}
             name="email"
             autoComplete="email"
             sx={{ backgroundColor: "#fefcf6" }}
@@ -187,7 +194,7 @@ export default function SignUpPage() {
             required
             fullWidth
             name="password"
-            label="Password"
+            label={t("fields.password")}
             type={!isPasswordVisible ? "password" : "text"}
             id="password"
             autoComplete="current-password"
@@ -199,7 +206,7 @@ export default function SignUpPage() {
                     aria-label="visibility-on"
                     onClick={() => setIsPasswordVisible(true)}
                   >
-                    <VisibilityIcon />
+                    <VisibilityIcon color={"primary"} />
                   </IconButton>
                 </InputAdornment>
               ) : (
@@ -208,7 +215,7 @@ export default function SignUpPage() {
                     aria-label="visibility-off"
                     onClick={() => setIsPasswordVisible(false)}
                   >
-                    <VisibilityOffIcon />
+                    <VisibilityOffIcon color={"primary"} />
                   </IconButton>
                 </InputAdornment>
               ),
@@ -221,7 +228,7 @@ export default function SignUpPage() {
             variant="contained"
             sx={{ mt: 2, color: themeColors.secondary }}
           >
-            Sign Up
+            {t("signup.button")}
           </Button>
           <Collapse in={emailAlreadyInUseError}>
             <Alert
@@ -240,7 +247,7 @@ export default function SignUpPage() {
               }
               sx={{ mt: 3 }}
             >
-              Adresa de email introdusa este deja in folosinta.
+              {t("signup.emailalreadyinuseerror")}
             </Alert>
           </Collapse>
           <Collapse
@@ -278,7 +285,7 @@ export default function SignUpPage() {
               }
               sx={{ mt: 3 }}
             >
-              Toate campurile sunt obligatorii.
+              {t("signup.emptyfieldserror")}
             </Alert>
           </Collapse>
           <Collapse in={userCreatedWithSuccess}>
@@ -298,13 +305,13 @@ export default function SignUpPage() {
               }
               sx={{ mt: 3 }}
             >
-              Contul dumneavoastra a fost creat.
+              {t("signup.success")}
             </Alert>
           </Collapse>
           <Grid container sx={{ mt: 4, mb: 5, justifyContent: "center" }}>
             <Grid item>
               <Link href="/" variant="body2" sx={{ color: "primary.main" }}>
-                {"Already have an account? Sign In"}
+                {t("signup.signinalternative")}
               </Link>
             </Grid>
           </Grid>

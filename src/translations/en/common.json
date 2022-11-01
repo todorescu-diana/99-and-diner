@@ -1,0 +1,85 @@
+{
+  "signin": {
+    "title": "Sign In",
+    "button": "Sign In",
+    "error": "Incorrect email or password.",
+    "signupalternative": "Don't have an account? Sign Up"
+  },
+  "signup": {
+    "title": "Sign Up",
+    "button": "Sign Up",
+    "emailalreadyinuseerror": "The email address you introduced is already being used.",
+    "emptyfieldserror": "All fields are mandatory.",
+    "success": "Your account has been created.",
+    "signinalternative": "Already have an account? Sign In"
+  },
+  "fields": {
+    "email": "Email address",
+    "password": "Password",
+    "firstname": "First name",
+    "lastname": "Last name",
+    "specialindications": "Special indications",
+    "address": "Delivery address"
+  },
+  "clienttabnavigator": {
+    "foodmenu": "Food Menu",
+    "drinkmenu": "Drink Menu",
+    "orders": "Previous orders",
+    "cart": "Cart"
+  },
+  "clientcontent": {
+    "greeting": "Hi",
+    "choosefromfoodmenu": "Choose from our food menu:",
+    "choosefromdrinkmenu": "Choose from our drink menu:",
+    "noproductsfound": "Unfortunately, no products have been found."
+  },
+  "clientpastorderscontent": {
+    "noordersfound": "No past orders have been found."
+  },
+  "clientcheckoutcontent": {
+    "checkorder": "Check order",
+    "enterspecialindicationsorder": "Enter special indications for order",
+    "enteraddress": "Enter address",
+    "orderplacedsuccesstitle": "Your order has successfully been placed.",
+    "orderplacederrortitle": "We are sorry, an error occurred on order placing.",
+    "orderplacedsuccesssubtitle": "Your order has successfully been placed. It will be delivered in the shortest time to your address.",
+    "orderplacederrorsubtitle": "Please try again later.",
+    "backtohmepage": "Back to home page",
+    "emptycartquestion": "Are you sure you want to empty your cart?",
+    "emptycartquestioninfo": "This action cannot be undone.",
+    "emptycartquit": "Quit",
+    "emptycartproceed": "Empty cart",
+    "optional": " Optional",
+    "previousstep": "Previous step",
+    "myordertitle": "My order",
+    "products": "Products",
+    "totalprice": "Total price",
+    "emptycartinfo": "Your cart is empty.",
+    "specialindications": "Special indications",
+    "address": "Delivery address",
+    "addressmandatoryerror": "The address field is mandatory.",
+    "nextstep": "Next step",
+    "placeorder": "Place order"
+  },
+  "managertabnavigator": {
+    "foodmenu": "Food Menu",
+    "drinkmenu": "Drink Menu",
+    "addnewproduct": "Add New Product",
+    "orders": "Previous orders"
+  },
+  "footer": {
+    "address": "Address",
+    "contact": "Contact",
+    "openinghours": "Opening hours",
+    "mondayfriday": "M - F",
+    "saturdaysunday": "S - S"
+  },
+  "clientpastordercontainr": {
+    "products": "Products",
+    "totalprice": "Total price",
+    "specialindications": "Special indications",
+    "orderdate": "Date of order",
+    "ordertime": "Time of order",
+    "orderaddress": "Delivery address of order"
+  }
+}

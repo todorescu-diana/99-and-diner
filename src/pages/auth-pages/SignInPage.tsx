@@ -15,8 +15,9 @@ import { Alert, Collapse, IconButton, InputAdornment } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { useEffect, useState } from "react";
-import userEvent from "@testing-library/user-event";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import ChangeLanguageSelect from "../../components/ChangeLanguageSelect";
 
 export default function SignInPage() {
   const { doLogin } = useLogin();
@@ -43,7 +44,7 @@ export default function SignInPage() {
             firstName: loginResult.user_first_name,
             lastName: loginResult.user_last_name,
           });
-          window.localStorage.setItem(
+          window.sessionStorage.setItem(
             "MY_APP_STATE",
             JSON.stringify(loginResult)
           );
@@ -61,8 +62,14 @@ export default function SignInPage() {
 
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
+  const [t] = useTranslation("common");
+
   return (
     <Box>
+      <Box sx={{ position: "absolute", right: 0, top: 0, margin: 5 }}>
+        <ChangeLanguageSelect />
+      </Box>
+
       <Container component="main" sx={{ marginBottom: 8.35 }}>
         <Box
           sx={{
@@ -80,7 +87,7 @@ export default function SignInPage() {
             variant="h5"
             sx={{ color: "primary.main" }}
           >
-            Sign in
+            {t("signin.title")}
           </Typography>
           <Box
             component="form"
@@ -94,7 +101,7 @@ export default function SignInPage() {
               required
               fullWidth
               id="email"
-              label="Email Address"
+              label={t("fields.email")}
               name="email"
               autoComplete="email"
               autoFocus
@@ -106,7 +113,7 @@ export default function SignInPage() {
               required
               fullWidth
               name="password"
-              label="Password"
+              label={t("fields.password")}
               id="password"
               autoComplete="current-password"
               sx={{ backgroundColor: "#fefcf6" }}
@@ -118,7 +125,7 @@ export default function SignInPage() {
                       aria-label="visibility-on"
                       onClick={() => setIsPasswordVisible(true)}
                     >
-                      <VisibilityIcon />
+                      <VisibilityIcon color={"primary"} />
                     </IconButton>
                   </InputAdornment>
                 ) : (
@@ -127,7 +134,7 @@ export default function SignInPage() {
                       aria-label="visibility-off"
                       onClick={() => setIsPasswordVisible(false)}
                     >
-                      <VisibilityOffIcon />
+                      <VisibilityOffIcon color={"primary"} />
                     </IconButton>
                   </InputAdornment>
                 ),
@@ -139,7 +146,7 @@ export default function SignInPage() {
               variant="contained"
               sx={{ mt: 2, color: themeColors.secondary }}
             >
-              Sign In
+              {t("signin.button")}
             </Button>
             <Collapse in={invalidCredentials}>
               <Alert
@@ -158,7 +165,7 @@ export default function SignInPage() {
                 }
                 sx={{ mb: 2, mt: 3 }}
               >
-                Email sau parola incorecte.
+                {t("signin.error")}
               </Alert>
             </Collapse>
             <Grid container sx={{ mt: 4, justifyContent: "center" }}>
@@ -168,7 +175,7 @@ export default function SignInPage() {
                   variant="body2"
                   sx={{ color: "primary.main" }}
                 >
-                  {"Don't have an account? Sign Up"}
+                  {t("signin.signupalternative")}
                 </Link>
               </Grid>
             </Grid>

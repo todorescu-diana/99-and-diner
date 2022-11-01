@@ -12,6 +12,7 @@ import ManagerFoodMenuContent from "./ManagerFoodMenuContent";
 import ManagerDrinkMenuContent from "./ManagerDrinkMenuContent";
 import ManagerPastOrdersContent from "./ManagerPastOrdersContent";
 import ManagerAddNewProductContent from "./ManagerAddNewProductContent";
+import { useTranslation } from "react-i18next";
 
 interface StyledTabsProps {
   children?: React.ReactNode;
@@ -67,6 +68,7 @@ export default function ManagerContent() {
   };
 
   const [userGlobalState, setUserGlobalState] = useUserGlobalContext();
+  const [t] = useTranslation("common");
 
   return (
     <Box sx={{ width: "100%" }} height="100vh">
@@ -101,10 +103,10 @@ export default function ManagerContent() {
           onChange={handleChange}
           aria-label="styled tabs example"
         >
-          <StyledTab label="Meniu Mancare" />
-          <StyledTab label="Meniu Bauturi" />
-          <StyledTab label="Adaugare Produs Nou" />
-          <StyledTab label="Comenzi anterioare" />
+          <StyledTab label={t("managertabnavigator.foodmenu")} />
+          <StyledTab label={t("managertabnavigator.drinkmenu")} />
+          <StyledTab label={t("managertabnavigator.addnewproduct")} />
+          <StyledTab label={t("managertabnavigator.orders")} />
         </StyledTabs>
         <IconButton
           sx={{ "&:hover": { color: themeColors.secondary } }}

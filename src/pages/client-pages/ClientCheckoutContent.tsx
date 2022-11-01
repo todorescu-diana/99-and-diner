@@ -20,12 +20,7 @@ import { useClientOrderContext } from "../../contexts/ClientOrderContext";
 import axios from "axios";
 import { useUserGlobalContext } from "../../contexts/UserGlobalContext";
 import StyledFooter from "../../components/StyledFooter";
-
-const steps = [
-  "Verificare comanda",
-  "Introducere indicatii speciale comanda",
-  "Introducere adresa",
-];
+import { useTranslation } from "react-i18next";
 
 export default function ClientCheckoutContent({
   setValue,
@@ -93,6 +88,12 @@ export default function ClientCheckoutContent({
   };
 
   const [isEmptyCartModalOpen, setIsEmptyCartModalOpen] = useState(false);
+  const [t] = useTranslation("common");
+  const steps = [
+    t("clientcheckoutcontent.checkorder"),
+    t("clientcheckoutcontent.enterspecialindicationsorder"),
+    t("clientcheckoutcontent.enteraddress"),
+  ];
 
   function handleEmptyCart() {
     setClientOrderState({
@@ -201,13 +202,13 @@ export default function ClientCheckoutContent({
           >
             <Typography id="modal-modal-title" variant="h6" component="h2">
               {hasServerRequestProccessedWithSuccess
-                ? "Comanda dumneavoastra a fost plasata."
-                : "Ne cerem scuze, a aparut o eroare la trimiterea comenzii."}
+                ? t("clientcheckoutcontent.orderplacedsuccesstitle")
+                : t("clientcheckoutcontent.orderplacederrortitle")}
             </Typography>
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
               {hasServerRequestProccessedWithSuccess
-                ? "Va fi livrata in cel mai scurt timp la adresa dumneavoastra."
-                : "Va rugam incercati mai tarziu."}
+                ? t("clientcheckoutcontent.orderplacedsuccesssubtitle")
+                : t("clientcheckoutcontent.orderplacederrorsubtitle")}
             </Typography>
             <Box
               mt={2}
@@ -224,7 +225,7 @@ export default function ClientCheckoutContent({
                 variant="contained"
                 sx={{ mt: 2, color: themeColors.secondary }}
               >
-                Inapoi la pagina principala
+                {t("clientcheckoutcontent.backtohomepage")}
               </Button>
             </Box>
           </Box>
@@ -250,10 +251,10 @@ export default function ClientCheckoutContent({
             }}
           >
             <Typography id="modal-modal-title" variant="h6" component="h2">
-              Sunteti sigur ca doriti sa goliti cosul?
+              {t("clientcheckoutcontent.emptycartquestion")}
             </Typography>
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              Aceasta actiune nu poate fi revocata.
+              {t("clientcheckoutcontent.emptycartquestioninfo")}
             </Typography>
             <Box
               mt={2}
@@ -270,7 +271,7 @@ export default function ClientCheckoutContent({
                 variant="contained"
                 sx={{ mt: 2, mr: 2, color: themeColors.secondary }}
               >
-                Renuntare
+                {t("clientcheckoutcontent.emptycartquit")}
               </Button>
               <Button
                 onClick={handleEmptyCart}
@@ -278,7 +279,7 @@ export default function ClientCheckoutContent({
                 variant="contained"
                 sx={{ mt: 2, color: themeColors.secondary }}
               >
-                Goleste cosul
+                {t("clientcheckoutcontent.emptycartproceed")}
               </Button>
             </Box>
           </Box>
@@ -293,7 +294,9 @@ export default function ClientCheckoutContent({
                 } = {};
                 if (isStepOptional(index)) {
                   labelProps.optional = (
-                    <Typography variant="caption">Optional</Typography>
+                    <Typography variant="caption">
+                      {t("clientcheckoutcontent.optional")}
+                    </Typography>
                   );
                 }
                 if (isStepSkipped(index)) {
@@ -333,7 +336,7 @@ export default function ClientCheckoutContent({
                 onClick={handleBack}
                 sx={{ color: "primary.dark" }}
               >
-                Pasul anterior
+                {t("clientcheckoutcontent.previousstep")}
               </Button>
             </Box>
           ) : null}
@@ -373,7 +376,7 @@ export default function ClientCheckoutContent({
                         variant="h3"
                         sx={{ alignSelf: "center" }}
                       >
-                        Comanda mea
+                        {t("clientcheckoutcontent.myordertitle")}
                       </Typography>
                       <Box
                         sx={{
@@ -387,27 +390,41 @@ export default function ClientCheckoutContent({
                             display: "flex",
                             flexDirection: "column",
                             justifyContent: "space-between",
+                            mr: 5,
                           }}
                         >
-                          <Typography variant="h4">Produse:</Typography>
-                          <Typography variant="h4">Pret total:</Typography>
+                          <Typography variant="h4">
+                            {t("clientcheckoutcontent.products")}:
+                          </Typography>
+                          <Typography variant="h4">
+                            {t("clientcheckoutcontent.totalprice")}:
+                          </Typography>
                         </Box>
                         <Box
                           sx={{
                             display: "flex",
                             flexDirection: "column",
+                            justifyContent: "space-between",
+                            paddingTop: 1,
+                            paddingBottom: 0.5,
                           }}
                         >
                           {clientOrderState.order_products.map(
                             (orderProduct, idx) => (
-                              <Typography key={idx} variant="h5">
+                              <Typography
+                                key={idx}
+                                variant="h5"
+                                sx={{
+                                  alignSelf: "center",
+                                }}
+                              >
                                 {orderProduct.product_name} x{" "}
                                 {orderProduct.product_qty}
                               </Typography>
                             )
                           )}
                           <Typography mt={3} variant="h5">
-                            {clientOrderState.order_total_price}
+                            {clientOrderState.order_total_price} lei
                           </Typography>
                         </Box>
                       </Box>
@@ -417,12 +434,12 @@ export default function ClientCheckoutContent({
                         sx={{ mt: 6, mb: 2, color: themeColors.secondary }}
                         onClick={() => setIsEmptyCartModalOpen(true)}
                       >
-                        Goleste cosul
+                        {t("clientcheckoutcontent.emptycartproceed")}
                       </Button>
                     </>
                   ) : (
                     <Typography variant="h4">
-                      Cosul dumneavoastra este gol.
+                      {t("clientcheckoutcontent.emptycartinfo")}
                     </Typography>
                   )}
                 </Box>
@@ -431,7 +448,7 @@ export default function ClientCheckoutContent({
           ) : null}
           {activeStep === 1 ? (
             <Box
-              m={4}
+              m={6}
               sx={{
                 display: "flex",
                 flexDirection: "row",
@@ -460,13 +477,13 @@ export default function ClientCheckoutContent({
                   }}
                 >
                   <Typography mb={4} variant="h3">
-                    Indicatii speciale
+                    {t("clientcheckoutcontent.specialindications")}
                   </Typography>
                   <TextField
                     margin="normal"
                     fullWidth
                     id="specialIndications"
-                    label="Indicatii speciale"
+                    label={t("fields.specialindications")}
                     name="specialIndications"
                     autoComplete="specialIndications"
                     autoFocus
@@ -485,7 +502,7 @@ export default function ClientCheckoutContent({
           ) : null}
           {activeStep === 2 ? (
             <Box
-              m={4}
+              m={6}
               sx={{
                 display: "flex",
                 flexDirection: "row",
@@ -513,7 +530,7 @@ export default function ClientCheckoutContent({
                   }}
                 >
                   <Typography mb={4} variant="h3">
-                    Adresa livrare
+                    {t("clientcheckoutcontent.address")}
                   </Typography>
                   <TextField
                     error={addressMissingErrorActive}
@@ -521,7 +538,7 @@ export default function ClientCheckoutContent({
                     required
                     fullWidth
                     id="address"
-                    label="Adresa livrare"
+                    label={t("fields.address")}
                     name="address"
                     autoComplete="address"
                     autoFocus
@@ -550,7 +567,7 @@ export default function ClientCheckoutContent({
                         }
                         sx={{ mb: 2 }}
                       >
-                        Campul de adresa de livrare este obligatoriu.
+                        {t("clientcheckoutcontent.addressmandatoryerror")}
                       </Alert>
                     </Collapse>
                   </Box>
@@ -575,7 +592,9 @@ export default function ClientCheckoutContent({
                   color: "primary.dark",
                 }}
               >
-                {activeStep !== 2 ? "Pasul urmator" : "Plasare comanda"}
+                {activeStep !== 2
+                  ? t("clientcheckoutcontent.nextstep")
+                  : t("clientcheckoutcontent.placeorder")}
               </Button>
             </Box>
           ) : null}

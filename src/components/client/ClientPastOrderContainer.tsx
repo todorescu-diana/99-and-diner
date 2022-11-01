@@ -1,10 +1,11 @@
-import { Box, Card, Grid, Typography } from "@mui/material";
-import { useEffect } from "react";
+import { Box, Card, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import { Order } from "../../models/Order";
 import { themeColors } from "../../theme/theme";
 import ClientPastOrderContainerRow from "./ClientPastOrderContainerRow";
 
 export default function ClientPastOrderContainer({ order }: { order: Order }) {
+  const [t] = useTranslation();
   return (
     <Box sx={{ width: "50%", alignSelf: "center" }}>
       <Card
@@ -28,7 +29,7 @@ export default function ClientPastOrderContainer({ order }: { order: Order }) {
           <ClientPastOrderContainerRow
             leftContent={
               <Typography sx={{ flex: 1, fontWeight: "bold" }} variant="h5">
-                Produse:
+                {t("clientpastordercontainer.products")}:
               </Typography>
             }
             rightContent={
@@ -46,7 +47,7 @@ export default function ClientPastOrderContainer({ order }: { order: Order }) {
           <ClientPastOrderContainerRow
             leftContent={
               <Typography mt={3} variant="h5" sx={{ fontWeight: "bold" }}>
-                Pret total:
+                {t("clientpastordercontainer.totalprice")}:
               </Typography>
             }
             rightContent={
@@ -59,7 +60,7 @@ export default function ClientPastOrderContainer({ order }: { order: Order }) {
           <ClientPastOrderContainerRow
             leftContent={
               <Typography mt={3} variant="h5" sx={{ fontWeight: "bold" }}>
-                Indicatii speciale:
+                {t("clientpastordercontainer.specialindications")}:
               </Typography>
             }
             rightContent={
@@ -72,7 +73,7 @@ export default function ClientPastOrderContainer({ order }: { order: Order }) {
           <ClientPastOrderContainerRow
             leftContent={
               <Typography mt={3} variant="h5" sx={{ fontWeight: "bold" }}>
-                Data plasarii comenzii:
+                {t("clientpastordercontainer.orderdate")}:
               </Typography>
             }
             rightContent={
@@ -85,7 +86,7 @@ export default function ClientPastOrderContainer({ order }: { order: Order }) {
           <ClientPastOrderContainerRow
             leftContent={
               <Typography mt={3} variant="h5" sx={{ fontWeight: "bold" }}>
-                Ora plasarii comenzii:
+                {t("clientpastordercontainer.ordertime")}:
               </Typography>
             }
             rightContent={
@@ -98,7 +99,7 @@ export default function ClientPastOrderContainer({ order }: { order: Order }) {
           <ClientPastOrderContainerRow
             leftContent={
               <Typography mt={3} variant="h5" sx={{ fontWeight: "bold" }}>
-                Adresa livrarii:
+                {t("clientpastordercontainer.orderaddress")}:
               </Typography>
             }
             rightContent={
