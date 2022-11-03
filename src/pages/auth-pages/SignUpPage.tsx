@@ -161,7 +161,7 @@ export default function SignUpPage() {
             name="firstName"
             autoComplete="firstName"
             autoFocus
-            sx={{ backgroundColor: "#fefcf6" }}
+            sx={{ backgroundColor: "#fefcf6", borderRadius: 2 }}
             inputRef={firstNameInputRef}
           />
           <TextField
@@ -173,7 +173,7 @@ export default function SignUpPage() {
             label={t("fields.lastname")}
             name="lastName"
             autoComplete="lastName"
-            sx={{ backgroundColor: "#fefcf6" }}
+            sx={{ backgroundColor: "#fefcf6", borderRadius: 2 }}
             inputRef={lastNameInputRef}
           />
           <TextField
@@ -185,7 +185,7 @@ export default function SignUpPage() {
             label={t("fields.email")}
             name="email"
             autoComplete="email"
-            sx={{ backgroundColor: "#fefcf6" }}
+            sx={{ backgroundColor: "#fefcf6", borderRadius: 2 }}
             inputRef={emailInputRef}
           />
           <TextField
@@ -198,7 +198,7 @@ export default function SignUpPage() {
             type={!isPasswordVisible ? "password" : "text"}
             id="password"
             autoComplete="current-password"
-            sx={{ backgroundColor: "#fefcf6" }}
+            sx={{ backgroundColor: "#fefcf6", borderRadius: 2 }}
             InputProps={{
               endAdornment: !isPasswordVisible ? (
                 <InputAdornment position="end">

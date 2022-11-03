@@ -105,7 +105,7 @@ export default function SignInPage() {
               name="email"
               autoComplete="email"
               autoFocus
-              sx={{ backgroundColor: "#fefcf6" }}
+              sx={{ backgroundColor: "#fefcf6", borderRadius: 2 }}
             />
             <TextField
               error={invalidCredentials}
@@ -116,7 +116,7 @@ export default function SignInPage() {
               label={t("fields.password")}
               id="password"
               autoComplete="current-password"
-              sx={{ backgroundColor: "#fefcf6" }}
+              sx={{ backgroundColor: "#fefcf6", borderRadius: 2 }}
               type={!isPasswordVisible ? "password" : "text"}
               InputProps={{
                 endAdornment: !isPasswordVisible ? (
