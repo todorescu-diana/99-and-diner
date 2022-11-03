@@ -9,7 +9,11 @@ import SignUpPage from "./pages/auth-pages/SignUpPage";
 import { useUserGlobalContext } from "./contexts/UserGlobalContext";
 import ClientContent from "./pages/client-pages/ClientContent";
 import ManagerContent from "./pages/manager-pages/ManagerContent";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { I18nextProvider } from "react-i18next";
+import i18next from "i18next";
+import common_ro from "./translations/ro/common.json";
+import common_en from "./translations/en/common.json";
 
 const theme = createTheme({
   palette: {
@@ -25,10 +29,23 @@ const theme = createTheme({
   },
 });
 
+i18next.init({
+  interpolation: { escapeValue: false },
+  lng: "ro",
+  resources: {
+    ro: {
+      common: common_ro,
+    },
+    en: {
+      common: common_en,
+    },
+  },
+});
+
 function App() {
   const [userGlobalState, setUserGlobalState] = useUserGlobalContext();
   useEffect(() => {
-    const data = window.localStorage.getItem("MY_APP_STATE");
+    const data = window.sessionStorage.getItem("MY_APP_STATE");
     if (data !== null) {
       const user = JSON.parse(data);
       setUserGlobalState({
@@ -43,36 +60,38 @@ function App() {
   }, []);
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <BrowserRouter>
-        <Routes>
-          {userGlobalState.role !== "" ? (
-            userGlobalState.role === "manager" ? (
-              <>
-                <Route path="/editcontent" element={<ManagerContent />} />
-              </>
-            ) : userGlobalState.role === "client" ? (
-              <>
-                <Route path="/content" element={<ClientContent />} />
-              </>
+    <I18nextProvider i18n={i18next}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <BrowserRouter>
+          <Routes>
+            {userGlobalState.role !== "" ? (
+              userGlobalState.role === "manager" ? (
+                <>
+                  <Route path="/editcontent" element={<ManagerContent />} />
+                </>
+              ) : userGlobalState.role === "client" ? (
+                <>
+                  <Route path="/content" element={<ClientContent />} />
+                </>
+              ) : (
+                <>
+                  <Route path="/" element={<Navigate to={"/signin"} />} />
+                  <Route path="/" element={<SignInPage />} />
+                  <Route path="/signup" element={<SignUpPage />} />
+                </>
+              )
             ) : (
               <>
                 <Route path="/" element={<Navigate to={"/signin"} />} />
-                <Route path="/" element={<SignInPage />} />
+                <Route path="/signin" element={<SignInPage />} />
                 <Route path="/signup" element={<SignUpPage />} />
               </>
-            )
-          ) : (
-            <>
-              <Route path="/" element={<Navigate to={"/signin"} />} />
-              <Route path="/signin" element={<SignInPage />} />
-              <Route path="/signup" element={<SignUpPage />} />
-            </>
-          )}
-        </Routes>
-      </BrowserRouter>
-    </ThemeProvider>
+            )}
+          </Routes>
+        </BrowserRouter>
+      </ThemeProvider>
+    </I18nextProvider>
   );
 }
 

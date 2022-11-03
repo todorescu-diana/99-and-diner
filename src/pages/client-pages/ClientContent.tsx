@@ -10,13 +10,21 @@ import ClientCheckoutContent from "./ClientCheckoutContent";
 import ClientPastOrdersContent from "./ClientPastOrdersContent";
 import ClientFoodMenuContent from "./ClientFoodMenuContent";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { IconButton, Typography } from "@mui/material";
+import {
+  IconButton,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useUserGlobalContext } from "../../contexts/UserGlobalContext";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { Product } from "../../models/Product";
 import { OrderResponse } from "../../models/OrderResponse";
 import { Order } from "../../models/Order";
+import { useTranslation } from "react-i18next";
+import ChangeLanguageSelect from "../../components/ChangeLanguageSelect";
 
 interface StyledTabsProps {
   children?: React.ReactNode;
@@ -133,6 +141,8 @@ export default function ClientContent() {
     getUserOrders();
   }, []);
 
+  const [t] = useTranslation("common");
+
   return (
     <Box sx={{ width: "100%" }} height="100vh">
       <Box
@@ -141,7 +151,6 @@ export default function ClientContent() {
           display: "flex",
           flexDirection: "row",
           p: 2,
-          // justifyContent: "flex-end",
           alignItems: "center",
         }}
       >
@@ -149,7 +158,6 @@ export default function ClientContent() {
           variant="h4"
           sx={{
             color: themeColors.secondary,
-            alignSelf: "flex-start",
             flex: 0.5,
             marginLeft: 5,
           }}
@@ -161,10 +169,10 @@ export default function ClientContent() {
           onChange={handleChange}
           aria-label="styled tabs"
         >
-          <StyledTab label="Meniu Mancare" />
-          <StyledTab label="Meniu Bauturi" />
-          <StyledTab label="Comenzi anterioare" />
-          <StyledTab label="Cos" />
+          <StyledTab label={t("clienttabnavigator.foodmenu")} />
+          <StyledTab label={t("clienttabnavigator.drinkmenu")} />
+          <StyledTab label={t("clienttabnavigator.orders")} />
+          <StyledTab label={t("clienttabnavigator.cart")} />
         </StyledTabs>
         <IconButton
           sx={{ "&:hover": { color: themeColors.secondary } }}
@@ -178,27 +186,41 @@ export default function ClientContent() {
               firstName: "",
               lastName: "",
             });
-            window.localStorage.clear();
+            window.sessionStorage.clear();
             navigate("/");
           }}
         >
           <LogoutIcon />
         </IconButton>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "flex-end",
+            flex: 0.5,
+          }}
+        >
+          <Box>
+            <ChangeLanguageSelect />
+          </Box>
+        </Box>
       </Box>
 
       {value === 0 || value === 1 ? (
         <>
-          <Typography ml={8} mt={8} variant="h4" sx={{ fontWeight: "bold" }}>
-            Buna, {userGlobalState.firstName}!{" "}
+          <Typography ml={8} mt={5} variant="h4" sx={{ fontWeight: "bold" }}>
+            {t("clientcontent.greeting")}, {userGlobalState.firstName}!{" "}
           </Typography>
           {(value === 0 && foodProducts.length > 0) ||
           (value === 1 && drinkProducts.length > 0) ? (
             <Typography ml={8} mt={3} variant="h5">
-              Alege din meniul de {value === 0 ? "mancare" : "bauturi"}.
+              {value === 0
+                ? t("clientcontent.choosefromfoodmenu")
+                : t("clientcontent.choosefromdrinkmenu")}
             </Typography>
           ) : (
             <Typography ml={8} mt={3} variant="h5">
-              Din pacate, nu s-au gasit produse disponibile.
+              {t("clientcontent.noproductsfound")}
             </Typography>
           )}
         </>

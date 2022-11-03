@@ -1,7 +1,9 @@
 import { Box, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import { themeColors } from "../theme/theme";
 
 export default function StyledFooter() {
+  const [t] = useTranslation("common");
   return (
     <Box
       sx={{
@@ -27,10 +29,10 @@ export default function StyledFooter() {
         p={2}
       >
         <Typography variant="h5" sx={{ color: themeColors.background }}>
-          Adresa:
+          {t("footer.address")}
         </Typography>
         <Typography variant="subtitle1" sx={{ color: themeColors.background }}>
-          filler adresa
+          Strada Amforei, nr. 9, Zona Circumvalaţiunii, Timişoara, România
         </Typography>
       </Box>
       <Box
@@ -43,13 +45,13 @@ export default function StyledFooter() {
         p={2}
       >
         <Typography variant="h5" sx={{ color: themeColors.background }}>
-          Contact:
+          {t("footer.contact")}
         </Typography>
         <Typography variant="subtitle1" sx={{ color: themeColors.background }}>
-          filler telefon
+          +40 364 413 422
         </Typography>
         <Typography variant="subtitle1" sx={{ color: themeColors.background }}>
-          filler email
+          support@99&diner.ro
         </Typography>
       </Box>
       <Box
@@ -62,10 +64,13 @@ export default function StyledFooter() {
         p={2}
       >
         <Typography variant="h5" sx={{ color: themeColors.background }}>
-          Orar:
+          {t("footer.openinghours")}
         </Typography>
         <Typography variant="subtitle1" sx={{ color: themeColors.background }}>
-          filler orar
+          {t("footer.mondayfriday")} 08 - 22
+        </Typography>
+        <Typography variant="subtitle1" sx={{ color: themeColors.background }}>
+          {t("footer.saturdaysunday")} Nonstop
         </Typography>
       </Box>
     </Box>

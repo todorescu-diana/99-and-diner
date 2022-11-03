@@ -1,0 +1,85 @@
+{
+  "signin": {
+    "title": "Logare",
+    "button": "Logare",
+    "error": "Email sau parolă incorecte.",
+    "signupalternative": "Nu aveţi cont? Inregistrare"
+  },
+  "signup": {
+    "title": "Înregistrare",
+    "button": "Înregistrare",
+    "emailalreadyinuseerror": "Adresa de email introdusă este deja în folosinţă.",
+    "emptyfieldserror": "Toate câmpurile sunt obligatorii.",
+    "success": "Contul dumneavoastră a fost creat.",
+    "signinalternative": "Aveţi deja cont? Logare"
+  },
+  "fields": {
+    "email": "Adresă email",
+    "password": "Parolă",
+    "firstname": "Prenume",
+    "lastname": "Nume",
+    "specialindications": "Indicaţii speciale",
+    "address": "Adresă livrare"
+  },
+  "clienttabnavigator": {
+    "foodmenu": "Meniu Mâncare",
+    "drinkmenu": "Meniu Băuturi",
+    "orders": "Comenzi anterioare",
+    "cart": "Coş"
+  },
+  "clientcontent": {
+    "greeting": "Bună",
+    "choosefromfoodmenu": "Alege din meniul nostru de mâncare:",
+    "choosefromdrinkmenu": "Alege din meniul nostru de băuturi:",
+    "noproductsfound": "Din păcate, nu s-au găsit produse disponibile."
+  },
+  "clientpastorderscontent": {
+    "noordersfound": "Nu s-au găsit comenzi anterioare."
+  },
+  "clientcheckoutcontent": {
+    "checkorder": "Verificare comandă",
+    "enterspecialindicationsorder": "Introducere indicaţii speciale comandă",
+    "enteraddress": "Introducere adresă",
+    "orderplacedsuccesstitle": "Comanda dumneavoastră a fost plasată.",
+    "orderplacederrortitle": "Ne cerem scuze, a apărut o eroare la plasarea comenzii.",
+    "orderplacedsuccesssubtitle": "Comanda dumneavoastră a fost plasată. Va fi livrată în cel mai scurt timp la adresa dumneavoastră.",
+    "orderplacederrorsubtitle": "Vă rugăm incercaţi mai târziu.",
+    "backtohmepage": "Înapoi la pagina principală",
+    "emptycartquestion": "Sunteţi sigur că doriţi să goliţi coşul?",
+    "emptycartquestioninfo": "Această acţiune nu poate fi revocată.",
+    "emptycartquit": "Renunţare",
+    "emptycartproceed": "Goleşte coşul",
+    "optional": " Opţional",
+    "previousstep": "Pasul anterior",
+    "myordertitle": "Comanda mea",
+    "products": "Produse",
+    "totalprice": "Preţ total",
+    "emptycartinfo": "Coşul dumneavoastră este gol.",
+    "specialindications": "Indicaţii speciale",
+    "address": "Adresă livrare",
+    "addressmandatoryerror": "Câmpul de adresă de livrare este obligatoriu.",
+    "nextstep": "Pasul următor",
+    "placeorder": "Plasare comandă"
+  },
+  "managertabnavigator": {
+    "foodmenu": "Meniu Mâncare",
+    "drinkmenu": "Meniu Băuturi",
+    "addnewproduct": "Adăugare Produs Nou",
+    "orders": "Comenzi anterioare"
+  },
+  "footer": {
+    "address": "Adresă",
+    "contact": "Contact",
+    "openinghours": "Orar",
+    "mondayfriday": "L - V",
+    "saturdaysunday": "S - D"
+  },
+  "clientpastordercontainr": {
+    "products": "Produse",
+    "totalprice": "Preţ total",
+    "specialindications": "Indicaţii speciale",
+    "orderdate": "Data plasării comenzii",
+    "ordertime": "Ora plasării comenzii",
+    "orderaddress": "Adresa livrării"
+  }
+}
