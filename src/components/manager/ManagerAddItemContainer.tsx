@@ -154,7 +154,7 @@ export default function ManagerAddItemContainer() {
             name="itemName"
             autoComplete="itemName"
             autoFocus
-            sx={{ backgroundColor: "#fefcf6" }}
+            sx={{ backgroundColor: "#fefcf6", borderRadius: 2 }}
             inputRef={nameInputRef}
           />
           <TextField
@@ -165,7 +165,7 @@ export default function ManagerAddItemContainer() {
             label="Pret"
             name="itemPrice"
             autoComplete="itemPrice"
-            sx={{ backgroundColor: "#fefcf6" }}
+            sx={{ backgroundColor: "#fefcf6", borderRadius: 2 }}
             inputRef={priceInputRef}
           />
           <TextField
@@ -175,7 +175,7 @@ export default function ManagerAddItemContainer() {
             id="itemType"
             name="itemType"
             fullWidth
-            sx={{ backgroundColor: "#fefcf6", mt: 2 }}
+            sx={{ backgroundColor: "#fefcf6", mt: 2, borderRadius: 2 }}
             value={type}
             onChange={(t) => setType(t.target.value)}
           >
@@ -193,7 +193,7 @@ export default function ManagerAddItemContainer() {
             id="itemUrl"
             label="Url Imagine"
             name="itemUrl"
-            sx={{ backgroundColor: "#fefcf6", mt: 3 }}
+            sx={{ backgroundColor: "#fefcf6", mt: 3, borderRadius: 2 }}
             onChange={(e) => setImageUrl(e.target.value)}
             inputRef={urlInputRef}
           />
