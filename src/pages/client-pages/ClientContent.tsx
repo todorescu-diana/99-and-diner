@@ -139,7 +139,7 @@ export default function ClientContent() {
     getFoodItems();
     getDrinkItems();
     getUserOrders();
-  }, []);
+  }, [value]);
 
   const [t] = useTranslation("common");
 

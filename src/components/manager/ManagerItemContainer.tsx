@@ -467,7 +467,7 @@ export default function ManagerItemContainer({
                   />
                 ) : (
                   <Typography
-                    sx={{ width: 600, wordWrap: "break-word" }}
+                    sx={{ width: 430, wordWrap: "break-word" }}
                     variant="h6"
                   >
                     {imageUrl}
@@ -495,7 +495,7 @@ export default function ManagerItemContainer({
             <IconButton
               aria-label="delete"
               onClick={handleToDeletePress}
-              sx={{ ml: 10, mr: 3, mt: 2.5 }}
+              sx={{ ml: 3, mt: 2.5 }}
             >
               <DeleteIcon color={"primary"} />
             </IconButton>

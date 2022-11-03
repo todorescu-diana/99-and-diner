@@ -5,7 +5,7 @@ import { themeColors } from "../../theme/theme";
 import ClientPastOrderContainerRow from "./ClientPastOrderContainerRow";
 
 export default function ClientPastOrderContainer({ order }: { order: Order }) {
-  const [t] = useTranslation();
+  const [t] = useTranslation("common");
   return (
     <Box sx={{ width: "50%", alignSelf: "center" }}>
       <Card
@@ -52,7 +52,7 @@ export default function ClientPastOrderContainer({ order }: { order: Order }) {
             }
             rightContent={
               <Typography mt={3} variant="h6">
-                {order.order_total_price}
+                {order.order_total_price} lei
               </Typography>
             }
           />
