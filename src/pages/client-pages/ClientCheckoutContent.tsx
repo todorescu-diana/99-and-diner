@@ -123,6 +123,8 @@ export default function ClientCheckoutContent({
       const totalNumberOfOrders = data.length;
 
       const today = new Date();
+      const minutes =
+        today.getMinutes() < 10 ? "0" + today.getMinutes() : today.getMinutes();
 
       const newOrder = {
         orderId: totalNumberOfOrders,
@@ -134,8 +136,8 @@ export default function ClientCheckoutContent({
         orderTotalPrice: clientOrderState.order_total_price,
         orderAddress: address,
         orderDate:
-          today.getDay() + "." + today.getMonth() + "." + today.getFullYear(),
-        orderTime: today.getHours() + ":" + today.getMinutes(),
+          today.getDate() + "." + today.getMonth() + "." + today.getFullYear(),
+        orderTime: today.getHours() + ":" + minutes,
       };
       try {
         const postResponseData = await axios.post(
@@ -409,20 +411,22 @@ export default function ClientCheckoutContent({
                             paddingBottom: 0.5,
                           }}
                         >
-                          {clientOrderState.order_products.map(
-                            (orderProduct, idx) => (
-                              <Typography
-                                key={idx}
-                                variant="h5"
-                                sx={{
-                                  alignSelf: "center",
-                                }}
-                              >
-                                {orderProduct.product_name} x{" "}
-                                {orderProduct.product_qty}
-                              </Typography>
-                            )
-                          )}
+                          <Box>
+                            {clientOrderState.order_products.map(
+                              (orderProduct, idx) => (
+                                <Typography
+                                  key={idx}
+                                  variant="h5"
+                                  sx={{
+                                    alignSelf: "center",
+                                  }}
+                                >
+                                  {orderProduct.product_name} x{" "}
+                                  {orderProduct.product_qty}
+                                </Typography>
+                              )
+                            )}
+                          </Box>
                           <Typography mt={3} variant="h5">
                             {clientOrderState.order_total_price} lei
                           </Typography>

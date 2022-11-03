@@ -44,7 +44,7 @@
     "orderplacederrortitle": "Ne cerem scuze, a apărut o eroare la plasarea comenzii.",
     "orderplacedsuccesssubtitle": "Comanda dumneavoastră a fost plasată. Va fi livrată în cel mai scurt timp la adresa dumneavoastră.",
     "orderplacederrorsubtitle": "Vă rugăm incercaţi mai târziu.",
-    "backtohmepage": "Înapoi la pagina principală",
+    "backtohomepage": "Înapoi la pagina principală",
     "emptycartquestion": "Sunteţi sigur că doriţi să goliţi coşul?",
     "emptycartquestioninfo": "Această acţiune nu poate fi revocată.",
     "emptycartquit": "Renunţare",
@@ -74,7 +74,7 @@
     "mondayfriday": "L - V",
     "saturdaysunday": "S - D"
   },
-  "clientpastordercontainr": {
+  "clientpastordercontainer": {
     "products": "Produse",
     "totalprice": "Preţ total",
     "specialindications": "Indicaţii speciale",

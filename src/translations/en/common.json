@@ -44,7 +44,7 @@
     "orderplacederrortitle": "We are sorry, an error occurred on order placing.",
     "orderplacedsuccesssubtitle": "Your order has successfully been placed. It will be delivered in the shortest time to your address.",
     "orderplacederrorsubtitle": "Please try again later.",
-    "backtohmepage": "Back to home page",
+    "backtohomepage": "Back to home page",
     "emptycartquestion": "Are you sure you want to empty your cart?",
     "emptycartquestioninfo": "This action cannot be undone.",
     "emptycartquit": "Quit",
@@ -74,7 +74,7 @@
     "mondayfriday": "M - F",
     "saturdaysunday": "S - S"
   },
-  "clientpastordercontainr": {
+  "clientpastordercontainer": {
     "products": "Products",
     "totalprice": "Total price",
     "specialindications": "Special indications",
