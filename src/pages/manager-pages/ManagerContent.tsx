@@ -67,7 +67,7 @@ export default function ManagerContent() {
     setValue(newValue);
   };
 
-  const [userGlobalState, setUserGlobalState] = useUserGlobalContext();
+  const [, setUserGlobalState] = useUserGlobalContext();
   const [t] = useTranslation("common");
 
   return (
@@ -78,7 +78,6 @@ export default function ManagerContent() {
           display: "flex",
           flexDirection: "row",
           p: 2,
-          // justifyContent: "flex-end",
           alignItems: "center",
         }}
       >

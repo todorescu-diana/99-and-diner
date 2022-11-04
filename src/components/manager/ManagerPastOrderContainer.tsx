@@ -5,7 +5,6 @@ import { Order } from "../../models/Order";
 import { User } from "../../models/User";
 import { themeColors } from "../../theme/theme";
 import ManagerPastOrderContainerRow from "./ManagerPastOrderContainerRow";
-// TODO DACA NU SUNT COMENZI + DACA COSUL ESTE GOL + DACA NU SE GASESC ITEME IN MENIU + FONT + LOGO
 
 export default function ManagerPastOrderContainer({ order }: { order: Order }) {
   const [userName, setUserName] = useState("");
@@ -13,10 +12,6 @@ export default function ManagerPastOrderContainer({ order }: { order: Order }) {
   useEffect(() => {
     async function getClientInfo() {
       try {
-        // const res = await axios.get(
-        //   `http://localhost:3002/api/getFromId/:${order.order_user_id}`,
-        //   { params: { userId: order.order_user_id } }
-        // );
         const res = await axios.get("http://localhost:3002/api/get");
         const { data } = await res;
         const allUsers: User[] = data;
@@ -34,6 +29,7 @@ export default function ManagerPastOrderContainer({ order }: { order: Order }) {
     }
     getClientInfo();
   }, []);
+
   return (
     <Box
       sx={{

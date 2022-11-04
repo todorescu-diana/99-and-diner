@@ -136,7 +136,11 @@ export default function ClientCheckoutContent({
         orderTotalPrice: clientOrderState.order_total_price,
         orderAddress: address,
         orderDate:
-          today.getDate() + "." + today.getMonth() + "." + today.getFullYear(),
+          today.getDate() +
+          "." +
+          (today.getMonth() + 1) +
+          "." +
+          today.getFullYear(),
         orderTime: today.getHours() + ":" + minutes,
       };
       try {
