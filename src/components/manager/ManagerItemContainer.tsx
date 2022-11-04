@@ -59,6 +59,12 @@ export default function ManagerItemContainer({
     setHasServerRequestProccessedWithSuccess,
   ] = useState(false);
 
+  const [changeCancelled, setChangeCancelled] = useState(false);
+
+  const [open, setOpen] = useState(false);
+  const [deletedWithSuccess, setDeletedWithSuccess] = useState(false);
+  const [deletedModalOpen, setDeletedModalOpen] = useState(false);
+
   useEffect(() => {
     if (
       name !== initialItemInfo.name ||
@@ -91,8 +97,6 @@ export default function ManagerItemContainer({
     event.preventDefault();
     setUrl(event.target.value);
   };
-
-  const [changeCancelled, setChangeCancelled] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -155,10 +159,6 @@ export default function ManagerItemContainer({
   function handleToDeletePress() {
     setOpen(true);
   }
-
-  const [open, setOpen] = useState(false);
-  const [deletedWithSuccess, setDeletedWithSuccess] = useState(false);
-  const [deletedModalOpen, setDeletedModalOpen] = useState(false);
 
   async function handleDeletePress() {
     try {

@@ -10,13 +10,7 @@ import ClientCheckoutContent from "./ClientCheckoutContent";
 import ClientPastOrdersContent from "./ClientPastOrdersContent";
 import ClientFoodMenuContent from "./ClientFoodMenuContent";
 import LogoutIcon from "@mui/icons-material/Logout";
-import {
-  IconButton,
-  MenuItem,
-  Select,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { IconButton, Typography } from "@mui/material";
 import { useUserGlobalContext } from "../../contexts/UserGlobalContext";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
@@ -85,6 +79,8 @@ export default function ClientContent() {
   const [drinkProducts, setDrinkProducts] = useState<Product[]>([]);
   const [userOrders, setUserOrders] = useState<Order[]>([]);
 
+  const [t] = useTranslation("common");
+
   useEffect(() => {
     async function getFoodItems() {
       try {
@@ -140,8 +136,6 @@ export default function ClientContent() {
     getDrinkItems();
     getUserOrders();
   }, [value]);
-
-  const [t] = useTranslation("common");
 
   return (
     <Box sx={{ width: "100%" }} height="100vh">
