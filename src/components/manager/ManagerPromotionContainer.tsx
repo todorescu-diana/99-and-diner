@@ -3,49 +3,43 @@ import {
   Box,
   Button,
   Card,
-  CardMedia,
   Collapse,
-  TextField,
-  Typography,
   IconButton,
   Modal,
+  TextField,
+  Typography,
 } from "@mui/material";
-import { themeColors } from "../../theme/theme";
-import { useEffect, useState } from "react";
 import axios from "axios";
+import { useEffect, useState } from "react";
+import { Promotion } from "../../models/Promotion";
+import { themeColors } from "../../theme/theme";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
 import DoneOutlineIcon from "@mui/icons-material/DoneOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Product } from "../../models/Product";
 
-export default function ManagerItemContainer({
+export default function ManagerPromotionContainer({
   itemId,
   itemName,
   itemPrice,
-  imageUrl,
   products,
   setProducts,
 }: {
   itemId: number;
   itemName: string;
   itemPrice: number;
-  imageUrl: string;
-  products: Product[];
-  setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
+  products: Promotion[];
+  setProducts: React.Dispatch<React.SetStateAction<Promotion[]>>;
 }) {
   const [isEditNameActive, setIsEditNameActive] = useState(false);
   const [isEditPriceActive, setIsEditPriceActive] = useState(false);
-  const [isEditUrlActive, setIsEditUrlActive] = useState(false);
 
   const [name, setName] = useState(itemName);
   const [price, setPrice] = useState(itemPrice);
-  const [url, setUrl] = useState(imageUrl);
 
   const [initialItemInfo, setInitialItemInfo] = useState({
     name: itemName,
     price: itemPrice,
-    url: imageUrl,
   });
 
   const [hasItemChanged, setHasItemChanged] = useState(false);
@@ -66,16 +60,12 @@ export default function ManagerItemContainer({
   const [deletedModalOpen, setDeletedModalOpen] = useState(false);
 
   useEffect(() => {
-    if (
-      name !== initialItemInfo.name ||
-      price !== initialItemInfo.price ||
-      url !== initialItemInfo.url
-    ) {
+    if (name !== initialItemInfo.name || price !== initialItemInfo.price) {
       if (!hasItemChanged) setHasItemChanged(true);
-    } else if (name === itemName && price === itemPrice && url === imageUrl) {
+    } else if (name === itemName && price === itemPrice) {
       if (hasItemChanged) setHasItemChanged(false);
     }
-  }, [name, price, url]);
+  }, [name, price]);
 
   const handleItemNameTextChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -91,37 +81,27 @@ export default function ManagerItemContainer({
     setPrice(parseInt(event.target.value));
   };
 
-  const handleItemUrlTextChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    event.preventDefault();
-    setUrl(event.target.value);
-  };
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (name === "" || isNaN(price) || url === "") {
+    if (name === "" || isNaN(price)) {
       setChangeCancelled(true);
       setHasItemChanged(false);
       setIsEditNameActive(false);
       setIsEditPriceActive(false);
-      setIsEditUrlActive(false);
       if (name === "") setName(itemName); // TODO
       if (isNaN(price)) setPrice(itemPrice);
-      if (url === "") setUrl(imageUrl);
     } else {
-      const newProductInfo = {
-        productId: itemId,
+      const newPromotionInfo = {
+        promotionId: itemId,
         productNewName: name,
         productNewPrice: price,
-        productNewImageUrl: url,
       };
 
       try {
         const result = await axios.put(
-          `http://localhost:3003/api/updateProduct/:${itemId}`,
-          newProductInfo
+          `http://localhost:3005/api/updateProduct/:${itemId}`,
+          newPromotionInfo
         );
 
         if (!result.data.error) {
@@ -141,7 +121,6 @@ export default function ManagerItemContainer({
         setHasItemChanged(false);
         if (isEditNameActive) setIsEditNameActive(!isEditNameActive);
         if (isEditPriceActive) setIsEditPriceActive(!isEditPriceActive);
-        if (isEditUrlActive) setIsEditUrlActive(!isEditUrlActive);
       }
     }
   };
@@ -151,7 +130,6 @@ export default function ManagerItemContainer({
       setInitialItemInfo({
         name,
         price,
-        url,
       });
     }
   }, [hasServerRequestProccessedWithSuccess]);
@@ -163,7 +141,7 @@ export default function ManagerItemContainer({
   async function handleDeletePress() {
     try {
       const deleteResponse = await axios.delete(
-        `http://localhost:3003/api/delete/${itemId}`,
+        `http://localhost:3005/api/delete/${itemId}`,
         {}
       );
       setOpen(false);
@@ -200,7 +178,7 @@ export default function ManagerItemContainer({
           }}
         >
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            Sunteţi sigur că doriţi să stergeţi produsul din meniul de mâncare?
+            Sunteţi sigur că doriţi să stergeţi această promoţie?
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             Această acţiune nu poate fi revocată.
@@ -237,7 +215,7 @@ export default function ManagerItemContainer({
         open={deletedModalOpen}
         onClose={() => {
           setProducts(
-            products.filter((product) => product.product_id !== itemId)
+            products.filter((product) => product.promotion_id !== itemId)
           );
           setDeletedModalOpen(false);
         }}
@@ -260,8 +238,8 @@ export default function ManagerItemContainer({
         >
           <Typography id="modal-modal-title" variant="h6" component="h2">
             {deletedWithSuccess
-              ? "Produs șters cu succes."
-              : "A apărut o eroare la ștergerea produsului, încercaţi mai târziu."}
+              ? "Promoţie ștearsă cu succes."
+              : "A apărut o eroare la ștergerea promoţiei, încercaţi mai târziu."}
           </Typography>
           <Box
             mt={2}
@@ -275,11 +253,11 @@ export default function ManagerItemContainer({
             <Button
               onClick={() => {
                 console.log(
-                  products.filter((product) => product.product_id !== itemId)
+                  products.filter((product) => product.promotion_id !== itemId)
                 );
                 setDeletedModalOpen(false);
                 setProducts(
-                  products.filter((product) => product.product_id !== itemId)
+                  products.filter((product) => product.promotion_id !== itemId)
                 );
               }}
               fullWidth
@@ -416,81 +394,6 @@ export default function ManagerItemContainer({
                   </Typography>
                 )}
               </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  flex: 1,
-                  alignItems: "center",
-                  mt: 2,
-                }}
-              >
-                <IconButton
-                  sx={{}}
-                  onClick={() => setIsEditUrlActive(true)}
-                  disabled={isEditUrlActive}
-                >
-                  <EditIcon fontSize="inherit" />
-                </IconButton>
-                <IconButton
-                  sx={{ mr: 4 }}
-                  onClick={() => setIsEditUrlActive(false)}
-                  disabled={!isEditUrlActive}
-                >
-                  <DoneOutlineIcon fontSize="inherit" />
-                </IconButton>
-                <Typography
-                  sx={{
-                    width: "20%",
-                    fontWeight: "bold",
-                  }}
-                  variant="h6"
-                >
-                  Url imagine:{" "}
-                </Typography>
-                {isEditUrlActive ? (
-                  <TextField
-                    margin="normal"
-                    id="itemUrl"
-                    label="Url Imagine"
-                    name="itemUrl"
-                    autoFocus
-                    defaultValue={url}
-                    sx={{
-                      backgroundColor: "#fefcf6",
-                      width: "70%",
-                    }}
-                    multiline
-                    rows={3}
-                    onChange={handleItemUrlTextChange}
-                    size="small"
-                  />
-                ) : (
-                  <Typography
-                    sx={{ width: 430, wordWrap: "break-word" }}
-                    variant="h6"
-                  >
-                    {imageUrl}
-                  </Typography>
-                )}
-              </Box>
-            </Box>
-            <Box
-              sx={{
-                width: 200,
-                height: 130,
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <CardMedia
-                component="img"
-                sx={{ height: "100%", width: "100%", borderRadius: 2 }}
-                src={imageUrl}
-                alt="URL imagine invalid"
-              />
             </Box>
             <IconButton
               aria-label="delete"
@@ -510,7 +413,7 @@ export default function ManagerItemContainer({
                   sx={{ mt: 2, color: themeColors.secondary }}
                   type="submit"
                 >
-                  Salvare informaţii produs
+                  Salvare informaţii promoţie
                 </Button>
               </Box>
               <Box sx={{ mt: 2 }}>
@@ -570,7 +473,7 @@ export default function ManagerItemContainer({
               >
                 {hasServerRequestProccessedWithError
                   ? "Eroare în comunicarea cu serverul."
-                  : "Produs modificat cu succes."}
+                  : "Promoţie modificată cu succes."}
               </Alert>
             </Collapse>
           </Box>

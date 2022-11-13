@@ -3,10 +3,8 @@ import {
   Box,
   Button,
   Card,
-  CardMedia,
   Collapse,
   IconButton,
-  MenuItem,
   TextField,
 } from "@mui/material";
 import axios from "axios";
@@ -14,9 +12,7 @@ import { useRef, useState } from "react";
 import { themeColors } from "../../theme/theme";
 import CloseIcon from "@mui/icons-material/Close";
 
-export default function ManagerAddItemContainer() {
-  const [imageUrl, setImageUrl] = useState("");
-
+export default function ManagerAddNewPromotionContainer() {
   const [
     hasServerRequestProccessedWithError,
     setHasServerRequestProccessedWithError,
@@ -26,19 +22,12 @@ export default function ManagerAddItemContainer() {
     setHasServerRequestProccessedWithSuccess,
   ] = useState(false);
 
-  const [type, setType] = useState<string>("");
-
   const nameInputRef = useRef<HTMLInputElement>(null);
   const priceInputRef = useRef<HTMLInputElement>(null);
-  const urlInputRef = useRef<HTMLInputElement>(null);
 
   const [emptyNameFieldErrorActive, setEmptyNameFieldErrorActive] =
     useState(false);
   const [emptyPriceFieldErrorActive, setEmptyPriceFieldErrorActive] =
-    useState(false);
-  const [emptyTypeFieldErrorActive, setEmptyTypeFieldErrorActive] =
-    useState(false);
-  const [emptyUrlFieldErrorActive, setEmptyUrlFieldErrorActive] =
     useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -51,32 +40,22 @@ export default function ManagerAddItemContainer() {
 
     if (formData.get("itemPrice") === "") {
       setEmptyPriceFieldErrorActive(true);
-    }
-
-    if (formData.get("itemType") === "") {
-      setEmptyTypeFieldErrorActive(true);
-    }
-
-    if (formData.get("itemUrl") === "") {
-      setEmptyUrlFieldErrorActive(true);
     } else {
-      const res = await axios.get("http://localhost:3003/api/get");
+      const res = await axios.get("http://localhost:3005/api/get");
       const { data } = await res;
-      let lastProductId = 0;
-      if (data.length > 0) lastProductId = data[data.length - 1].product_id;
+      let lastPromotionId = 0;
+      if (data.length > 0) lastPromotionId = data[data.length - 1].promotion_id;
 
-      const newProduct = {
-        productId: lastProductId + 1,
-        productName: formData.get("itemName"),
-        productPrice: formData.get("itemPrice"),
-        productType: formData.get("itemType") === "Mancare" ? "food" : "drink", // TODO daca nu se alege nimic
-        productImageUrl: formData.get("itemUrl"),
+      const newPromotion = {
+        promotionId: lastPromotionId + 1,
+        promotionName: formData.get("itemName"),
+        promotionPrice: formData.get("itemPrice"),
       };
 
       try {
         const postResponseData = await axios.post(
-          "http://localhost:3003/api/create",
-          newProduct
+          "http://localhost:3005/api/create",
+          newPromotion
         );
         if (!postResponseData.data.error) {
           if (emptyNameFieldErrorActive) {
@@ -85,21 +64,12 @@ export default function ManagerAddItemContainer() {
           if (emptyPriceFieldErrorActive) {
             setEmptyPriceFieldErrorActive(false);
           }
-          if (emptyTypeFieldErrorActive) {
-            setEmptyTypeFieldErrorActive(false);
-          }
-          if (emptyUrlFieldErrorActive) {
-            setEmptyUrlFieldErrorActive(false);
-          }
           if (hasServerRequestProccessedWithError)
             setHasServerRequestProccessedWithError(false);
           setHasServerRequestProccessedWithSuccess(true);
 
           if (nameInputRef.current) nameInputRef.current.value = "";
           if (priceInputRef.current) priceInputRef.current.value = "";
-          setType("");
-          if (urlInputRef.current) urlInputRef.current.value = "";
-          setImageUrl("");
         } else {
           if (hasServerRequestProccessedWithSuccess)
             setHasServerRequestProccessedWithSuccess(false);
@@ -168,35 +138,6 @@ export default function ManagerAddItemContainer() {
             sx={{ backgroundColor: "#fefcf6", borderRadius: 2 }}
             inputRef={priceInputRef}
           />
-          <TextField
-            error={emptyTypeFieldErrorActive}
-            select
-            label="Tip Produs"
-            id="itemType"
-            name="itemType"
-            fullWidth
-            sx={{ backgroundColor: "#fefcf6", mt: 2, borderRadius: 2 }}
-            value={type}
-            onChange={(t) => setType(t.target.value)}
-          >
-            <MenuItem key={1} value="Mancare">
-              Mancare
-            </MenuItem>
-            <MenuItem key={2} value="Bautura">
-              Bautura
-            </MenuItem>
-          </TextField>
-          <TextField
-            error={emptyUrlFieldErrorActive}
-            margin="normal"
-            fullWidth
-            id="itemUrl"
-            label="Url Imagine"
-            name="itemUrl"
-            sx={{ backgroundColor: "#fefcf6", mt: 3, borderRadius: 2 }}
-            onChange={(e) => setImageUrl(e.target.value)}
-            inputRef={urlInputRef}
-          />
           <Box mt={2} sx={{ display: "flex", flexDirection: "row" }}>
             <Button
               fullWidth
@@ -204,7 +145,7 @@ export default function ManagerAddItemContainer() {
               sx={{ mt: 2, color: themeColors.secondary }}
               type="submit"
             >
-              Adăugare produs
+              Adăugare promoţie
             </Button>
           </Box>
           <Box sx={{ width: "100%" }} mt={2}>
@@ -240,22 +181,10 @@ export default function ManagerAddItemContainer() {
               >
                 {hasServerRequestProccessedWithError
                   ? "Eroare în comunicarea cu serverul."
-                  : "Produs adăugat cu succes."}
+                  : "Promoţie adăugată cu succes."}
               </Alert>
             </Collapse>
           </Box>
-        </Box>
-        <Box sx={{ width: 200, height: 130, alignSelf: "center" }}>
-          <CardMedia
-            component="img"
-            sx={{
-              height: "100%",
-              width: "100%",
-              borderRadius: 2,
-            }}
-            src={imageUrl}
-            alt="Invalid Image Url."
-          />
         </Box>
       </Box>
       <Box
@@ -268,12 +197,7 @@ export default function ManagerAddItemContainer() {
       >
         <Box sx={{ width: "85.5%" }} p={4}>
           <Collapse
-            in={
-              emptyNameFieldErrorActive ||
-              emptyPriceFieldErrorActive ||
-              emptyTypeFieldErrorActive ||
-              emptyUrlFieldErrorActive
-            }
+            in={emptyNameFieldErrorActive || emptyPriceFieldErrorActive}
           >
             <Alert
               severity="error"
@@ -288,12 +212,6 @@ export default function ManagerAddItemContainer() {
                     }
                     if (emptyPriceFieldErrorActive) {
                       setEmptyPriceFieldErrorActive(false);
-                    }
-                    if (emptyTypeFieldErrorActive) {
-                      setEmptyTypeFieldErrorActive(false);
-                    }
-                    if (emptyUrlFieldErrorActive) {
-                      setEmptyUrlFieldErrorActive(false);
                     }
                   }}
                 >

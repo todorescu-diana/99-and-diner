@@ -68,7 +68,9 @@
   "managertabnavigator": {
     "foodmenu": "Food Menu",
     "drinkmenu": "Drink Menu",
+    "promotions": "Promotions",
     "addnewproduct": "Add New Product",
+    "addnewpromotion": "Add New Promotion",
     "orders": "Previous orders"
   },
   "footer": {

@@ -13,6 +13,8 @@ import ManagerDrinkMenuContent from "./ManagerDrinkMenuContent";
 import ManagerPastOrdersContent from "./ManagerPastOrdersContent";
 import ManagerAddNewProductContent from "./ManagerAddNewProductContent";
 import { useTranslation } from "react-i18next";
+import ManagerPromotionsContent from "./ManagerPromotionsContent";
+import ManagerAddNewPromotionContent from "./ManagerAddNewPromotionContent";
 
 interface StyledTabsProps {
   children?: React.ReactNode;
@@ -104,7 +106,9 @@ export default function ManagerContent() {
         >
           <StyledTab label={t("managertabnavigator.foodmenu")} />
           <StyledTab label={t("managertabnavigator.drinkmenu")} />
+          <StyledTab label={t("managertabnavigator.promotions")} />
           <StyledTab label={t("managertabnavigator.addnewproduct")} />
+          <StyledTab label={t("managertabnavigator.addnewpromotion")} />
           <StyledTab label={t("managertabnavigator.orders")} />
         </StyledTabs>
         <IconButton
@@ -128,8 +132,10 @@ export default function ManagerContent() {
 
       {value === 0 ? <ManagerFoodMenuContent /> : null}
       {value === 1 ? <ManagerDrinkMenuContent /> : null}
-      {value === 2 ? <ManagerAddNewProductContent /> : null}
-      {value === 3 ? <ManagerPastOrdersContent /> : null}
+      {value === 2 ? <ManagerPromotionsContent /> : null}
+      {value === 3 ? <ManagerAddNewProductContent /> : null}
+      {value === 4 ? <ManagerAddNewPromotionContent /> : null}
+      {value === 5 ? <ManagerPastOrdersContent /> : null}
     </Box>
   );
 }

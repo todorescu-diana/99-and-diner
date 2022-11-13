@@ -68,7 +68,9 @@
   "managertabnavigator": {
     "foodmenu": "Meniu Mâncare",
     "drinkmenu": "Meniu Băuturi",
+    "promotions": "Promoţii",
     "addnewproduct": "Adăugare Produs Nou",
+    "addnewpromotion": "Adăugare Promoţie Nouă",
     "orders": "Comenzi anterioare"
   },
   "footer": {
