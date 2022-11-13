@@ -25,13 +25,17 @@
     "foodmenu": "Food Menu",
     "drinkmenu": "Drink Menu",
     "orders": "Previous orders",
-    "cart": "Cart"
+    "cart": "Cart",
+    "promotions": "Promotions"
   },
   "clientcontent": {
     "greeting": "Hi",
     "choosefromfoodmenu": "Choose from our food menu:",
     "choosefromdrinkmenu": "Choose from our drink menu:",
     "noproductsfound": "Unfortunately, no products have been found."
+  },
+  "clientpromotionscontent": {
+    "nopromotionsfound": "Unfortunately, no promotions have been found."
   },
   "clientpastorderscontent": {
     "noordersfound": "No past orders have been found."

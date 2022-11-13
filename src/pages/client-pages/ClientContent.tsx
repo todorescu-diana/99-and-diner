@@ -19,6 +19,8 @@ import { OrderResponse } from "../../models/OrderResponse";
 import { Order } from "../../models/Order";
 import { useTranslation } from "react-i18next";
 import ChangeLanguageSelect from "../../components/ChangeLanguageSelect";
+import ClientPromotionsContent from "./ClientPromotionscontent";
+import { Promotion } from "../../models/Promotion";
 
 interface StyledTabsProps {
   children?: React.ReactNode;
@@ -77,6 +79,7 @@ export default function ClientContent() {
 
   const [foodProducts, setFoodProducts] = useState<Product[]>([]);
   const [drinkProducts, setDrinkProducts] = useState<Product[]>([]);
+  const [promotionProducts, setPromotionProducts] = useState<Promotion[]>([]);
   const [userOrders, setUserOrders] = useState<Order[]>([]);
 
   const [t] = useTranslation("common");
@@ -108,6 +111,17 @@ export default function ClientContent() {
         console.log(err);
       }
     }
+    async function getPromotionItems() {
+      try {
+        const res = await axios.get("http://localhost:3005/api/get");
+        const { data } = await res;
+        const allPromotions: Promotion[] = data;
+
+        setPromotionProducts(allPromotions);
+      } catch (err) {
+        console.log(err);
+      }
+    }
     async function getUserOrders() {
       try {
         const res = await axios.get("http://localhost:3004/api/get");
@@ -134,6 +148,7 @@ export default function ClientContent() {
     }
     getFoodItems();
     getDrinkItems();
+    getPromotionItems();
     getUserOrders();
   }, [value]);
 
@@ -165,6 +180,7 @@ export default function ClientContent() {
         >
           <StyledTab label={t("clienttabnavigator.foodmenu")} />
           <StyledTab label={t("clienttabnavigator.drinkmenu")} />
+          <StyledTab label={t("clienttabnavigator.promotions")} />
           <StyledTab label={t("clienttabnavigator.orders")} />
           <StyledTab label={t("clienttabnavigator.cart")} />
         </StyledTabs>
@@ -226,8 +242,11 @@ export default function ClientContent() {
       {value === 1 ? (
         <ClientDrinkMenuContent drinkProducts={drinkProducts} />
       ) : null}
-      {value === 2 ? <ClientPastOrdersContent userOrders={userOrders} /> : null}
-      {value === 3 ? <ClientCheckoutContent setValue={setValue} /> : null}
+      {value === 2 ? (
+        <ClientPromotionsContent promotionProducts={promotionProducts} />
+      ) : null}
+      {value === 3 ? <ClientPastOrdersContent userOrders={userOrders} /> : null}
+      {value === 4 ? <ClientCheckoutContent setValue={setValue} /> : null}
     </Box>
   );
 }

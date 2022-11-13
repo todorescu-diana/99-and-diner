@@ -25,13 +25,17 @@
     "foodmenu": "Meniu Mâncare",
     "drinkmenu": "Meniu Băuturi",
     "orders": "Comenzi anterioare",
-    "cart": "Coş"
+    "cart": "Coş",
+    "promotions": "Promoţii"
   },
   "clientcontent": {
     "greeting": "Bună",
     "choosefromfoodmenu": "Alege din meniul nostru de mâncare:",
     "choosefromdrinkmenu": "Alege din meniul nostru de băuturi:",
     "noproductsfound": "Din păcate, nu s-au găsit produse disponibile."
+  },
+  "clientpromotionscontent": {
+    "nopromotionsfound": "Din păcate, nu s-au găsit promoţii disponibile."
   },
   "clientpastorderscontent": {
     "noordersfound": "Nu s-au găsit comenzi anterioare."
