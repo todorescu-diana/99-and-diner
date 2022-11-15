@@ -10,7 +10,11 @@ import { useUserGlobalContext } from "./contexts/UserGlobalContext";
 import ClientContent from "./pages/client-pages/ClientContent";
 import ManagerContent from "./pages/manager-pages/ManagerContent";
 import { useEffect, useRef } from "react";
-import { I18nextProvider } from "react-i18next";
+import {
+  I18nextProvider,
+  initReactI18next,
+  useTranslation,
+} from "react-i18next";
 import i18next from "i18next";
 import common_ro from "./translations/ro/common.json";
 import common_en from "./translations/en/common.json";
@@ -29,7 +33,7 @@ const theme = createTheme({
   },
 });
 
-i18next.init({
+i18next.use(initReactI18next).init({
   interpolation: { escapeValue: false },
   lng: "ro",
   resources: {
@@ -44,6 +48,16 @@ i18next.init({
 
 function App() {
   const [userGlobalState, setUserGlobalState] = useUserGlobalContext();
+  const [, i18n] = useTranslation("common");
+
+  useEffect(() => {
+    async function getLanguage() {
+      let language = window.sessionStorage.getItem("i18nlanguage");
+      console.log("LANMGUAGE: " + language)
+      if (language !== null) i18n.changeLanguage(language);
+    }
+    getLanguage();
+  }, []);
   useEffect(() => {
     const data = window.sessionStorage.getItem("MY_APP_STATE");
     if (data !== null) {

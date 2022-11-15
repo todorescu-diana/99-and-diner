@@ -21,25 +21,31 @@ import DeleteIcon from "@mui/icons-material/Delete";
 export default function ManagerPromotionContainer({
   itemId,
   itemName,
-  itemPrice,
+  itemNormalPrice,
+  itemSpecialPrice,
   products,
   setProducts,
 }: {
   itemId: number;
   itemName: string;
-  itemPrice: number;
+  itemNormalPrice: number;
+  itemSpecialPrice: number;
   products: Promotion[];
   setProducts: React.Dispatch<React.SetStateAction<Promotion[]>>;
 }) {
   const [isEditNameActive, setIsEditNameActive] = useState(false);
-  const [isEditPriceActive, setIsEditPriceActive] = useState(false);
+  const [isEditNormalPriceActive, setIsEditNormalPriceActive] = useState(false);
+  const [isEditSpecialPriceActive, setIsEditSpecialPriceActive] =
+    useState(false);
 
   const [name, setName] = useState(itemName);
-  const [price, setPrice] = useState(itemPrice);
+  const [normalPrice, setNormalPrice] = useState(itemNormalPrice);
+  const [specialPrice, setSpecialPrice] = useState(itemSpecialPrice);
 
   const [initialItemInfo, setInitialItemInfo] = useState({
     name: itemName,
-    price: itemPrice,
+    normalPrice: itemNormalPrice,
+    specialPrice: itemSpecialPrice,
   });
 
   const [hasItemChanged, setHasItemChanged] = useState(false);
@@ -60,12 +66,20 @@ export default function ManagerPromotionContainer({
   const [deletedModalOpen, setDeletedModalOpen] = useState(false);
 
   useEffect(() => {
-    if (name !== initialItemInfo.name || price !== initialItemInfo.price) {
+    if (
+      name !== initialItemInfo.name ||
+      normalPrice !== initialItemInfo.normalPrice ||
+      specialPrice !== initialItemInfo.specialPrice
+    ) {
       if (!hasItemChanged) setHasItemChanged(true);
-    } else if (name === itemName && price === itemPrice) {
+    } else if (
+      name === itemName &&
+      normalPrice === itemNormalPrice &&
+      specialPrice === itemSpecialPrice
+    ) {
       if (hasItemChanged) setHasItemChanged(false);
     }
-  }, [name, price]);
+  }, [name, normalPrice, specialPrice]);
 
   const handleItemNameTextChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -74,29 +88,45 @@ export default function ManagerPromotionContainer({
     setName(event.target.value);
   };
 
-  const handlePriceTextChange = (
+  const handleNormalPriceTextChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     event.preventDefault();
-    setPrice(parseInt(event.target.value));
+    setNormalPrice(parseInt(event.target.value));
+  };
+
+  const handleSpecialPriceTextChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    event.preventDefault();
+    setSpecialPrice(parseInt(event.target.value));
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (name === "" || isNaN(price)) {
+    if (name === "" || isNaN(normalPrice) || isNaN(specialPrice)) {
       setChangeCancelled(true);
       setHasItemChanged(false);
       setIsEditNameActive(false);
-      setIsEditPriceActive(false);
+      setIsEditNormalPriceActive(false);
+      setIsEditSpecialPriceActive(false);
       if (name === "") setName(itemName); // TODO
-      if (isNaN(price)) setPrice(itemPrice);
+      if (isNaN(normalPrice)) setNormalPrice(itemNormalPrice);
+      if (isNaN(specialPrice)) setSpecialPrice(itemSpecialPrice);
+      console.log("aici2: " + normalPrice);
+      console.log("aici2: " + specialPrice);
     } else {
       const newPromotionInfo = {
         promotionId: itemId,
-        productNewName: name,
-        productNewPrice: price,
+        promotionNewName: name,
+        promotionNewPriceNormal: normalPrice,
+        promotionNewPriceSpecial: specialPrice,
       };
+
+      console.log("aici: " + normalPrice);
+      console.log("aici: " + specialPrice);
+      console.log(newPromotionInfo);
 
       try {
         const result = await axios.put(
@@ -120,7 +150,10 @@ export default function ManagerPromotionContainer({
       } finally {
         setHasItemChanged(false);
         if (isEditNameActive) setIsEditNameActive(!isEditNameActive);
-        if (isEditPriceActive) setIsEditPriceActive(!isEditPriceActive);
+        if (isEditNormalPriceActive)
+          setIsEditNormalPriceActive(!isEditNormalPriceActive);
+        if (isEditSpecialPriceActive)
+          setIsEditSpecialPriceActive(!isEditSpecialPriceActive);
       }
     }
   };
@@ -129,10 +162,15 @@ export default function ManagerPromotionContainer({
     if (hasServerRequestProccessedWithSuccess) {
       setInitialItemInfo({
         name,
-        price,
+        normalPrice,
+        specialPrice,
       });
     }
   }, [hasServerRequestProccessedWithSuccess]);
+
+  useEffect(() => {
+    console.log(normalPrice);
+  }, [normalPrice]);
 
   function handleToDeletePress() {
     setOpen(true);
@@ -206,7 +244,7 @@ export default function ManagerPromotionContainer({
               variant="contained"
               sx={{ mt: 2, color: themeColors.secondary }}
             >
-              Ștergere produs
+              Ștergere promoţie
             </Button>
           </Box>
         </Box>
@@ -357,15 +395,15 @@ export default function ManagerPromotionContainer({
               >
                 <IconButton
                   sx={{}}
-                  onClick={() => setIsEditPriceActive(true)}
-                  disabled={isEditPriceActive}
+                  onClick={() => setIsEditNormalPriceActive(true)}
+                  disabled={isEditNormalPriceActive}
                 >
                   <EditIcon fontSize="inherit" />
                 </IconButton>
                 <IconButton
                   sx={{ mr: 4 }}
-                  onClick={() => setIsEditPriceActive(false)}
-                  disabled={!isEditPriceActive}
+                  onClick={() => setIsEditNormalPriceActive(false)}
+                  disabled={!isEditNormalPriceActive}
                 >
                   <DoneOutlineIcon fontSize="inherit" />
                 </IconButton>
@@ -373,9 +411,9 @@ export default function ManagerPromotionContainer({
                   sx={{ width: "20%", fontWeight: "bold" }}
                   variant="h6"
                 >
-                  Preţ:{" "}
+                  Preţ vechi:{" "}
                 </Typography>
-                {isEditPriceActive ? (
+                {isEditNormalPriceActive ? (
                   <TextField
                     margin="normal"
                     id="itemPrice"
@@ -385,12 +423,60 @@ export default function ManagerPromotionContainer({
                     autoFocus
                     sx={{ backgroundColor: "#fefcf6", width: "70%" }}
                     size="small"
-                    onChange={handlePriceTextChange}
-                    defaultValue={price}
+                    onChange={handleNormalPriceTextChange}
+                    defaultValue={normalPrice}
                   />
                 ) : (
                   <Typography sx={{ width: "70%" }} variant="h6">
-                    {price.toString()} lei
+                    {normalPrice.toString()} lei
+                  </Typography>
+                )}
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  flex: 1,
+                  alignItems: "center",
+                  mt: 2,
+                }}
+              >
+                <IconButton
+                  sx={{}}
+                  onClick={() => setIsEditSpecialPriceActive(true)}
+                  disabled={isEditSpecialPriceActive}
+                >
+                  <EditIcon fontSize="inherit" />
+                </IconButton>
+                <IconButton
+                  sx={{ mr: 4 }}
+                  onClick={() => setIsEditSpecialPriceActive(false)}
+                  disabled={!isEditSpecialPriceActive}
+                >
+                  <DoneOutlineIcon fontSize="inherit" />
+                </IconButton>
+                <Typography
+                  sx={{ width: "20%", fontWeight: "bold" }}
+                  variant="h6"
+                >
+                  Preţ promoţie:{" "}
+                </Typography>
+                {isEditSpecialPriceActive ? (
+                  <TextField
+                    margin="normal"
+                    id="itemPrice"
+                    label="Pret"
+                    name="itemPrice"
+                    autoComplete="itemPrice"
+                    autoFocus
+                    sx={{ backgroundColor: "#fefcf6", width: "70%" }}
+                    size="small"
+                    onChange={handleSpecialPriceTextChange}
+                    defaultValue={specialPrice}
+                  />
+                ) : (
+                  <Typography sx={{ width: "70%" }} variant="h6">
+                    {specialPrice.toString()} lei
                   </Typography>
                 )}
               </Box>

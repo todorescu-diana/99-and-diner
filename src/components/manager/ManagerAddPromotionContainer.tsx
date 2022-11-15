@@ -23,12 +23,19 @@ export default function ManagerAddNewPromotionContainer() {
   ] = useState(false);
 
   const nameInputRef = useRef<HTMLInputElement>(null);
-  const priceInputRef = useRef<HTMLInputElement>(null);
+  const normalPriceInputRef = useRef<HTMLInputElement>(null);
+  const specialPriceInputRef = useRef<HTMLInputElement>(null);
 
   const [emptyNameFieldErrorActive, setEmptyNameFieldErrorActive] =
     useState(false);
-  const [emptyPriceFieldErrorActive, setEmptyPriceFieldErrorActive] =
-    useState(false);
+  const [
+    emptyNormalPriceFieldErrorActive,
+    setEmptyNormalPriceFieldErrorActive,
+  ] = useState(false);
+  const [
+    emptySpecialPriceFieldErrorActive,
+    setEmptySpecialPriceFieldErrorActive,
+  ] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -38,8 +45,11 @@ export default function ManagerAddNewPromotionContainer() {
       setEmptyNameFieldErrorActive(true);
     }
 
-    if (formData.get("itemPrice") === "") {
-      setEmptyPriceFieldErrorActive(true);
+    if (formData.get("itemNormalPrice") === "") {
+      setEmptyNormalPriceFieldErrorActive(true);
+    }
+    if (formData.get("itemSpecialPrice") === "") {
+      setEmptySpecialPriceFieldErrorActive(true);
     } else {
       const res = await axios.get("http://localhost:3005/api/get");
       const { data } = await res;
@@ -49,7 +59,8 @@ export default function ManagerAddNewPromotionContainer() {
       const newPromotion = {
         promotionId: lastPromotionId + 1,
         promotionName: formData.get("itemName"),
-        promotionPrice: formData.get("itemPrice"),
+        promotionPriceNormal: formData.get("itemNormalPrice"),
+        promotionPriceSpecial: formData.get("itemSpecialPrice"),
       };
 
       try {
@@ -61,15 +72,21 @@ export default function ManagerAddNewPromotionContainer() {
           if (emptyNameFieldErrorActive) {
             setEmptyNameFieldErrorActive(false);
           }
-          if (emptyPriceFieldErrorActive) {
-            setEmptyPriceFieldErrorActive(false);
+          if (emptyNormalPriceFieldErrorActive) {
+            setEmptyNormalPriceFieldErrorActive(false);
+          }
+          if (emptySpecialPriceFieldErrorActive) {
+            setEmptySpecialPriceFieldErrorActive(false);
           }
           if (hasServerRequestProccessedWithError)
             setHasServerRequestProccessedWithError(false);
           setHasServerRequestProccessedWithSuccess(true);
 
           if (nameInputRef.current) nameInputRef.current.value = "";
-          if (priceInputRef.current) priceInputRef.current.value = "";
+          if (normalPriceInputRef.current)
+            normalPriceInputRef.current.value = "";
+          if (specialPriceInputRef.current)
+            specialPriceInputRef.current.value = "";
         } else {
           if (hasServerRequestProccessedWithSuccess)
             setHasServerRequestProccessedWithSuccess(false);
@@ -128,15 +145,26 @@ export default function ManagerAddNewPromotionContainer() {
             inputRef={nameInputRef}
           />
           <TextField
-            error={emptyPriceFieldErrorActive}
+            error={emptyNormalPriceFieldErrorActive}
             margin="normal"
             fullWidth
-            id="itemPrice"
-            label="Pret"
-            name="itemPrice"
+            id="itemNormalPrice"
+            label="Pret vechi"
+            name="itemNormalPrice"
             autoComplete="itemPrice"
             sx={{ backgroundColor: "#fefcf6", borderRadius: 2 }}
-            inputRef={priceInputRef}
+            inputRef={normalPriceInputRef}
+          />
+          <TextField
+            error={emptySpecialPriceFieldErrorActive}
+            margin="normal"
+            fullWidth
+            id="itemSpecialPrice"
+            label="Pret promotie"
+            name="itemSpecialPrice"
+            autoComplete="itemPrice"
+            sx={{ backgroundColor: "#fefcf6", borderRadius: 2 }}
+            inputRef={specialPriceInputRef}
           />
           <Box mt={2} sx={{ display: "flex", flexDirection: "row" }}>
             <Button
@@ -197,7 +225,11 @@ export default function ManagerAddNewPromotionContainer() {
       >
         <Box sx={{ width: "85.5%" }} p={4}>
           <Collapse
-            in={emptyNameFieldErrorActive || emptyPriceFieldErrorActive}
+            in={
+              emptyNameFieldErrorActive ||
+              emptyNormalPriceFieldErrorActive ||
+              emptySpecialPriceFieldErrorActive
+            }
           >
             <Alert
               severity="error"
@@ -210,8 +242,11 @@ export default function ManagerAddNewPromotionContainer() {
                     if (emptyNameFieldErrorActive) {
                       setEmptyNameFieldErrorActive(false);
                     }
-                    if (emptyPriceFieldErrorActive) {
-                      setEmptyPriceFieldErrorActive(false);
+                    if (emptyNormalPriceFieldErrorActive) {
+                      setEmptyNormalPriceFieldErrorActive(false);
+                    }
+                    if (emptySpecialPriceFieldErrorActive) {
+                      setEmptySpecialPriceFieldErrorActive(false);
                     }
                   }}
                 >

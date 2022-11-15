@@ -30,7 +30,8 @@ export default function ManagerPromotionsContent() {
             key={promotion.promotion_id.toString()}
             itemId={promotion.promotion_id}
             itemName={promotion.promotion_name}
-            itemPrice={promotion.promotion_price}
+            itemNormalPrice={promotion.promotion_price_normal}
+            itemSpecialPrice={promotion.promotion_price_special}
             products={promotions}
             setProducts={setPromotions}
           />

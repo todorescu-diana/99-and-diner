@@ -30,7 +30,8 @@ export default function ClientPromotionsContent({
             <ClientPromotionContainer
               key={idx}
               itemName={promotionProduct.promotion_name}
-              itemPrice={promotionProduct.promotion_price}
+              itemPriceNormal={promotionProduct.promotion_price_normal}
+              itemPriceSpecial={promotionProduct.promotion_price_special}
             />
           ))
         ) : (

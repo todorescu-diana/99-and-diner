@@ -5,12 +5,14 @@ import { themeColors } from "../../theme/theme";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 
-export default function ClientPromotionContent({
+export default function ClientPromotionContainer({
   itemName,
-  itemPrice,
+  itemPriceNormal,
+  itemPriceSpecial,
 }: {
   itemName: string;
-  itemPrice: number;
+  itemPriceNormal: number;
+  itemPriceSpecial: number;
 }) {
   const [itemQty, setItemQty] = useState(0);
   const [clientOrderState, setClientOrderState] = useClientOrderContext();
@@ -52,6 +54,8 @@ export default function ClientPromotionContent({
         });
       }
     } else {
+      setItemQty(itemQty - 1);
+
       if (currentItemInOrderProductArray !== undefined) {
         // delete item from order
         setClientOrderState({
@@ -98,12 +102,13 @@ export default function ClientPromotionContent({
           ...clientOrderState.order_products,
           {
             product_name: itemName,
-            product_price: itemPrice,
+            product_price: itemPriceSpecial,
             product_type: "",
             product_qty: 1,
           },
         ],
-        order_total_price: clientOrderState.order_total_price + itemPrice,
+        order_total_price:
+          clientOrderState.order_total_price + itemPriceSpecial,
         order_notes: clientOrderState.order_notes,
       });
     }
@@ -142,9 +147,28 @@ export default function ClientPromotionContent({
         >
           {itemName}
         </Typography>
-        <Typography variant="h6" sx={{ marginTop: 3 }}>
-          {itemPrice.toString()} lei
-        </Typography>
+        <Box
+          maxWidth={250}
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "flex-start",
+          }}
+        >
+          <Typography
+            variant="h6"
+            sx={{
+              marginTop: 1,
+              textDecoration: "line-through",
+              marginRight: 3,
+            }}
+          >
+            {itemPriceNormal.toString()} lei
+          </Typography>
+          <Typography variant="h6" sx={{ marginTop: 1, color: "red" }}>
+            {itemPriceSpecial.toString()} lei
+          </Typography>
+        </Box>
         <Box
           sx={{
             display: "flex",

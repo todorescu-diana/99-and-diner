@@ -56,6 +56,8 @@ export default function ClientItemContainer({
         });
       }
     } else {
+      setItemQty(itemQty - 1);
+
       if (currentItemInOrderProductArray !== undefined) {
         // delete item from order
         setClientOrderState({
